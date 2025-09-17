@@ -385,10 +385,13 @@
                     this.videoLoading.style.display = 'block';
                     this.video.style.display = 'none';
                     
-                    this.video.src = videoSrc;
+                    // Clear previous event listeners
+                    this.video.removeEventListener('loadeddata', this.onVideoLoaded);
+                    this.video.removeEventListener('error', this.onVideoError);
+                    this.video.removeEventListener('canplay', this.onVideoCanPlay);
                     
-                    // Add load event listener
-                    this.video.addEventListener('loadeddata', () => {
+                    // Create bound event handlers
+                    this.onVideoLoaded = () => {
                         console.log(`Video loaded successfully: ${videoSrc}`);
                         // Hide loading indicator and show video
                         this.videoLoading.style.display = 'none';
@@ -399,26 +402,41 @@
                             // If autoplay fails, try next video after short delay
                             setTimeout(() => {
                                 this.playNextVideo();
-                            }, 2000);
+                            }, 1000);
                         });
-                    });
+                    };
                     
-                    // Add error event listener
-                    this.video.addEventListener('error', (e) => {
+                    this.onVideoError = (e) => {
                         console.log(`Video failed to load: ${videoSrc}`, e);
                         // Hide loading indicator
                         this.videoLoading.style.display = 'none';
                         this.failedVideos++;
                         
                         // If too many videos fail, go directly to main menu
-                        if (this.failedVideos >= 3) {
+                        if (this.failedVideos >= 2) {
                             console.log('Too many video failures, skipping to main menu');
                             this.skipToMainMenu();
                         } else {
                             // Try next video immediately
                             this.playNextVideo();
                         }
-                    });
+                    };
+                    
+                    this.onVideoCanPlay = () => {
+                        console.log(`Video can play: ${videoSrc}`);
+                        this.videoLoading.style.display = 'none';
+                        this.video.style.display = 'block';
+                    };
+                    
+                    // Add event listeners
+                    this.video.addEventListener('loadeddata', this.onVideoLoaded);
+                    this.video.addEventListener('error', this.onVideoError);
+                    this.video.addEventListener('canplay', this.onVideoCanPlay);
+                    
+                    // Set video properties for better compatibility
+                    this.video.muted = true;
+                    this.video.preload = 'auto';
+                    this.video.src = videoSrc;
                     
                     // Load the video
                     this.video.load();
@@ -440,13 +458,31 @@
                 // Test if the first video is accessible
                 const testVideo = document.createElement('video');
                 testVideo.src = this.cutsceneVideos[0];
-                testVideo.addEventListener('error', () => {
-                    console.log('Video test failed, will skip videos');
+                testVideo.muted = true; // Ensure muted for autoplay
+                
+                testVideo.addEventListener('error', (e) => {
+                    console.log('Video test failed, will skip videos', e);
                     this.skipVideos = true;
                 });
+                
                 testVideo.addEventListener('loadeddata', () => {
                     console.log('Video test successful, videos are accessible');
+                    this.skipVideos = false;
                 });
+                
+                testVideo.addEventListener('canplay', () => {
+                    console.log('Video can play, videos are ready');
+                    this.skipVideos = false;
+                });
+                
+                // Set a timeout for the test
+                setTimeout(() => {
+                    if (testVideo.readyState < 2) {
+                        console.log('Video test timeout, will skip videos');
+                        this.skipVideos = true;
+                    }
+                }, 3000);
+                
                 testVideo.load();
             }
 
