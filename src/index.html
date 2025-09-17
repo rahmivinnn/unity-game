@@ -207,6 +207,32 @@
             object-fit: cover;
         }
 
+        .video-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffffff;
+            font-size: 1.5em;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #00ff88;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         #skip-button {
             position: absolute;
             bottom: 30px;
@@ -244,8 +270,12 @@
 
     <!-- Video Cutscene -->
     <div id="video-container">
+        <div class="video-loading" id="video-loading">
+            <div class="loading-spinner"></div>
+            <div>Memuat video...</div>
+        </div>
         <video id="cutscene-video" autoplay muted>
-            <source src="/public/Video/opening.mp4" type="video/mp4">
+            <source src="public/Video/opening.mp4" type="video/mp4">
             Video tidak dapat dimuat.
         </video>
         <button id="skip-button">Skip ⏭</button>
@@ -258,16 +288,18 @@
                 this.videoContainer = document.getElementById('video-container');
                 this.video = document.getElementById('cutscene-video');
                 this.skipButton = document.getElementById('skip-button');
+                this.videoLoading = document.getElementById('video-loading');
                 
                 // Array of 5 cutscene videos
                 this.cutsceneVideos = [
-                    '/public/Video/opening.mp4',
-                    '/public/Video/ilmuwan.mp4',
-                    '/public/Video/video.mp4',
-                    '/public/Video/video action.mp4',
-                    '/public/Video/final.mp4'
+                    'public/Video/opening.mp4',
+                    'public/Video/ilmuwan.mp4',
+                    'public/Video/video.mp4',
+                    'public/Video/video action.mp4',
+                    'public/Video/final.mp4'
                 ];
                 this.currentVideoIndex = 0;
+                this.failedVideos = 0; // Track failed video attempts
                 
                 this.init();
             }
@@ -293,6 +325,14 @@
                     console.log('Video failed to load, trying next video or proceeding to main menu');
                     this.playNextVideo();
                 });
+                
+                // Safety timeout - if no video loads within 10 seconds, go to main menu
+                setTimeout(() => {
+                    if (this.currentVideoIndex < this.cutsceneVideos.length) {
+                        console.log('Video loading timeout, proceeding to main menu');
+                        this.skipToMainMenu();
+                    }
+                }, 10000);
             }
 
             showCutscene() {
@@ -304,16 +344,49 @@
             playCurrentVideo() {
                 if (this.currentVideoIndex < this.cutsceneVideos.length) {
                     const videoSrc = this.cutsceneVideos[this.currentVideoIndex];
+                    console.log(`Attempting to load video: ${videoSrc}`);
+                    
+                    // Show loading indicator
+                    this.videoLoading.style.display = 'block';
+                    this.video.style.display = 'none';
+                    
                     this.video.src = videoSrc;
                     
-                    // Try to play video
-                    this.video.play().catch(error => {
-                        console.log('Video autoplay failed:', error);
-                        // If autoplay fails, try next video after short delay
-                        setTimeout(() => {
-                            this.playNextVideo();
-                        }, 2000);
+                    // Add load event listener
+                    this.video.addEventListener('loadeddata', () => {
+                        console.log(`Video loaded successfully: ${videoSrc}`);
+                        // Hide loading indicator and show video
+                        this.videoLoading.style.display = 'none';
+                        this.video.style.display = 'block';
+                        
+                        this.video.play().catch(error => {
+                            console.log('Video autoplay failed:', error);
+                            // If autoplay fails, try next video after short delay
+                            setTimeout(() => {
+                                this.playNextVideo();
+                            }, 2000);
+                        });
                     });
+                    
+                    // Add error event listener
+                    this.video.addEventListener('error', (e) => {
+                        console.log(`Video failed to load: ${videoSrc}`, e);
+                        // Hide loading indicator
+                        this.videoLoading.style.display = 'none';
+                        this.failedVideos++;
+                        
+                        // If too many videos fail, go directly to main menu
+                        if (this.failedVideos >= 3) {
+                            console.log('Too many video failures, skipping to main menu');
+                            this.skipToMainMenu();
+                        } else {
+                            // Try next video immediately
+                            this.playNextVideo();
+                        }
+                    });
+                    
+                    // Load the video
+                    this.video.load();
                 } else {
                     this.skipToMainMenu();
                 }

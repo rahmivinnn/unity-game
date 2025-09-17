@@ -383,6 +383,14 @@
             init() {
                 console.log('GameFlowController initialized');
                 this.startSplashScreen();
+                
+                // Safety timeout - if no video loads within 10 seconds, go to main menu
+                setTimeout(() => {
+                    if (this.currentVideoIndex < this.videos.length) {
+                        console.log('Video loading timeout, proceeding to main menu');
+                        this.goToMainMenu();
+                    }
+                }, 10000);
             }
             
             startSplashScreen() {
@@ -419,13 +427,33 @@
                 
                 // Update video source
                 video.src = currentVideoSrc;
-                video.load();
-                video.play();
+                
+                // Add load event listener
+                video.addEventListener('loadeddata', () => {
+                    console.log(`Video loaded successfully: ${currentVideoSrc}`);
+                    video.play().catch(error => {
+                        console.log('Video autoplay failed:', error);
+                        // If autoplay fails, try next video after short delay
+                        setTimeout(() => {
+                            this.nextVideo();
+                        }, 2000);
+                    });
+                });
+                
+                // Add error event listener
+                video.addEventListener('error', (e) => {
+                    console.log(`Video failed to load: ${currentVideoSrc}`, e);
+                    // Try next video immediately
+                    this.nextVideo();
+                });
                 
                 // When video ends, play next or go to main menu
                 video.onended = () => {
                     this.nextVideo();
                 };
+                
+                // Load the video
+                video.load();
             }
             
             nextVideo() {
