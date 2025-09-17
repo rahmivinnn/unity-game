@@ -1,0 +1,35 @@
+<svg width="120" height="90" viewBox="0 0 120 90" xmlns="http://www.w3.org/2000/svg">
+  <!-- Television -->
+  <!-- TV body -->
+  <rect x="10" y="15" width="100" height="60" fill="#2F2F2F" stroke="#1A1A1A" stroke-width="3" rx="8"/>
+  
+  <!-- Screen -->
+  <rect x="18" y="22" width="84" height="46" fill="#000080" stroke="#000040" stroke-width="2" rx="3"/>
+  
+  <!-- Screen content (static/pattern) -->
+  <rect x="20" y="24" width="80" height="42" fill="#000"/>
+  <rect x="22" y="26" width="76" height="38" fill="#1E1E1E"/>
+  
+  <!-- Static lines -->
+  <line x1="25" y1="30" x2="95" y2="30" stroke="#404040" stroke-width="1"/>
+  <line x1="25" y1="35" x2="95" y2="35" stroke="#404040" stroke-width="1"/>
+  <line x1="25" y1="40" x2="95" y2="40" stroke="#404040" stroke-width="1"/>
+  <line x1="25" y1="45" x2="95" y2="45" stroke="#404040" stroke-width="1"/>
+  <line x1="25" y1="50" x2="95" y2="50" stroke="#404040" stroke-width="1"/>
+  <line x1="25" y1="55" x2="95" y2="55" stroke="#404040" stroke-width="1"/>
+  <line x1="25" y1="60" x2="95" y2="60" stroke="#404040" stroke-width="1"/>
+  
+  <!-- Power button -->
+  <circle cx="95" cy="30" r="4" fill="#FF0000" stroke="#CC0000" stroke-width="1"/>
+  <text x="95" y="33" text-anchor="middle" font-family="Arial" font-size="6" fill="#FFF">●</text>
+  
+  <!-- Antenna -->
+  <line x1="30" y1="15" x2="20" y2="5" stroke="#C0C0C0" stroke-width="2"/>
+  <line x1="90" y1="15" x2="100" y2="5" stroke="#C0C0C0" stroke-width="2"/>
+  
+  <!-- TV stand -->
+  <rect x="45" y="75" width="30" height="8" fill="#2F2F2F" stroke="#1A1A1A" stroke-width="2" rx="4"/>
+  
+  <!-- Brand label -->
+  <text x="60" y="85" text-anchor="middle" font-family="Arial" font-size="8" fill="#C0C0C0">TV</text>
+</svg>

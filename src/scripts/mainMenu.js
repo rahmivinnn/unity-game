@@ -178,7 +178,7 @@ class MainMenu {
     }
 
     showAbout() {
-        alert('Energy Quest - Game Edukasi Penghematan Energi\n\nDikembangkan untuk meningkatkan kesadaran tentang pentingnya menghemat energi.');
+        window.gameNotification.info('🎮 Energy Quest - Game Edukasi Penghematan Energi\n\n💡 Dikembangkan untuk meningkatkan kesadaran tentang pentingnya menghemat energi.');
     }
 
     hideTooltip() {

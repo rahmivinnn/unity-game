@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scene 2 - Level 1: 客厅 (基础电路)</title>
+    <title>Energy Quest - Level 1: Ruang Tamu (Dasar Listrik)</title>
     <link rel="stylesheet" href="public/main.css">
     <link rel="stylesheet" href="public/scene2-level1.css">
-    <script src="public/globalGameState.js"></script>
+    <link rel="stylesheet" href="public/real-objects.css">
     <script src="public/audio-manager.js"></script>
 </head>
 <body>
@@ -17,172 +17,98 @@
             <img src="../../../Image/living room.png" alt="客厅背景" id="living-room-bg">
         </div>
 
-        <!-- HUD 界面 -->
+        <!-- HUD Interface -->
         <div id="level1-hud">
-            <!-- 左侧面板 -->
+            <!-- Panel Kiri -->
             <div class="left-panel">
                 <div class="character-display">
-                    <img src="../../../Image/2 karakter.png" alt="角色" class="character-avatar">
+                    <img src="./public/character2.png" alt="Karakter Ilmuwan" class="character-avatar">
                 </div>
                 <div class="inventory-panel">
-                    <h3>能量钥匙</h3>
+                    <h3>🔑 Kunci Energi</h3>
                     <div id="energy-keys-container">
-                        <!-- 能量钥匙将动态添加到这里 -->
+                        <!-- Kunci energi akan ditambahkan secara dinamis -->
                     </div>
                 </div>
                 <div class="power-status">
-                    <h3>电力状态</h3>
+                    <h3>⚡ Status Listrik</h3>
                     <div class="power-indicator">
-                        <span id="living-room-power-status">❌ 客厅断电</span>
+                        <span id="living-room-power-status">❌ Ruang Tamu Mati</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 右侧控制面板 -->
+            <!-- Panel Kanan -->
             <div class="right-panel">
                 <div class="level-info">
-                    <h2>Level 1: 客厅基础电路</h2>
-                    <p>目标: 修复电路，点亮客厅</p>
+                    <h2>Level 1: Ruang Tamu - Dasar Listrik</h2>
+                    <p>🎯 Misi: Hubungkan kabel listrik dan nyalakan lampu untuk menemukan petunjuk ilmuwan yang hilang!</p>
                 </div>
                 <div class="progress-tracker">
                     <div class="task-item" id="task-cable">
                         <span class="task-icon">🔌</span>
-                        <span class="task-text">修复电缆连接</span>
+                        <span class="task-text">Hubungkan Kabel Listrik</span>
                         <span class="task-status">⏳</span>
                     </div>
                     <div class="task-item" id="task-tv">
                         <span class="task-icon">📺</span>
-                        <span class="task-text">启动电视</span>
+                        <span class="task-text">Nyalakan TV untuk Petunjuk</span>
                         <span class="task-status">🔒</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 主要游戏区域 -->
+        <!-- Area Game Utama -->
         <div id="living-room-main">
-            <!-- 角色助手 SVG -->
+            <!-- Karakter Pemandu Ilmuwan -->
             <div id="character-guide" class="character-guide">
-                <svg width="120" height="150" viewBox="0 0 120 150" class="character-svg">
-                    <!-- 身体 -->
-                    <ellipse cx="60" cy="100" rx="25" ry="35" fill="#4A90E2" stroke="#2E5C8A" stroke-width="2" class="character-body"/>
-                    <!-- 头部 -->
-                    <circle cx="60" cy="45" r="20" fill="#FFE4B5" stroke="#D4A574" stroke-width="2" class="character-head"/>
-                    <!-- 眼睛 -->
-                    <circle cx="55" cy="40" r="3" fill="#333" class="character-eye-left"/>
-                    <circle cx="65" cy="40" r="3" fill="#333" class="character-eye-right"/>
-                    <!-- 嘴巴 -->
-                    <path d="M 52 50 Q 60 55 68 50" stroke="#333" stroke-width="2" fill="none" class="character-mouth"/>
-                    <!-- 手臂 -->
-                    <line x1="35" y1="85" x2="25" y2="110" stroke="#FFE4B5" stroke-width="8" stroke-linecap="round" class="character-arm-left"/>
-                    <line x1="85" y1="85" x2="95" y2="110" stroke="#FFE4B5" stroke-width="8" stroke-linecap="round" class="character-arm-right"/>
-                    <!-- 腿 -->
-                    <line x1="50" y1="130" x2="45" y2="145" stroke="#4A90E2" stroke-width="10" stroke-linecap="round" class="character-leg-left"/>
-                    <line x1="70" y1="130" x2="75" y2="145" stroke="#4A90E2" stroke-width="10" stroke-linecap="round" class="character-leg-right"/>
-                    <!-- 工具带 -->
-                    <rect x="45" y="95" width="30" height="8" fill="#8B4513" rx="2" class="character-belt"/>
-                    <circle cx="52" cy="99" r="3" fill="#FFD700" class="character-tool"/>
-                    <circle cx="60" cy="99" r="3" fill="#C0C0C0" class="character-tool"/>
-                    <circle cx="68" cy="99" r="3" fill="#FF6B6B" class="character-tool"/>
-                </svg>
+                <img src="./public/real-images/scientist-character.svg" alt="Scientist Guide" width="120" height="150" class="character-svg">
                 <div class="character-speech-bubble hidden" id="character-speech">
                     <div class="speech-content">
-                        <p id="speech-text">Halo! Saya akan membantu kamu belajar hemat energi!</p>
+                        <p id="speech-text">🔍 Selamat datang di rumah misterius! Bantu saya menemukan petunjuk dengan menghubungkan listrik!</p>
                     </div>
                     <div class="speech-arrow"></div>
                 </div>
             </div>
             
-            <!-- 交互对象 -->
+            <!-- Objek Interaktif -->
             <div class="interactive-objects">
-                <!-- 电池 -->
+                <!-- Baterai -->
                 <div class="interactive-item battery" id="battery-obj" data-object="battery">
                     <div class="object-highlight"></div>
-                    <div class="object-label">电池</div>
+                    <div class="object-label">🔋 Baterai</div>
                 </div>
 
-                <!-- 开关 -->
+                <!-- Saklar -->
                 <div class="interactive-item switch" id="switch-obj" data-object="switch">
                     <div class="object-highlight"></div>
-                    <div class="object-label">开关</div>
-                    <svg width="50" height="70" viewBox="0 0 50 70" class="switch-svg">
-                        <!-- Switch Plate -->
-                        <rect x="10" y="10" width="30" height="50" rx="5" fill="#F5F5F5" stroke="#DDD" stroke-width="2"/>
-                        <!-- Switch Toggle -->
-                        <rect x="15" y="25" width="20" height="15" rx="7" fill="#E0E0E0" stroke="#CCC" stroke-width="1" class="switch-toggle"/>
-                        <!-- Switch Button -->
-                        <circle cx="25" cy="32" r="6" fill="#FFF" stroke="#999" stroke-width="1" class="switch-button"/>
-                        <!-- Power Indicator -->
-                        <circle cx="25" cy="50" r="3" fill="#FF4444" class="switch-indicator" opacity="0.3"/>
-                        <!-- Screws -->
-                        <circle cx="17" cy="17" r="1.5" fill="#999"/>
-                        <circle cx="33" cy="17" r="1.5" fill="#999"/>
-                        <circle cx="17" cy="53" r="1.5" fill="#999"/>
-                        <circle cx="33" cy="53" r="1.5" fill="#999"/>
-                    </svg>
+                    <div class="object-label">🔘 Saklar</div>
+                    <img src="./public/real-images/switch.svg" alt="Switch" width="50" height="70" class="switch-svg">
                 </div>
 
-                <!-- 灯泡 -->
+                <!-- Lampu -->
                 <div class="interactive-item lamp" id="lamp-obj" data-object="lamp">
                     <div class="object-highlight"></div>
-                    <div class="object-label">灯泡</div>
+                    <div class="object-label">💡 Lampu</div>
                     <div class="lamp-glow" id="lamp-glow">
-                        <svg width="60" height="80" viewBox="0 0 60 80" class="lamp-svg">
-                            <!-- Lamp Base -->
-                            <rect x="20" y="65" width="20" height="10" rx="2" fill="#8B4513"/>
-                            <!-- Lamp Neck -->
-                            <rect x="27" y="55" width="6" height="15" fill="#A0522D"/>
-                            <!-- Bulb -->
-                            <circle cx="30" cy="35" r="20" fill="#FFF8DC" stroke="#E6E6FA" stroke-width="2" class="lamp-bulb"/>
-                            <!-- Filament -->
-                            <path d="M 20 35 Q 30 25 40 35 Q 30 45 20 35" stroke="#FFD700" stroke-width="1" fill="none" class="lamp-filament" opacity="0"/>
-                            <!-- Glow Effect -->
-                            <circle cx="30" cy="35" r="25" fill="url(#lampGlow)" class="lamp-glow-effect" opacity="0"/>
-                            <!-- Gradient Definition -->
-                            <defs>
-                                <radialGradient id="lampGlow" cx="50%" cy="50%" r="50%">
-                                    <stop offset="0%" style="stop-color:#FFFF99;stop-opacity:0.8" />
-                                    <stop offset="70%" style="stop-color:#FFD700;stop-opacity:0.4" />
-                                    <stop offset="100%" style="stop-color:#FFA500;stop-opacity:0" />
-                                </radialGradient>
-                            </defs>
-                        </svg>
+                        <img src="./public/real-images/lamp.svg" alt="Lamp" width="60" height="80" class="lamp-svg">
                     </div>
                 </div>
 
-                <!-- 电视 -->
+                <!-- TV -->
                 <div class="interactive-item tv" id="tv-obj" data-object="tv">
                     <div class="object-highlight"></div>
-                    <div class="object-label">老式电视</div>
+                    <div class="object-label">📺 TV Petunjuk</div>
                     <div class="tv-screen" id="tv-screen">
-                        <svg width="80" height="60" viewBox="0 0 80 60" class="tv-svg">
-                            <!-- TV Body -->
-                            <rect x="5" y="10" width="70" height="45" rx="5" fill="#2D2D2D" stroke="#1A1A1A" stroke-width="2"/>
-                            <!-- Screen -->
-                            <rect x="10" y="15" width="60" height="35" rx="2" fill="#000" class="tv-screen-area"/>
-                            <!-- Screen Content (when on) -->
-                            <rect x="10" y="15" width="60" height="35" rx="2" fill="url(#tvGradient)" class="tv-screen-content" opacity="0"/>
-                            <!-- Power Button -->
-                            <circle cx="15" cy="52" r="3" fill="#FF4444" class="tv-power-btn"/>
-                            <!-- Antenna -->
-                            <line x1="40" y1="10" x2="35" y2="2" stroke="#666" stroke-width="2"/>
-                            <line x1="40" y1="10" x2="45" y2="2" stroke="#666" stroke-width="2"/>
-                            <!-- Gradient Definition -->
-                            <defs>
-                                <linearGradient id="tvGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:0.8" />
-                                    <stop offset="50%" style="stop-color:#87CEEB;stop-opacity:0.6" />
-                                    <stop offset="100%" style="stop-color:#4A90E2;stop-opacity:0.8" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
+                        <img src="./public/real-images/tv.svg" alt="TV" width="80" height="60" class="tv-svg">
                     </div>
                 </div>
 
-                <!-- 电缆桌子区域 -->
+                <!-- Area Meja Kabel -->
                 <div class="interactive-item cable-table" id="cable-table-obj" data-object="cable_table">
                     <div class="object-highlight"></div>
-                    <div class="object-label">电缆工作台</div>
+                    <div class="object-label">🔧 Meja Eksperimen</div>
                     <div class="cable-pieces-preview">
                         <div class="cable-piece"></div>
                         <div class="cable-piece"></div>
@@ -191,7 +117,7 @@
                 </div>
             </div>
 
-            <!-- 提示气泡 -->
+            <!-- Bubble Petunjuk -->
             <div id="hint-bubble" class="hint-bubble hidden">
                 <div class="hint-content">
                     <p id="hint-text"></p>
@@ -200,69 +126,115 @@
             </div>
         </div>
 
-        <!-- Puzzle A: 电缆连接面板 -->
+        <!-- Puzzle A: Panel Koneksi Listrik -->
         <div id="cable-puzzle-overlay" class="puzzle-overlay hidden">
             <div class="puzzle-panel">
                 <div class="puzzle-header">
-                    <h3>修复电路连接</h3>
+                    <h3>🔌 Hubungkan Rangkaian Listrik</h3>
                     <button id="cable-puzzle-close" class="close-btn">×</button>
                 </div>
                 <div class="puzzle-content">
                     <div class="circuit-grid" id="circuit-grid">
-                        <!-- 电路组件网格 -->
+                        <!-- Grid Komponen Listrik -->
                         <div class="grid-slot" data-slot="battery-pos" data-type="battery-positive">
-                            <div class="slot-label">电池 (+)</div>
+                            <div class="slot-label">
+                                <div class="real-battery">
+                                    <div class="battery-label">Baterai (+)</div>
+                                </div>
+                            </div>
                         </div>
                         <div class="grid-slot" data-slot="switch" data-type="switch">
-                            <div class="slot-label">开关</div>
+                            <div class="slot-label">
+                                <div class="real-switch">
+                                    <div class="switch-plate">
+                                        <div class="switch-toggle"></div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 12px;">Saklar</div>
+                            </div>
                         </div>
                         <div class="grid-slot" data-slot="lamp" data-type="lamp">
-                            <div class="slot-label">灯泡</div>
+                            <div class="slot-label">
+                                <div class="real-lamp">
+                                    <div class="lamp-bulb">
+                                        <div class="lamp-filament"></div>
+                                    </div>
+                                    <div class="lamp-neck"></div>
+                                    <div class="lamp-base"></div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 12px;">Lampu</div>
+                            </div>
                         </div>
                         <div class="grid-slot" data-slot="battery-neg" data-type="battery-negative">
-                            <div class="slot-label">电池 (-)</div>
+                            <div class="slot-label">
+                                <div class="real-battery negative">
+                                    <div class="battery-label">Baterai (-)</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="components-area">
-                        <h4>拖拽组件到正确位置</h4>
+                        <h4>🔧 Seret Komponen ke Posisi yang Benar</h4>
                         <div class="draggable-components">
-                            <div class="component" data-component="battery-positive" draggable="true">
-                                <div class="component-icon">🔋+</div>
-                                <div class="component-label">电池正极</div>
+                            <div class="component real-object" data-component="battery-positive" draggable="true">
+                                <div class="component-icon">
+                                    <div class="real-battery" style="transform: scale(0.7);">
+                                        <div class="battery-label">+</div>
+                                    </div>
+                                </div>
+                                <div class="component-label">Kutub Positif</div>
                             </div>
-                            <div class="component" data-component="switch" draggable="true">
-                                <div class="component-icon">🔘</div>
-                                <div class="component-label">开关</div>
+                            <div class="component real-object" data-component="switch" draggable="true">
+                                <div class="component-icon">
+                                    <div class="real-switch" style="transform: scale(0.7);">
+                                        <div class="switch-plate">
+                                            <div class="switch-toggle"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="component-label">Saklar</div>
                             </div>
-                            <div class="component" data-component="lamp" draggable="true">
-                                <div class="component-icon">💡</div>
-                                <div class="component-label">灯泡</div>
+                            <div class="component real-object" data-component="lamp" draggable="true">
+                                <div class="component-icon">
+                                    <div class="real-lamp" style="transform: scale(0.7);">
+                                        <div class="lamp-bulb">
+                                            <div class="lamp-filament"></div>
+                                        </div>
+                                        <div class="lamp-neck"></div>
+                                        <div class="lamp-base"></div>
+                                    </div>
+                                </div>
+                                <div class="component-label">Lampu</div>
                             </div>
-                            <div class="component" data-component="battery-negative" draggable="true">
-                                <div class="component-icon">🔋-</div>
-                                <div class="component-label">电池负极</div>
+                            <div class="component real-object" data-component="battery-negative" draggable="true">
+                                <div class="component-icon">
+                                    <div class="real-battery negative" style="transform: scale(0.7);">
+                                        <div class="battery-label">−</div>
+                                    </div>
+                                </div>
+                                <div class="component-label">Kutub Negatif</div>
                             </div>
                         </div>
                     </div>
                     <div class="cable-connections" id="cable-connections">
-                        <!-- 电缆连接线将在这里动态绘制 -->
+                        <!-- Kabel koneksi akan digambar secara dinamis -->
                         <svg id="connection-svg" width="100%" height="100%">
-                            <!-- 连接线将通过JavaScript动态添加 -->
+                            <!-- Garis koneksi akan ditambahkan melalui JavaScript -->
                         </svg>
                     </div>
                 </div>
                 <div class="puzzle-controls">
-                    <button id="test-circuit" class="puzzle-btn">测试电路</button>
-                    <button id="reset-circuit" class="puzzle-btn secondary">重置</button>
+                    <button id="test-circuit" class="puzzle-btn">⚡ Uji Rangkaian</button>
+                    <button id="reset-circuit" class="puzzle-btn secondary">🔄 Reset</button>
                 </div>
             </div>
         </div>
 
-        <!-- Puzzle B: TV 控制面板 -->
+        <!-- Puzzle B: Panel Kontrol TV -->
         <div id="tv-puzzle-overlay" class="puzzle-overlay hidden">
             <div class="puzzle-panel">
                 <div class="puzzle-header">
-                    <h3>启动老式电视</h3>
+                    <h3>📺 Nyalakan TV untuk Petunjuk</h3>
                     <button id="tv-puzzle-close" class="close-btn">×</button>
                 </div>
                 <div class="puzzle-content">
@@ -313,17 +285,17 @@
             </div>
         </div>
 
-        <!-- 教育信息面板 -->
+        <!-- Panel Informasi Edukasi -->
         <div id="educational-popup" class="popup-overlay hidden">
             <div class="popup-panel">
                 <div class="popup-header">
-                    <h3 id="edu-title">知识点</h3>
+                    <h3 id="edu-title">💡 Pengetahuan Listrik</h3>
                     <button id="edu-close" class="close-btn">×</button>
                 </div>
                 <div class="popup-content">
                     <p id="edu-content"></p>
                     <div class="edu-expand" id="edu-expand">
-                        <button id="edu-expand-btn">了解更多</button>
+                        <button id="edu-expand-btn">🔍 Pelajari Lebih Lanjut</button>
                         <div class="edu-detail" id="edu-detail"></div>
                     </div>
                 </div>
@@ -356,7 +328,7 @@
     </audio>
 
     <!-- JavaScript -->
-    <script src="scripts/globalGameState.js"></script>
+    <script src="public/globalGameState.js"></script>
     <script src="scripts/narrativeSystem.js"></script>
     <script src="scripts/scene2-level1.js"></script>
 </body>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scene 5 - Level 4: 地下室最终评估</title>
+    <title>Energy Quest - Level 4: Ruang Bawah Tanah (Evaluasi Akhir)</title>
     <link rel="stylesheet" href="public/main.css">
     <link rel="stylesheet" href="public/scene5-level4.css">
     <script src="public/globalGameState.js"></script>
@@ -14,7 +14,7 @@
     <div id="scene5-level4-container" class="scene-container hidden">
         <!-- Background -->
         <div class="scene-background">
-            <img src="public/images/basement-background.jpg" alt="地下室背景" class="background-image">
+            <img src="public/images/basement-background.jpg" alt="Latar Belakang Ruang Bawah Tanah" class="background-image">
             <div class="background-overlay"></div>
         </div>
 
@@ -23,29 +23,29 @@
             <!-- Header -->
             <div id="final-puzzle-header" class="puzzle-header">
                 <div id="final-puzzle-title" class="puzzle-title">
-                    <h1>能源知识最终评估</h1>
-                    <p>运用你学到的知识，完成最终挑战</p>
+                    <h1>🏆 Evaluasi Akhir Pengetahuan Energi</h1>
+                    <p>Gunakan pengetahuan yang telah kamu pelajari untuk menyelesaikan tantangan terakhir</p>
                 </div>
                 
                 <div id="final-timer-display" class="timer-display">
-                    <span id="final-timer-text">剩余时间</span>
+                    <span id="final-timer-text">⏰ Waktu Tersisa</span>
                     <span id="final-timer-value">10:00</span>
                 </div>
                 
                 <div id="final-motivational-text" class="motivational-text">
-                    证明你已经掌握了能源管理的精髓！
+                    🌟 Buktikan bahwa kamu telah menguasai rahasia hemat energi!
                 </div>
             </div>
 
             <!-- Left Panel -->
             <div class="hud-left-panel">
                 <div class="level-info">
-                    <h2>Level 4: 地下室</h2>
-                    <p>最终评估挑战</p>
+                    <h2>🏠 Level 4: Ruang Bawah Tanah</h2>
+                    <p>Tantangan Evaluasi Akhir</p>
                 </div>
                 
                 <div class="progress-panel">
-                    <h3>完成进度</h3>
+                    <h3>📊 Progress Penyelesaian</h3>
                     <div class="progress-bar">
                         <div id="quiz-progress" class="progress-fill">0%</div>
                     </div>
@@ -55,26 +55,26 @@
                 </div>
                 
                 <div class="score-panel">
-                    <h3>当前得分</h3>
+                    <h3>🎯 Skor Saat Ini</h3>
                     <div class="score-display">
                         <span id="current-score">0</span> / <span id="max-score">100</span>
                     </div>
                     <div class="score-breakdown">
                         <div class="score-item">
-                            <span>正确答案:</span>
+                            <span>✅ Jawaban Benar:</span>
                             <span id="correct-count">0</span>
                         </div>
                         <div class="score-item">
-                            <span>错误答案:</span>
+                            <span>❌ Jawaban Salah:</span>
                             <span id="wrong-count">0</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="energy-keys-panel">
-                    <h3>收集的钥匙</h3>
+                    <h3>🗝️ Kunci Energi Terkumpul</h3>
                     <div id="collected-keys" class="energy-keys">
-                        <!-- 动态添加能量钥匙 -->
+                        <!-- Kunci energi akan ditambahkan secara dinamis -->
                     </div>
                 </div>
             </div>
@@ -82,37 +82,37 @@
             <!-- Right Panel -->
             <div class="hud-right-panel">
                 <div class="hint-panel">
-                    <h3>提示系统</h3>
+                    <h3>💡 Sistem Bantuan</h3>
                     <div id="hint-display" class="hint-display">
-                        <p id="hint-text">仔细阅读每个问题，运用你在前面关卡学到的知识。</p>
+                        <p id="hint-text">Baca setiap pertanyaan dengan teliti dan gunakan pengetahuan yang telah kamu pelajari di level sebelumnya.</p>
                     </div>
                     <div class="hint-controls">
                         <button id="hint-btn" class="hint-btn" disabled>
                             <span class="hint-icon">💡</span>
-                            <span>获取提示</span>
+                            <span>Dapatkan Petunjuk</span>
                             <span id="hint-count">(3)</span>
                         </button>
                     </div>
                 </div>
                 
                 <div class="knowledge-panel">
-                    <h3>知识回顾</h3>
+                    <h3>📚 Ringkasan Pengetahuan</h3>
                     <div class="knowledge-items">
                         <div class="knowledge-item" data-topic="circuit">
                             <span class="knowledge-icon">⚡</span>
-                            <span>电路基础</span>
+                            <span>Dasar Rangkaian Listrik</span>
                         </div>
                         <div class="knowledge-item" data-topic="efficiency">
                             <span class="knowledge-icon">🌱</span>
-                            <span>能效管理</span>
+                            <span>Manajemen Efisiensi Energi</span>
                         </div>
                         <div class="knowledge-item" data-topic="calculation">
                             <span class="knowledge-icon">🧮</span>
-                            <span>电费计算</span>
+                            <span>Perhitungan Tarif Listrik</span>
                         </div>
                         <div class="knowledge-item" data-topic="conservation">
                             <span class="knowledge-icon">💚</span>
-                            <span>节能技巧</span>
+                            <span>Tips Hemat Energi</span>
                         </div>
                     </div>
                 </div>
@@ -123,33 +123,33 @@
                 <!-- Question Display -->
                 <div id="question-container" class="question-container">
                     <div class="question-header">
-                        <span class="question-number">问题 <span id="question-num">1</span></span>
-                        <span class="question-category" id="question-category">电路基础</span>
+                        <span class="question-number">❓ Pertanyaan <span id="question-num">1</span></span>
+                        <span class="question-category" id="question-category">Dasar Rangkaian Listrik</span>
                     </div>
                     
                     <div class="question-content">
                         <h3 id="question-text" class="question-text">
-                            在一个简单的电路中，电流的流动需要什么条件？
+                            Dalam rangkaian listrik sederhana, apa yang diperlukan agar arus listrik dapat mengalir?
                         </h3>
                         
                         <div id="question-image" class="question-image hidden">
-                            <img id="question-img" src="" alt="问题图片">
+                            <img id="question-img" src="" alt="Gambar Pertanyaan">
                         </div>
                     </div>
                     
                     <div id="answer-options" class="answer-options">
-                        <!-- 动态生成答案选项 -->
+                        <!-- Opsi jawaban akan dibuat secara dinamis -->
                     </div>
                     
                     <div class="question-controls">
                         <button id="submit-answer" class="submit-btn" disabled>
                             <span class="submit-icon">✓</span>
-                            <span>提交答案</span>
+                            <span>Kirim Jawaban</span>
                         </button>
                         
                         <button id="skip-question" class="skip-btn">
                             <span class="skip-icon">⏭</span>
-                            <span>跳过问题</span>
+                            <span>Lewati Pertanyaan</span>
                         </button>
                     </div>
                 </div>
@@ -159,17 +159,17 @@
                     <div class="feedback-content">
                         <div id="feedback-result" class="feedback-result">
                             <span id="feedback-icon" class="feedback-icon">✓</span>
-                            <span id="feedback-title" class="feedback-title">回答正确！</span>
+                            <span id="feedback-title" class="feedback-title">Jawaban Benar!</span>
                         </div>
                         
                         <div id="feedback-explanation" class="feedback-explanation">
-                            <p id="explanation-text">很好！电流需要一个完整的闭合回路才能流动。</p>
+                            <p id="explanation-text">Bagus! Arus listrik memerlukan rangkaian tertutup yang lengkap untuk dapat mengalir.</p>
                         </div>
                         
                         <div class="feedback-controls">
                             <button id="next-question" class="next-btn">
                                 <span class="next-icon">→</span>
-                                <span>下一题</span>
+                                <span>Pertanyaan Berikutnya</span>
                             </button>
                         </div>
                     </div>
@@ -180,18 +180,18 @@
         <!-- Knowledge Review Popup -->
         <div id="knowledge-popup" class="knowledge-popup hidden">
             <div class="popup-content">
-                <h3 id="knowledge-title">电路基础知识</h3>
+                <h3 id="knowledge-title">⚡ Pengetahuan Dasar Rangkaian Listrik</h3>
                 <div id="knowledge-content" class="knowledge-content">
-                    <p>电路是电流流动的路径。基本电路包含：</p>
+                    <p>Rangkaian listrik adalah jalur aliran arus listrik. Komponen dasar rangkaian meliputi:</p>
                     <ul>
-                        <li>电源（如电池）</li>
-                        <li>导线（连接各部件）</li>
-                        <li>负载（如灯泡）</li>
-                        <li>开关（控制电流）</li>
+                        <li>🔋 Sumber listrik (seperti baterai)</li>
+                        <li>🔌 Kabel penghubung (menghubungkan komponen)</li>
+                        <li>💡 Beban listrik (seperti lampu)</li>
+                        <li>🔘 Saklar (mengontrol aliran arus)</li>
                     </ul>
-                    <p>电流只能在闭合回路中流动。</p>
+                    <p>Arus listrik hanya dapat mengalir dalam rangkaian tertutup.</p>
                 </div>
-                <button id="knowledge-close" class="knowledge-close">关闭</button>
+                <button id="knowledge-close" class="knowledge-close">❌ Tutup</button>
             </div>
         </div>
 
@@ -199,9 +199,9 @@
         <div id="final-results" class="final-results hidden">
             <div class="results-content">
                 <div class="results-header">
-                    <h2 id="results-title">评估完成！</h2>
+                    <h2 id="results-title">🎉 Evaluasi Selesai!</h2>
                     <div class="final-score">
-                        <span class="score-label">最终得分</span>
+                        <span class="score-label">Skor Akhir</span>
                         <span id="final-score-value" class="score-value">85</span>
                         <span class="score-unit">/100</span>
                     </div>
@@ -209,21 +209,21 @@
                 
                 <div class="results-breakdown">
                     <div class="breakdown-item">
-                        <span class="breakdown-label">正确率:</span>
+                        <span class="breakdown-label">📊 Tingkat Akurasi:</span>
                         <span id="accuracy-rate" class="breakdown-value">85%</span>
                     </div>
                     <div class="breakdown-item">
-                        <span class="breakdown-label">完成时间:</span>
+                        <span class="breakdown-label">⏱️ Waktu Penyelesaian:</span>
                         <span id="completion-time" class="breakdown-value">8:32</span>
                     </div>
                     <div class="breakdown-item">
-                        <span class="breakdown-label">使用提示:</span>
-                        <span id="hints-used" class="breakdown-value">1次</span>
+                        <span class="breakdown-label">💡 Petunjuk Digunakan:</span>
+                        <span id="hints-used" class="breakdown-value">1 kali</span>
                     </div>
                 </div>
                 
                 <div class="performance-rating">
-                    <h3>表现评级</h3>
+                    <h3>🌟 Rating Performa</h3>
                     <div id="rating-display" class="rating-display">
                         <div class="rating-stars">
                             <span class="star active">★</span>
@@ -232,38 +232,38 @@
                             <span class="star">★</span>
                             <span class="star">★</span>
                         </div>
-                        <div id="rating-text" class="rating-text">良好掌握</div>
+                        <div id="rating-text" class="rating-text">Penguasaan Baik</div>
                     </div>
                 </div>
                 
                 <div class="achievement-unlock">
-                    <h3>解锁成就</h3>
+                    <h3>🏆 Pencapaian Terbuka</h3>
                     <div class="achievement-item">
-                        <img src="public/images/master_key.png" alt="能源大师钥匙" class="achievement-image">
+                        <img src="public/images/master_key.png" alt="Kunci Master Energi" class="achievement-image">
                         <div class="achievement-info">
-                            <h4>能源管理大师</h4>
-                            <p>成功完成所有能源知识挑战</p>
+                            <h4>🔑 Master Manajemen Energi</h4>
+                            <p>Berhasil menyelesaikan semua tantangan pengetahuan energi</p>
                         </div>
                     </div>
                 </div>
                 
                 <div class="final-message">
-                    <h3>恭喜你！</h3>
+                    <h3>🎊 Selamat!</h3>
                     <p id="final-message-text">
-                        你已经成功掌握了能源管理的核心知识。从电路基础到能效优化，从电费计算到节能技巧，你都表现出色。
-                        现在你可以在日常生活中应用这些知识，成为真正的能源管理专家！
+                        Kamu telah berhasil menguasai pengetahuan inti manajemen energi. Dari dasar rangkaian listrik hingga optimasi efisiensi, dari perhitungan tarif listrik hingga tips hemat energi, kamu menunjukkan performa yang luar biasa.
+                        Sekarang kamu dapat menerapkan pengetahuan ini dalam kehidupan sehari-hari dan menjadi ahli manajemen energi sejati!
                     </p>
                 </div>
                 
                 <div class="final-controls">
                     <button id="restart-quiz" class="control-btn secondary">
                         <span class="btn-icon">🔄</span>
-                        <span>重新挑战</span>
+                        <span>Ulangi Tantangan</span>
                     </button>
                     
                     <button id="complete-game" class="control-btn primary">
                         <span class="btn-icon">🏆</span>
-                        <span>完成游戏</span>
+                        <span>Selesaikan Permainan</span>
                     </button>
                 </div>
             </div>
@@ -272,15 +272,15 @@
         <!-- Hint Usage Popup -->
         <div id="hint-popup" class="hint-popup hidden">
             <div class="popup-content">
-                <h3>提示信息</h3>
+                <h3>💡 Informasi Petunjuk</h3>
                 <div id="hint-popup-content" class="hint-popup-content">
-                    <p>这个问题考查的是电路的基本原理。回想一下在客厅关卡中学到的知识。</p>
+                    <p>Pertanyaan ini menguji prinsip dasar rangkaian listrik. Ingat kembali pengetahuan yang dipelajari di level ruang tamu.</p>
                 </div>
                 <div class="hint-controls">
-                    <span class="hint-cost">使用提示将扣除5分</span>
+                    <span class="hint-cost">Menggunakan petunjuk akan mengurangi 5 poin</span>
                     <div class="hint-buttons">
-                        <button id="use-hint" class="use-hint-btn">使用提示</button>
-                        <button id="cancel-hint" class="cancel-hint-btn">取消</button>
+                        <button id="use-hint" class="use-hint-btn">Gunakan Petunjuk</button>
+                        <button id="cancel-hint" class="cancel-hint-btn">Batal</button>
                     </div>
                 </div>
             </div>
@@ -290,8 +290,8 @@
         <div id="quiz-loading" class="quiz-loading hidden">
             <div class="loading-content">
                 <div class="loading-spinner"></div>
-                <h3>正在加载题目...</h3>
-                <p>请稍候，系统正在准备你的专属挑战</p>
+                <h3>⏳ Memuat Soal...</h3>
+                <p>Mohon tunggu, sistem sedang menyiapkan tantangan khusus untukmu</p>
             </div>
         </div>
     </div>

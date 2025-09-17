@@ -654,15 +654,71 @@
             position: absolute;
             width: 150px;
             height: 150px;
-            border: 3px dashed transparent;
-            border-radius: 50%;
-            transition: all 0.3s ease;
+            border: 4px dashed transparent;
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: linear-gradient(135deg, 
+                rgba(102, 126, 234, 0.1) 0%, 
+                rgba(118, 75, 162, 0.1) 100%);
+            backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .drop-zone::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                transparent 0%, 
+                rgba(255,255,255,0.1) 50%, 
+                transparent 100%);
+            border-radius: 16px;
+        }
+
+        .drop-zone::after {
+            content: '⚡';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+            color: rgba(255, 215, 0, 0.6);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+            animation: dropZonePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes dropZonePulse {
+            0%, 100% { 
+                opacity: 0.6;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% { 
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.1);
+            }
         }
 
         .drop-zone.active {
             border-color: #FFD700;
-            background: rgba(255, 215, 0, 0.1);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            background: linear-gradient(135deg, 
+                rgba(255, 215, 0, 0.2) 0%, 
+                rgba(255, 247, 0, 0.15) 100%);
+            box-shadow: 
+                0 0 30px rgba(255, 215, 0, 0.7),
+                inset 0 0 20px rgba(255, 215, 0, 0.3),
+                0 0 60px rgba(255, 215, 0, 0.4);
+            transform: scale(1.05);
+            border-style: solid;
+        }
+
+        .drop-zone.active::after {
+            color: #FFD700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 1);
+            animation: dropZonePulse 1s ease-in-out infinite;
         }
 
         .object-label {

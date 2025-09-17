@@ -331,7 +331,7 @@ class Game2D {
             '4': 'Level 4: Kuis evaluasi dengan 10 soal acak. Jawab dengan benar untuk menyelesaikan permainan. Setiap soal memiliki batas waktu 15 detik.'
         };
         
-        alert(tutorials[level] || 'Tutorial tidak tersedia.');
+        window.gameNotification.info(tutorials[level] || '📚 Tutorial tidak tersedia.');
     }
     
     // Level 1 - Circuit Puzzle

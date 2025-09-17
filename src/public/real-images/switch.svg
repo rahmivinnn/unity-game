@@ -1,0 +1,27 @@
+<svg width="60" height="80" viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Light Switch -->
+  <!-- Switch plate -->
+  <rect x="10" y="10" width="40" height="60" fill="#F5F5F5" stroke="#D3D3D3" stroke-width="2" rx="5"/>
+  
+  <!-- Switch toggle -->
+  <rect x="20" y="25" width="20" height="30" fill="#FFFFFF" stroke="#C0C0C0" stroke-width="1" rx="3"/>
+  
+  <!-- Switch button -->
+  <rect x="22" y="30" width="16" height="12" fill="#E0E0E0" stroke="#B0B0B0" stroke-width="1" rx="2"/>
+  
+  <!-- ON/OFF labels -->
+  <text x="30" y="22" text-anchor="middle" font-family="Arial" font-size="6" fill="#000">ON</text>
+  <text x="30" y="62" text-anchor="middle" font-family="Arial" font-size="6" fill="#000">OFF</text>
+  
+  <!-- Screws -->
+  <circle cx="18" cy="18" r="2" fill="#C0C0C0" stroke="#808080"/>
+  <circle cx="42" cy="18" r="2" fill="#C0C0C0" stroke="#808080"/>
+  <circle cx="18" cy="62" r="2" fill="#C0C0C0" stroke="#808080"/>
+  <circle cx="42" cy="62" r="2" fill="#C0C0C0" stroke="#808080"/>
+  
+  <!-- Screw slots -->
+  <line x1="16" y1="18" x2="20" y2="18" stroke="#808080" stroke-width="1"/>
+  <line x1="40" y1="18" x2="44" y2="18" stroke="#808080" stroke-width="1"/>
+  <line x1="16" y1="62" x2="20" y2="62" stroke="#808080" stroke-width="1"/>
+  <line x1="40" y1="62" x2="44" y2="62" stroke="#808080" stroke-width="1"/>
+</svg>

@@ -54,12 +54,37 @@ body {
     overflow: hidden;
 }
 
+/* Menu Rows for Better Layout */
+.menu-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+/* Compact Button Style */
+.unity-btn.compact {
+    width: 380px;
+    height: 80px;
+    padding: 15px 20px;
+}
+
+.unity-btn.compact .btn-title {
+    font-size: 1.1rem;
+}
+
+.unity-btn.compact .btn-desc {
+    font-size: 0.85rem;
+}
+
 /* Header Container */
 .header-container {
     position: absolute;
     top: 20px;
-    right: 80px;
-    text-align: right;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
     z-index: 10;
 }
 
@@ -102,14 +127,14 @@ body {
 .game-title-energy,
 .game-title-quest {
     font-family: 'Orbitron', sans-serif;
-    font-size: 3.5rem;
+    font-size: 2.8rem;
     font-weight: 900;
     color: #FFD700;
     text-shadow: 
         0 0 5px rgba(255, 215, 0, 0.4),
         2px 2px 4px rgba(0, 0, 0, 0.8);
     margin: 0;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     text-transform: uppercase;
     line-height: 0.9;
 }
@@ -174,16 +199,19 @@ body {
     color: #00BFFF;
 }
 
-/* Level Menu (Left Side) */
+/* Level Menu (Centered) */
 .level-menu {
     position: absolute;
-    left: 50px;
-    top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    top: 55%;
+    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
     z-index: 5;
+    width: 100%;
+    max-width: 800px;
+    align-items: center;
 }
 
 /* Unity-Style Buttons */

@@ -140,6 +140,15 @@ class GlobalGameState {
     }
     
     // Story progression
+    getStoryProgress() {
+        return {
+            openingWatched: this.gameData.story.currentChapter >= 1,
+            currentChapter: this.gameData.story.currentChapter,
+            scientistFound: this.gameData.story.scientistFound,
+            mysteryResolved: this.gameData.story.mysteryResolved
+        };
+    }
+    
     updateStoryProgress(chapter, scientistFound = false) {
         this.gameData.story.currentChapter = Math.max(
             this.gameData.story.currentChapter, 

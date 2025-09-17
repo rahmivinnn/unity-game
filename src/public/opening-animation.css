@@ -97,14 +97,15 @@ body {
     100% { transform: translateX(100%); }
 }
 
-/* House Structure */
+/* House Structure - Enhanced Design */
 .house-exterior {
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 350px;
-    height: 250px;
+    width: 400px;
+    height: 280px;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
 }
 
 .house-structure {
@@ -119,7 +120,26 @@ body {
     left: 10%;
     width: 80%;
     height: 40%;
-    background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+    background: linear-gradient(135deg, #8B4513 0%, #654321 50%, #4A2C17 100%);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    border-bottom: 3px solid #5D4037;
+    position: relative;
+}
+
+.roof::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        transparent 8px,
+        rgba(139, 69, 19, 0.3) 8px,
+        rgba(139, 69, 19, 0.3) 10px
+    );
     clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
 
@@ -129,7 +149,10 @@ body {
     left: 15%;
     width: 70%;
     height: 65%;
-    background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+    background: linear-gradient(180deg, #E8E8E8 0%, #D0D0D0 50%, #B8B8B8 100%);
+    border: 2px solid #A0A0A0;
+    border-radius: 4px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
 }
 
 .windows {
@@ -144,8 +167,13 @@ body {
     position: absolute;
     width: 35%;
     height: 80%;
-    background: #1a1a1a;
-    border: 2px solid #4a4a4a;
+    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
+    border: 4px solid #8B4513;
+    border-radius: 8px;
+    box-shadow: 
+        inset 0 0 10px rgba(255,255,255,0.3),
+        0 4px 8px rgba(0,0,0,0.3);
+    overflow: hidden;
 }
 
 .window-1 {
@@ -163,7 +191,18 @@ body {
     transform: translate(-50%, -50%);
     width: 90%;
     height: 90%;
-    border: 1px solid #666;
+    border: 2px solid #654321;
+    background: linear-gradient(45deg, transparent 48%, #654321 48%, #654321 52%, transparent 52%);
+}
+
+.window-frame::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, transparent 48%, #654321 48%, #654321 52%, transparent 52%);
 }
 
 .window-light {
@@ -172,9 +211,10 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle, #ffff88 0%, transparent 70%);
-    opacity: 0.6;
+    background: radial-gradient(circle at 30% 30%, #FFE135 0%, #FFA500 40%, transparent 70%);
+    opacity: 0.8;
     animation: windowFlicker 4s ease-in-out infinite;
+    mix-blend-mode: overlay;
 }
 
 .tv-screen {
@@ -229,26 +269,43 @@ body {
     transform: translateX(-50%);
     width: 20%;
     height: 40%;
-    background: linear-gradient(180deg, #4a3c2a 0%, #3a2c1a 100%);
+    background: linear-gradient(180deg, #8B4513 0%, #654321 50%, #4A2C17 100%);
+    border: 3px solid #5D4037;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 
+        inset 0 0 10px rgba(0,0,0,0.2),
+        0 4px 8px rgba(0,0,0,0.3);
 }
 
 .door-frame {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 2px solid #5a4c3a;
+    top: 5%;
+    left: 5%;
+    width: 90%;
+    height: 90%;
+    border: 2px solid #4A2C17;
+    border-radius: 4px;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 8px,
+        rgba(74, 44, 23, 0.2) 8px,
+        rgba(74, 44, 23, 0.2) 10px
+    );
 }
 
 .door-handle {
     position: absolute;
     top: 50%;
-    right: 10%;
-    width: 8px;
-    height: 8px;
-    background: #ffd700;
+    right: 15%;
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle, #FFD700 0%, #FFA500 100%);
     border-radius: 50%;
+    border: 2px solid #B8860B;
+    box-shadow: 
+        0 2px 4px rgba(0,0,0,0.3),
+        inset 0 1px 2px rgba(255,255,255,0.5);
 }
 
 .chimney {
@@ -257,7 +314,10 @@ body {
     right: 25%;
     width: 15%;
     height: 30%;
-    background: linear-gradient(180deg, #4a4a4a 0%, #3a3a3a 100%);
+    background: linear-gradient(180deg, #8B0000 0%, #654321 50%, #4A2C17 100%);
+    border: 2px solid #5D4037;
+    border-radius: 4px 4px 0 0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
 .smoke {
@@ -537,7 +597,7 @@ body {
     50% { opacity: 0.3; }
 }
 
-/* Electrical Equipment */
+/* Electrical Equipment - Enhanced Design */
 .electrical-equipment {
     position: absolute;
     top: 10%;
@@ -547,32 +607,57 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-    gap: 20px;
+    gap: 25px;
+    perspective: 1000px;
 }
 
 .device {
     position: relative;
-    background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
-    border: 2px solid #555;
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    background: linear-gradient(135deg, #E8E8E8 0%, #D0D0D0 50%, #B8B8B8 100%);
+    border: 3px solid #A0A0A0;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 
+        0 8px 25px rgba(0,0,0,0.4),
+        inset 0 1px 3px rgba(255,255,255,0.3);
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
 }
 
-/* Oscilloscope */
+.device:hover {
+    transform: rotateY(5deg) rotateX(5deg);
+}
+
+/* Oscilloscope - Professional Design */
 .oscilloscope {
-    background: linear-gradient(135deg, #2a4a2a 0%, #1a3a1a 100%);
-    border-color: #4a9eff;
+    background: linear-gradient(135deg, #2C3E50 0%, #34495E 50%, #2C3E50 100%);
+    border-color: #3498DB;
+    position: relative;
+}
+
+.oscilloscope::before {
+    content: 'OSCILLOSCOPE';
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7em;
+    font-weight: bold;
+    color: #ECF0F1;
+    letter-spacing: 1px;
 }
 
 .oscilloscope .screen {
     position: relative;
     width: 100%;
     height: 60%;
-    background: #001100;
-    border: 3px solid #333;
-    border-radius: 5px;
+    background: linear-gradient(135deg, #0F1419 0%, #1A252F 100%);
+    border: 4px solid #34495E;
+    border-radius: 8px;
     overflow: hidden;
+    box-shadow: 
+        inset 0 0 20px rgba(0,0,0,0.5),
+        0 0 10px rgba(52, 152, 219, 0.3);
 }
 
 .waveform {
@@ -659,21 +744,37 @@ body {
     50% { opacity: 1; }
 }
 
-/* Multimeter */
+/* Multimeter - Professional Design */
 .multimeter {
-    background: linear-gradient(135deg, #4a4a2a 0%, #3a3a1a 100%);
+    background: linear-gradient(135deg, #E74C3C 0%, #C0392B 50%, #A93226 100%);
+    position: relative;
+}
+
+.multimeter::before {
+    content: 'DIGITAL MULTIMETER';
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.6em;
+    font-weight: bold;
+    color: #FFFFFF;
+    letter-spacing: 0.5px;
 }
 
 .multimeter .display {
     position: relative;
     width: 100%;
     height: 40%;
-    background: #000;
-    border: 2px solid #333;
-    border-radius: 5px;
+    background: linear-gradient(135deg, #000000 0%, #1C1C1C 100%);
+    border: 3px solid #2C3E50;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 
+        inset 0 0 15px rgba(0,0,0,0.7),
+        0 0 8px rgba(231, 76, 60, 0.3);
 }
 
 .digital-readout {

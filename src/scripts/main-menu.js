@@ -457,7 +457,7 @@ function unlockAllKeysForTesting() {
     
     if (typeof window.globalGameState !== 'undefined') {
         window.globalGameState.unlockAllEnergyKeys();
-        alert('Semua Kunci Energi telah dibuka untuk testing!\nSekarang Anda dapat mengakses Gerbang Evaluasi Akhir.');
+        window.gameNotification.achievement('🔓 Semua Kunci Energi telah dibuka untuk testing!\n🚪 Sekarang Anda dapat mengakses Gerbang Evaluasi Akhir.');
     } else {
         // Fallback method
         const testData = {
@@ -469,7 +469,7 @@ function unlockAllKeysForTesting() {
             }
         };
         localStorage.setItem('globalGameState', JSON.stringify(testData));
-        alert('Semua Kunci Energi telah dibuka untuk testing (fallback method)!\nSekarang Anda dapat mengakses Gerbang Evaluasi Akhir.');
+        window.gameNotification.achievement('🔓 Semua Kunci Energi telah dibuka untuk testing (fallback method)!\n🚪 Sekarang Anda dapat mengakses Gerbang Evaluasi Akhir.');
     }
 }
 

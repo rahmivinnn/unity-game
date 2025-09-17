@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1600, height=720, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="public/responsive-1600x720.css">
     <title>Energy Quest: Misteri Hemat Listrik</title>
+    <script src="scripts/in-game-notifications.js"></script>
     <link rel="stylesheet" href="public/main-menu.css">
     <link rel="icon" type="image/x-icon" href="public/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -31,7 +33,7 @@
                 <!-- Transparent button over Energy Quest text -->
                 <button class="transparent-title-btn" onclick="loadSplashScreen()" title="Klik untuk ke Splashscreen"></button>
             </div>
-            <p class="game-subtitle">Misteri Hemat Listrik - Puzzle Adventure</p>
+            <p class="game-subtitle">Misteri Hemat Listrik</p>
         </div>
 
         <!-- Top Right Options -->
@@ -52,67 +54,74 @@
 
         <!-- Main Game Buttons -->
         <div class="level-menu">
-            <button class="unity-btn level-btn main-game-btn" data-level="games" onclick="loadMainGame()">
-                <div class="btn-glow"></div>
-                <i class="fas fa-plug btn-icon"></i>
-                <div class="btn-content">
-                    <span class="btn-title">GAMES</span>
-                    <span class="btn-desc">Hubungkan Listrik & Nyalakan Lampu</span>
-                </div>
-            </button>
+            <!-- Row 1: Main Adventures -->
+            <div class="menu-row">
+                <button class="unity-btn level-btn main-game-btn compact" data-level="games" onclick="loadMainGame()">
+                    <div class="btn-glow"></div>
+                    <i class="fas fa-plug btn-icon"></i>
+                    <div class="btn-content">
+                        <span class="btn-title">PUZZLE LISTRIK</span>
+                        <span class="btn-desc">Hubungkan Kabel & Nyalakan Lampu</span>
+                    </div>
+                </button>
+                
+                <button class="unity-btn level-btn simcity-btn compact" data-level="simcity" onclick="loadSimCity()">
+                    <div class="btn-glow"></div>
+                    <i class="fas fa-cube btn-icon"></i>
+                    <div class="btn-content">
+                        <span class="btn-title">3D ADVENTURE</span>
+                        <span class="btn-desc">Petualangan Rumah Hemat Energi</span>
+                    </div>
+                </button>
+            </div>
             
-            <button class="unity-btn level-btn quiz-btn" data-level="quiz" onclick="loadQuiz()">
-                <div class="btn-glow"></div>
-                <i class="fas fa-question-circle btn-icon"></i>
-                <div class="btn-content">
-                    <span class="btn-title">KUIS ENERGI</span>
-                    <span class="btn-desc">Uji Pengetahuan Hemat Energi</span>
-                </div>
-            </button>
+            <!-- Row 2: Quiz & Final Gate -->
+            <div class="menu-row">
+                <button class="unity-btn level-btn quiz-btn compact" data-level="quiz" onclick="loadQuiz()">
+                    <div class="btn-glow"></div>
+                    <i class="fas fa-question-circle btn-icon"></i>
+                    <div class="btn-content">
+                        <span class="btn-title">KUIS ENERGI</span>
+                        <span class="btn-desc">Uji Pengetahuan Hemat Listrik</span>
+                    </div>
+                </button>
+                
+                <button class="unity-btn level-btn final-gate-btn compact" data-level="final-gate" onclick="loadFinalGate()" id="final-gate-btn">
+                    <div class="btn-glow"></div>
+                    <i class="fas fa-door-open btn-icon"></i>
+                    <div class="btn-content">
+                        <span class="btn-title">GERBANG EVALUASI AKHIR</span>
+                        <span class="btn-desc">Kumpulkan 4 Kunci Energi</span>
+                    </div>
+                </button>
+            </div>
             
-            <button class="unity-btn level-btn energy-game-btn" data-level="energy-game" onclick="loadEnergyGame()" id="energy-game-btn" style="display: none;">
+            <!-- Hidden/Testing Buttons -->
+            <button class="unity-btn level-btn energy-game-btn compact" data-level="energy-game" onclick="loadEnergyGame()" id="energy-game-btn" style="display: none;">
                 <div class="btn-glow"></div>
                 <i class="fas fa-home btn-icon"></i>
                 <div class="btn-content">
                     <span class="btn-title">MAP & PUZZLE</span>
-                    <span class="btn-desc">Petualangan Top-Down Anime Style</span>
+                    <span class="btn-desc">Petualangan Top-Down</span>
                 </div>
             </button>
             
-            <button class="unity-btn level-btn experiments-btn" data-level="experiments" onclick="loadExperiments()" id="experiments-btn" style="display: none;">
+            <button class="unity-btn level-btn experiments-btn compact" data-level="experiments" onclick="loadExperiments()" id="experiments-btn" style="display: none;">
                 <div class="btn-glow"></div>
                 <i class="fas fa-flask btn-icon"></i>
                 <div class="btn-content">
                     <span class="btn-title">ENERGY EXPERIMENTS</span>
-                    <span class="btn-desc">10 Teknologi Energi Masa Depan</span>
-                </div>
-            </button>
-            
-            <button class="unity-btn level-btn simcity-btn" data-level="simcity" onclick="loadSimCity()">
-                <div class="btn-glow"></div>
-                <i class="fas fa-cube btn-icon"></i>
-                <div class="btn-content">
-                    <span class="btn-title">3D ADVENTURE</span>
-                    <span class="btn-desc">Petualangan Kota Hemat Energi 3D</span>
-                </div>
-            </button>
-            
-            <button class="unity-btn level-btn final-gate-btn" data-level="final-gate" onclick="loadFinalGate()" id="final-gate-btn">
-                <div class="btn-glow"></div>
-                <i class="fas fa-door-open btn-icon"></i>
-                <div class="btn-content">
-                    <span class="btn-title">GERBANG EVALUASI AKHIR</span>
-                    <span class="btn-desc">Kumpulkan 4 Kunci Energi untuk Membuka</span>
+                    <span class="btn-desc">Teknologi Energi Masa Depan</span>
                 </div>
             </button>
             
             <!-- Testing Button -->
-            <button class="unity-btn level-btn testing-btn" onclick="unlockAllKeysForTesting()" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); margin-top: 20px;">
+            <button class="unity-btn level-btn testing-btn compact" onclick="unlockAllKeysForTesting()" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); margin-top: 10px; display: none;">
                 <div class="btn-glow"></div>
                 <i class="fas fa-key btn-icon"></i>
                 <div class="btn-content">
                     <span class="btn-title">TESTING: UNLOCK ALL KEYS</span>
-                    <span class="btn-desc">Untuk Testing Gerbang Evaluasi Akhir</span>
+                    <span class="btn-desc">Untuk Testing</span>
                 </div>
             </button>
         </div>

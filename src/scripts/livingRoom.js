@@ -596,7 +596,7 @@ class LivingRoomScene {
       }, 1500);
     } else {
       // Fallback if gameState not available
-      alert('Level 2: Dapur akan segera tersedia!');
+      window.gameNotification.info('🍳 Level 2: Dapur akan segera tersedia!');
       
       // Return to main menu for now
       this.hide();

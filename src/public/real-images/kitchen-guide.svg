@@ -1,0 +1,49 @@
+<svg width="140" height="180" viewBox="0 0 140 180" xmlns="http://www.w3.org/2000/svg">
+  <!-- Chef Hat -->
+  <ellipse cx="70" cy="25" rx="30" ry="15" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="2"/>
+  <ellipse cx="70" cy="20" rx="25" ry="20" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="2"/>
+  
+  <!-- Head -->
+  <circle cx="70" cy="55" r="22" fill="#FFE4B5" stroke="#D4A574" stroke-width="2"/>
+  
+  <!-- Eyes -->
+  <circle cx="64" cy="50" r="3" fill="#333"/>
+  <circle cx="76" cy="50" r="3" fill="#333"/>
+  
+  <!-- Smile -->
+  <path d="M 60 60 Q 70 68 80 60" stroke="#333" stroke-width="2" fill="none"/>
+  
+  <!-- Body (Chef Apron) -->
+  <rect x="45" y="75" width="50" height="70" rx="10" fill="#4CAF50" stroke="#388E3C" stroke-width="2"/>
+  
+  <!-- Apron -->
+  <rect x="50" y="80" width="40" height="60" rx="5" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1"/>
+  
+  <!-- Energy Symbol on Apron -->
+  <circle cx="70" cy="110" r="8" fill="#FFD700" stroke="#FFA000" stroke-width="1"/>
+  <text x="70" y="115" text-anchor="middle" font-size="12" fill="#333">⚡</text>
+  
+  <!-- Arms -->
+  <line x1="45" y1="90" x2="30" y2="120" stroke="#FFE4B5" stroke-width="10" stroke-linecap="round"/>
+  <line x1="95" y1="90" x2="110" y2="120" stroke="#FFE4B5" stroke-width="10" stroke-linecap="round"/>
+  
+  <!-- Hands with Kitchen Tools -->
+  <circle cx="25" cy="125" r="6" fill="#FFE4B5"/>
+  <circle cx="115" cy="125" r="6" fill="#FFE4B5"/>
+  
+  <!-- Kitchen Utensil (Spatula) -->
+  <line x1="20" y1="130" x2="15" y2="140" stroke="#8B4513" stroke-width="3"/>
+  <ellipse cx="13" cy="142" rx="4" ry="2" fill="#C0C0C0"/>
+  
+  <!-- Energy Meter (in other hand) -->
+  <rect x="110" y="130" width="8" height="12" rx="2" fill="#333"/>
+  <rect x="111" y="132" width="6" height="8" fill="#00FF00"/>
+  
+  <!-- Legs -->
+  <line x1="60" y1="145" x2="55" y2="170" stroke="#4CAF50" stroke-width="12" stroke-linecap="round"/>
+  <line x1="80" y1="145" x2="85" y2="170" stroke="#4CAF50" stroke-width="12" stroke-linecap="round"/>
+  
+  <!-- Shoes -->
+  <ellipse cx="52" cy="172" rx="8" ry="4" fill="#333"/>
+  <ellipse cx="88" cy="172" rx="8" ry="4" fill="#333"/>
+</svg>

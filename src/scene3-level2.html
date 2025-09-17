@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scene 3 - Level 2: 厨房能效管理</title>
+    <title>Energy Quest - Level 2: Dapur (Manajemen Efisiensi)</title>
     <link rel="stylesheet" href="public/main.css">
     <link rel="stylesheet" href="public/scene3-level2.css">
     <script src="public/globalGameState.js"></script>
@@ -14,7 +14,7 @@
     <div id="scene3-level2-container" class="scene-container hidden">
         <!-- Background -->
         <div class="scene-background">
-            <img src="public/images/kitchen-background.jpg" alt="厨房背景" class="background-image">
+            <img src="public/images/kitchen-background.jpg" alt="Latar Belakang Dapur" class="background-image">
             <div class="background-overlay"></div>
         </div>
 
@@ -23,30 +23,30 @@
             <!-- Left Panel -->
             <div class="hud-left-panel">
                 <div class="level-info">
-                    <h2>Level 2: 厨房</h2>
-                    <p>能效管理挑战</p>
+                    <h2>🍳 Level 2: Dapur</h2>
+                    <p>Tantangan Manajemen Efisiensi Energi</p>
                 </div>
                 
                 <div class="objectives-panel">
-                    <h3>目标</h3>
+                    <h3>🎯 Misi</h3>
                     <ul class="objectives-list">
                         <li id="obj-power-meter" class="objective">
                             <span class="obj-status">⏳</span>
-                            保持功率表在绿色区域
+                            Jaga meteran daya di zona hijau
                         </li>
                         <li id="obj-natural-light" class="objective">
                             <span class="obj-status">⏳</span>
-                            利用自然光源
+                            Manfaatkan cahaya alami
                         </li>
                         <li id="obj-efficiency" class="objective">
                             <span class="obj-status">⏳</span>
-                            达到能效目标
+                            Capai target efisiensi energi
                         </li>
                     </ul>
                 </div>
 
                 <div class="inventory-panel">
-                    <h3>能量钥匙</h3>
+                    <h3>🔑 Kunci Energi</h3>
                     <div id="energy-keys-container" class="energy-keys">
                         <!-- 动态添加能量钥匙 -->
                     </div>
@@ -167,55 +167,7 @@
 
                 <!-- Kitchen Energy Guide Character -->
                 <div id="kitchen-guide" class="kitchen-energy-guide">
-                    <svg width="140" height="180" viewBox="0 0 140 180" class="guide-svg">
-                        <!-- Chef Hat -->
-                        <ellipse cx="70" cy="25" rx="30" ry="15" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="2" class="chef-hat-base"/>
-                        <ellipse cx="70" cy="20" rx="25" ry="20" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="2" class="chef-hat-top"/>
-                        
-                        <!-- Head -->
-                        <circle cx="70" cy="55" r="22" fill="#FFE4B5" stroke="#D4A574" stroke-width="2" class="guide-head"/>
-                        
-                        <!-- Eyes -->
-                        <circle cx="64" cy="50" r="3" fill="#333" class="guide-eye-left"/>
-                        <circle cx="76" cy="50" r="3" fill="#333" class="guide-eye-right"/>
-                        
-                        <!-- Smile -->
-                        <path d="M 60 60 Q 70 68 80 60" stroke="#333" stroke-width="2" fill="none" class="guide-mouth"/>
-                        
-                        <!-- Body (Chef Apron) -->
-                        <rect x="45" y="75" width="50" height="70" rx="10" fill="#4CAF50" stroke="#388E3C" stroke-width="2" class="guide-body"/>
-                        
-                        <!-- Apron -->
-                        <rect x="50" y="80" width="40" height="60" rx="5" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" class="guide-apron"/>
-                        
-                        <!-- Energy Symbol on Apron -->
-                        <circle cx="70" cy="110" r="8" fill="#FFD700" stroke="#FFA000" stroke-width="1" class="energy-badge"/>
-                        <text x="70" y="115" text-anchor="middle" font-size="12" fill="#333">⚡</text>
-                        
-                        <!-- Arms -->
-                        <line x1="45" y1="90" x2="30" y2="120" stroke="#FFE4B5" stroke-width="10" stroke-linecap="round" class="guide-arm-left"/>
-                        <line x1="95" y1="90" x2="110" y2="120" stroke="#FFE4B5" stroke-width="10" stroke-linecap="round" class="guide-arm-right"/>
-                        
-                        <!-- Hands with Kitchen Tools -->
-                        <circle cx="25" cy="125" r="6" fill="#FFE4B5" class="guide-hand-left"/>
-                        <circle cx="115" cy="125" r="6" fill="#FFE4B5" class="guide-hand-right"/>
-                        
-                        <!-- Kitchen Utensil (Spatula) -->
-                        <line x1="20" y1="130" x2="15" y2="140" stroke="#8B4513" stroke-width="3" class="spatula-handle"/>
-                        <ellipse cx="13" cy="142" rx="4" ry="2" fill="#C0C0C0" class="spatula-head"/>
-                        
-                        <!-- Energy Meter (in other hand) -->
-                        <rect x="110" y="130" width="8" height="12" rx="2" fill="#333" class="meter-body"/>
-                        <rect x="111" y="132" width="6" height="8" fill="#00FF00" class="meter-display"/>
-                        
-                        <!-- Legs -->
-                        <line x1="60" y1="145" x2="55" y2="170" stroke="#4CAF50" stroke-width="12" stroke-linecap="round" class="guide-leg-left"/>
-                        <line x1="80" y1="145" x2="85" y2="170" stroke="#4CAF50" stroke-width="12" stroke-linecap="round" class="guide-leg-right"/>
-                        
-                        <!-- Shoes -->
-                        <ellipse cx="52" cy="172" rx="8" ry="4" fill="#333" class="guide-shoe-left"/>
-                        <ellipse cx="88" cy="172" rx="8" ry="4" fill="#333" class="guide-shoe-right"/>
-                    </svg>
+                    <img src="./public/real-images/kitchen-guide.svg" alt="Kitchen Guide" width="140" height="180" class="guide-svg">
                     
                     <div class="guide-speech-bubble hidden" id="guide-speech">
                         <div class="speech-content">

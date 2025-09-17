@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Energy Quest: Misteri Hemat Listrik - Opening</title>
     <link rel="stylesheet" href="public/opening-animation.css">
+    <link rel="stylesheet" href="public/real-objects.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="public/globalGameState.js"></script>
 </head>
@@ -125,8 +126,12 @@
                         </div>
                         <div class="device circuit-board">
                             <div class="pcb-surface">
-                                <div class="resistors"></div>
-                                <div class="capacitors"></div>
+                                <div class="real-components-container">
+                                    <div class="real-resistor" style="transform: scale(0.6) rotate(45deg); margin: 5px;"></div>
+                                    <div class="real-resistor" style="transform: scale(0.6) rotate(-30deg); margin: 5px;"></div>
+                                    <div class="real-capacitor" style="transform: scale(0.5); margin: 8px;"></div>
+                                    <div class="real-capacitor" style="transform: scale(0.5) rotate(90deg); margin: 8px;"></div>
+                                </div>
                                 <div class="led-indicators">
                                     <div class="led led-red"></div>
                                     <div class="led led-green"></div>

@@ -113,14 +113,14 @@ class GameState {
   showKitchen() {
     console.log('Kitchen scene not implemented yet');
     // Placeholder for kitchen scene
-    alert('Level 2: Dapur akan segera tersedia!');
+    window.gameNotification.info('🍳 Level 2: Dapur akan segera tersedia!');
     this.transitionTo('MainMenu');
   }
   
   showBedroom() {
     console.log('Bedroom scene not implemented yet');
     // Placeholder for bedroom scene
-    alert('Level 3: Kamar Tidur akan segera tersedia!');
+    window.gameNotification.info('🛏️ Level 3: Kamar Tidur akan segera tersedia!');
     this.transitionTo('MainMenu');
   }
   

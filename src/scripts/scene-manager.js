@@ -405,13 +405,13 @@ class SceneManager {
     startLevel(sceneName) {
         console.log(`Starting ${sceneName}...`);
         // Here you would implement the actual level gameplay
-        alert(`Starting ${sceneName}! (Gameplay implementation coming soon)`);
+        window.gameNotification.info(`🎮 Starting ${sceneName}! (Gameplay implementation coming soon)`);
     }
 
     showTutorial(sceneName) {
         console.log(`Showing tutorial for ${sceneName}...`);
         // Here you would show tutorial content
-        alert(`Tutorial for ${sceneName}! (Tutorial implementation coming soon)`);
+        window.gameNotification.info(`📚 Tutorial for ${sceneName}! (Tutorial implementation coming soon)`);
     }
 
     hideCurrentScene() {
