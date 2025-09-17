@@ -65,10 +65,13 @@ export class PuzzleGame {
       pieceElement.dataset.row = piece.row;
       pieceElement.dataset.col = piece.col;
       
-      // Set background image
-      pieceElement.style.backgroundImage = `url(public/puzzle_piece_${piece.row}_${piece.col}.png)`;
-      pieceElement.style.backgroundSize = 'cover';
-      pieceElement.style.backgroundPosition = 'center';
+      // Set background color and pattern instead of image
+      const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD'];
+      const colorIndex = (piece.row * 3 + piece.col) % colors.length;
+      pieceElement.style.backgroundColor = colors[colorIndex];
+      pieceElement.style.background = `linear-gradient(45deg, ${colors[colorIndex]}, ${colors[(colorIndex + 1) % colors.length]})`;
+      pieceElement.style.border = '2px solid #333';
+      pieceElement.style.borderRadius = '8px';
       
       // Add drag event listeners
       pieceElement.addEventListener('dragstart', this.handleDragStart.bind(this));

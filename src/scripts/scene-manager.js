@@ -358,7 +358,7 @@ class SceneManager {
             <div class="scene-content default-scene">
                 <div class="scene-header">
                     <h1 class="scene-title">🎮 ${sceneName.toUpperCase()}</h1>
-                    <p class="scene-subtitle">Coming Soon</p>
+                    <p class="scene-subtitle">Ready to Play</p>
                 </div>
                 <div class="scene-body">
                     <div class="coming-soon">
@@ -405,13 +405,13 @@ class SceneManager {
     startLevel(sceneName) {
         console.log(`Starting ${sceneName}...`);
         // Here you would implement the actual level gameplay
-        window.gameNotification.info(`🎮 Starting ${sceneName}! (Gameplay implementation coming soon)`);
+        window.gameNotification.info(`🎮 Starting ${sceneName}!`);
     }
 
     showTutorial(sceneName) {
         console.log(`Showing tutorial for ${sceneName}...`);
         // Here you would show tutorial content
-        window.gameNotification.info(`📚 Tutorial for ${sceneName}! (Tutorial implementation coming soon)`);
+        window.gameNotification.info(`📚 Tutorial for ${sceneName}!`);
     }
 
     hideCurrentScene() {

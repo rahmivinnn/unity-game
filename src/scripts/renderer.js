@@ -100,32 +100,31 @@ export class SimCityRenderer {
       // Add lighting
       this.setupLighting();
 
-      // Add test objects to verify rendering is working
-      console.log('=== CREATING TEST OBJECTS ===');
+      // Add real 3D environment objects
+      console.log('=== CREATING 3D ENVIRONMENT ===');
       
-      // Red cube
-      const testGeometry = new THREE.BoxGeometry(1, 1, 1);
-      const testMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-      const testCube = new THREE.Mesh(testGeometry, testMaterial);
-      testCube.position.set(-2, 0, -5);
-      this.scene.add(testCube);
-      console.log('Red cube added at:', testCube.position);
+      // Create ground plane
+      const groundGeometry = new THREE.PlaneGeometry(100, 100);
+      const groundMaterial = new THREE.MeshLambertMaterial({ 
+        color: 0x90EE90,
+        transparent: true,
+        opacity: 0.8
+      });
+      const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+      ground.rotation.x = -Math.PI / 2;
+      ground.position.y = -1;
+      ground.receiveShadow = true;
+      this.scene.add(ground);
+      console.log('Ground plane added');
       
-      // Green sphere
-      const sphereGeometry = new THREE.SphereGeometry(0.8, 32, 32);
-      const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-      const testSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-      testSphere.position.set(0, 0, -5);
-      this.scene.add(testSphere);
-      console.log('Green sphere added at:', testSphere.position);
+      // Create energy-efficient house
+      this.createEnergyEfficientHouse();
       
-      // Blue cylinder
-      const cylinderGeometry = new THREE.CylinderGeometry(0.5, 0.5, 1.5, 32);
-      const cylinderMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
-      const testCylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
-      testCylinder.position.set(2, 0, -5);
-      this.scene.add(testCylinder);
-      console.log('Blue cylinder added at:', testCylinder.position);
+      // Create solar panels
+      this.createSolarPanels();
+      
+      // Create wind turbines
+      this.createWindTurbines();
       
       console.log('Scene children count:', this.scene.children.length);
 
@@ -174,6 +173,138 @@ export class SimCityRenderer {
     directionalLight.shadow.camera.top = 100;
     directionalLight.shadow.camera.bottom = -100;
     this.scene.add(directionalLight);
+  }
+
+  /**
+   * Create energy-efficient house
+   */
+  createEnergyEfficientHouse() {
+    const houseGroup = new THREE.Group();
+    
+    // House base
+    const houseGeometry = new THREE.BoxGeometry(8, 6, 8);
+    const houseMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+    const house = new THREE.Mesh(houseGeometry, houseMaterial);
+    house.position.y = 3;
+    house.castShadow = true;
+    house.receiveShadow = true;
+    houseGroup.add(house);
+    
+    // Roof
+    const roofGeometry = new THREE.ConeGeometry(6, 3, 4);
+    const roofMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+    const roof = new THREE.Mesh(roofGeometry, roofMaterial);
+    roof.position.y = 7.5;
+    roof.rotation.y = Math.PI / 4;
+    roof.castShadow = true;
+    houseGroup.add(roof);
+    
+    // Windows
+    for (let i = 0; i < 4; i++) {
+      const windowGeometry = new THREE.BoxGeometry(1, 1.5, 0.1);
+      const windowMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0x87CEEB,
+        transparent: true,
+        opacity: 0.7
+      });
+      const window = new THREE.Mesh(windowGeometry, windowMaterial);
+      window.position.set(
+        Math.cos(i * Math.PI / 2) * 4.1,
+        2,
+        Math.sin(i * Math.PI / 2) * 4.1
+      );
+      window.rotation.y = i * Math.PI / 2;
+      houseGroup.add(window);
+    }
+    
+    // Door
+    const doorGeometry = new THREE.BoxGeometry(1.5, 3, 0.1);
+    const doorMaterial = new THREE.MeshLambertMaterial({ color: 0x654321 });
+    const door = new THREE.Mesh(doorGeometry, doorMaterial);
+    door.position.set(0, 1.5, 4.1);
+    door.castShadow = true;
+    houseGroup.add(door);
+    
+    houseGroup.position.set(0, 0, 0);
+    this.scene.add(houseGroup);
+    console.log('Energy-efficient house created');
+  }
+
+  /**
+   * Create solar panels
+   */
+  createSolarPanels() {
+    const solarGroup = new THREE.Group();
+    
+    for (let i = 0; i < 6; i++) {
+      const panelGeometry = new THREE.BoxGeometry(2, 0.1, 1);
+      const panelMaterial = new THREE.MeshLambertMaterial({ 
+        color: 0x1a1a1a,
+        metalness: 0.8,
+        roughness: 0.2
+      });
+      const panel = new THREE.Mesh(panelGeometry, panelMaterial);
+      panel.position.set(
+        (i % 3) * 2.5 - 2.5,
+        8,
+        Math.floor(i / 3) * 1.5 - 0.75
+      );
+      panel.rotation.x = -Math.PI / 6; // Tilt towards sun
+      panel.castShadow = true;
+      solarGroup.add(panel);
+    }
+    
+    solarGroup.position.set(0, 0, 0);
+    this.scene.add(solarGroup);
+    console.log('Solar panels created');
+  }
+
+  /**
+   * Create wind turbines
+   */
+  createWindTurbines() {
+    const turbineGroup = new THREE.Group();
+    
+    for (let i = 0; i < 3; i++) {
+      const singleTurbine = new THREE.Group();
+      
+      // Tower
+      const towerGeometry = new THREE.CylinderGeometry(0.2, 0.3, 15);
+      const towerMaterial = new THREE.MeshLambertMaterial({ color: 0x708090 });
+      const tower = new THREE.Mesh(towerGeometry, towerMaterial);
+      tower.position.y = 7.5;
+      tower.castShadow = true;
+      singleTurbine.add(tower);
+      
+      // Nacelle
+      const nacelleGeometry = new THREE.BoxGeometry(1, 0.5, 0.5);
+      const nacelleMaterial = new THREE.MeshLambertMaterial({ color: 0x2F4F4F });
+      const nacelle = new THREE.Mesh(nacelleGeometry, nacelleMaterial);
+      nacelle.position.y = 15;
+      nacelle.castShadow = true;
+      singleTurbine.add(nacelle);
+      
+      // Blades
+      for (let j = 0; j < 3; j++) {
+        const bladeGeometry = new THREE.BoxGeometry(0.1, 8, 0.3);
+        const bladeMaterial = new THREE.MeshLambertMaterial({ color: 0xF5F5F5 });
+        const blade = new THREE.Mesh(bladeGeometry, bladeMaterial);
+        blade.position.set(0, 15, 0);
+        blade.rotation.z = (j * Math.PI * 2) / 3;
+        blade.castShadow = true;
+        singleTurbine.add(blade);
+      }
+      
+      singleTurbine.position.set(
+        (i - 1) * 20,
+        0,
+        -15
+      );
+      turbineGroup.add(singleTurbine);
+    }
+    
+    this.scene.add(turbineGroup);
+    console.log('Wind turbines created');
   }
 
   /**

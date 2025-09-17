@@ -158,7 +158,17 @@ class MainMenu {
     }
 
     continueGame() {
-        console.log('Continue game functionality not implemented yet');
+        // Continue game functionality
+        if (window.gameState) {
+            const savedLevel = window.gameState.getCurrentLevel();
+            if (savedLevel !== 'MainMenu') {
+                window.gameState.transitionTo(savedLevel);
+            } else {
+                window.gameNotification.info('Tidak ada progress yang tersimpan. Mulai game baru!');
+            }
+        } else {
+            window.gameNotification.info('Game state tidak tersedia. Mulai game baru!');
+        }
     }
 
     openSettingsModal() {

@@ -107,11 +107,11 @@ class LivingRoomScene {
   initAudio() {
     try {
       this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      // Load sound effects (placeholder - would load actual audio files)
+      // Use global audio manager for sound effects
       this.sounds = {
-        success: 'sfx_click_success.wav',
-        buzz: 'sfx_buzz.wav',
-        lightOn: 'anim_light_on.json'
+        success: 'success',
+        buzz: 'error',
+        lightOn: 'success'
       };
     } catch (error) {
       console.warn('Audio context not available:', error);
@@ -119,8 +119,24 @@ class LivingRoomScene {
   }
   
   playSound(soundName) {
-    // Placeholder for audio playback
-    console.log(`Playing sound: ${soundName}`);
+    // Use global audio manager for real audio playback
+    if (window.audioManager) {
+      switch (soundName) {
+        case 'success':
+          window.audioManager.playSuccessSound();
+          break;
+        case 'buzz':
+          window.audioManager.playErrorSound();
+          break;
+        case 'lightOn':
+          window.audioManager.playSuccessSound();
+          break;
+        default:
+          window.audioManager.playClickSound();
+      }
+    } else {
+      console.log(`Playing sound: ${soundName}`);
+    }
   }
   
   openCablePuzzle() {

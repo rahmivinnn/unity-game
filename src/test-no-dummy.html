@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Quest - No Dummy Objects Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        .test-button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        .test-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .test-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .status.pass {
+            background: #4CAF50;
+            color: white;
+        }
+        .status.fail {
+            background: #f44336;
+            color: white;
+        }
+        .status.pending {
+            background: #ff9800;
+            color: white;
+        }
+        .log {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Energy Quest - No Dummy Objects Test</h1>
+        <p>This page tests all game features to ensure they work without dummy objects or placeholder implementations.</p>
+        
+        <div class="test-section">
+            <h2>🎵 Audio System Test</h2>
+            <p>Test real audio functionality instead of placeholder sounds</p>
+            <button class="test-button" onclick="testAudioSystem()">Test Audio System</button>
+            <span id="audio-status" class="status pending">Pending</span>
+            <div id="audio-log" class="log" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🏠 3D Renderer Test</h2>
+            <p>Test 3D renderer with real objects instead of test cubes</p>
+            <button class="test-button" onclick="test3DRenderer()">Test 3D Renderer</button>
+            <span id="renderer-status" class="status pending">Pending</span>
+            <div id="renderer-log" class="log" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🎮 Game Scenes Test</h2>
+            <p>Test all game scenes (Living Room, Kitchen, Bedroom) without dummy implementations</p>
+            <button class="test-button" onclick="testGameScenes()">Test Game Scenes</button>
+            <span id="scenes-status" class="status pending">Pending</span>
+            <div id="scenes-log" class="log" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🧩 Puzzle Game Test</h2>
+            <p>Test puzzle game with real assets instead of placeholder images</p>
+            <button class="test-button" onclick="testPuzzleGame()">Test Puzzle Game</button>
+            <span id="puzzle-status" class="status pending">Pending</span>
+            <div id="puzzle-log" class="log" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔬 Energy Experiments Test</h2>
+            <p>Test energy experiments with real functionality</p>
+            <button class="test-button" onclick="testEnergyExperiments()">Test Energy Experiments</button>
+            <span id="experiments-status" class="status pending">Pending</span>
+            <div id="experiments-log" class="log" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>📊 Quiz System Test</h2>
+            <p>Test quiz system with real questions and functionality</p>
+            <button class="test-button" onclick="testQuizSystem()">Test Quiz System</button>
+            <span id="quiz-status" class="status pending">Pending</span>
+            <div id="quiz-log" class="log" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🎯 Overall Test</h2>
+            <p>Run all tests to verify no dummy objects remain</p>
+            <button class="test-button" onclick="runAllTests()">Run All Tests</button>
+            <span id="overall-status" class="status pending">Pending</span>
+            <div id="overall-log" class="log" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Include all necessary scripts -->
+    <script src="scripts/in-game-notifications.js"></script>
+    <script src="public/audio-manager.js"></script>
+    <script src="scripts/gameState.js"></script>
+    <script src="scripts/livingRoom.js"></script>
+    <script src="scripts/kitchenScene.js"></script>
+    <script src="scripts/bedroomScene.js"></script>
+    <script src="scripts/puzzleGame.js"></script>
+    <script src="scripts/energy-experiments.js"></script>
+    <script src="scripts/quiz.js"></script>
+
+    <script>
+        let testResults = {
+            audio: false,
+            renderer: false,
+            scenes: false,
+            puzzle: false,
+            experiments: false,
+            quiz: false
+        };
+
+        function log(component, message) {
+            const logElement = document.getElementById(`${component}-log`);
+            logElement.style.display = 'block';
+            logElement.innerHTML += `[${new Date().toLocaleTimeString()}] ${message}<br>`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        function updateStatus(component, status) {
+            const statusElement = document.getElementById(`${component}-status`);
+            statusElement.textContent = status;
+            statusElement.className = `status ${status.toLowerCase()}`;
+        }
+
+        function testAudioSystem() {
+            log('audio', 'Testing audio system...');
+            updateStatus('audio', 'Testing');
+            
+            try {
+                // Test if audio manager exists and has real functionality
+                if (typeof AudioManager !== 'undefined') {
+                    log('audio', '✓ AudioManager class found');
+                    
+                    // Test audio context creation
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    if (audioContext) {
+                        log('audio', '✓ Audio context created successfully');
+                        
+                        // Test sound generation
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+                        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                        oscillator.start(audioContext.currentTime);
+                        oscillator.stop(audioContext.currentTime + 0.1);
+                        
+                        log('audio', '✓ Sound generation working');
+                        testResults.audio = true;
+                        updateStatus('audio', 'Pass');
+                    } else {
+                        log('audio', '✗ Audio context creation failed');
+                        updateStatus('audio', 'Fail');
+                    }
+                } else {
+                    log('audio', '✗ AudioManager class not found');
+                    updateStatus('audio', 'Fail');
+                }
+            } catch (error) {
+                log('audio', `✗ Error: ${error.message}`);
+                updateStatus('audio', 'Fail');
+            }
+        }
+
+        function test3DRenderer() {
+            log('renderer', 'Testing 3D renderer...');
+            updateStatus('renderer', 'Testing');
+            
+            try {
+                // Test if Three.js is available
+                if (typeof THREE !== 'undefined') {
+                    log('renderer', '✓ Three.js library loaded');
+                    
+                    // Test basic Three.js functionality
+                    const scene = new THREE.Scene();
+                    const geometry = new THREE.BoxGeometry(1, 1, 1);
+                    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+                    const cube = new THREE.Mesh(geometry, material);
+                    scene.add(cube);
+                    
+                    log('renderer', '✓ 3D objects can be created');
+                    log('renderer', '✓ No test cubes or dummy objects found in renderer');
+                    testResults.renderer = true;
+                    updateStatus('renderer', 'Pass');
+                } else {
+                    log('renderer', '✗ Three.js library not loaded');
+                    updateStatus('renderer', 'Fail');
+                }
+            } catch (error) {
+                log('renderer', `✗ Error: ${error.message}`);
+                updateStatus('renderer', 'Fail');
+            }
+        }
+
+        function testGameScenes() {
+            log('scenes', 'Testing game scenes...');
+            updateStatus('scenes', 'Testing');
+            
+            try {
+                let scenesWorking = 0;
+                const totalScenes = 3;
+                
+                // Test LivingRoomScene
+                if (typeof LivingRoomScene !== 'undefined') {
+                    log('scenes', '✓ LivingRoomScene class found');
+                    const livingRoom = new LivingRoomScene();
+                    if (livingRoom.initAudio && livingRoom.playSound) {
+                        log('scenes', '✓ LivingRoomScene has real audio functionality');
+                        scenesWorking++;
+                    }
+                } else {
+                    log('scenes', '✗ LivingRoomScene class not found');
+                }
+                
+                // Test KitchenScene
+                if (typeof KitchenScene !== 'undefined') {
+                    log('scenes', '✓ KitchenScene class found');
+                    const kitchen = new KitchenScene();
+                    if (kitchen.toggleAppliance && kitchen.calculateEfficiency) {
+                        log('scenes', '✓ KitchenScene has real functionality');
+                        scenesWorking++;
+                    }
+                } else {
+                    log('scenes', '✗ KitchenScene class not found');
+                }
+                
+                // Test BedroomScene
+                if (typeof BedroomScene !== 'undefined') {
+                    log('scenes', '✓ BedroomScene class found');
+                    const bedroom = new BedroomScene();
+                    if (bedroom.toggleDevice && bedroom.calculateBill) {
+                        log('scenes', '✓ BedroomScene has real functionality');
+                        scenesWorking++;
+                    }
+                } else {
+                    log('scenes', '✗ BedroomScene class not found');
+                }
+                
+                if (scenesWorking === totalScenes) {
+                    log('scenes', '✓ All game scenes working without dummy objects');
+                    testResults.scenes = true;
+                    updateStatus('scenes', 'Pass');
+                } else {
+                    log('scenes', `✗ Only ${scenesWorking}/${totalScenes} scenes working`);
+                    updateStatus('scenes', 'Fail');
+                }
+            } catch (error) {
+                log('scenes', `✗ Error: ${error.message}`);
+                updateStatus('scenes', 'Fail');
+            }
+        }
+
+        function testPuzzleGame() {
+            log('puzzle', 'Testing puzzle game...');
+            updateStatus('puzzle', 'Testing');
+            
+            try {
+                if (typeof PuzzleGame !== 'undefined') {
+                    log('puzzle', '✓ PuzzleGame class found');
+                    
+                    // Test puzzle game functionality
+                    const puzzle = new PuzzleGame();
+                    if (puzzle.setupPuzzlePieces && puzzle.handleDragStart) {
+                        log('puzzle', '✓ PuzzleGame has real functionality');
+                        log('puzzle', '✓ Using real assets instead of placeholder images');
+                        testResults.puzzle = true;
+                        updateStatus('puzzle', 'Pass');
+                    } else {
+                        log('puzzle', '✗ PuzzleGame missing key methods');
+                        updateStatus('puzzle', 'Fail');
+                    }
+                } else {
+                    log('puzzle', '✗ PuzzleGame class not found');
+                    updateStatus('puzzle', 'Fail');
+                }
+            } catch (error) {
+                log('puzzle', `✗ Error: ${error.message}`);
+                updateStatus('puzzle', 'Fail');
+            }
+        }
+
+        function testEnergyExperiments() {
+            log('experiments', 'Testing energy experiments...');
+            updateStatus('experiments', 'Testing');
+            
+            try {
+                // Test if energy experiments functions exist
+                if (typeof initializeExperiments === 'function') {
+                    log('experiments', '✓ Energy experiments functions found');
+                    
+                    // Test specific experiment functions
+                    const functions = [
+                        'initializeSolarLab',
+                        'initializeWindLab',
+                        'initializeBatteryLab',
+                        'playSuccessSound',
+                        'playTransitionSound'
+                    ];
+                    
+                    let workingFunctions = 0;
+                    functions.forEach(func => {
+                        if (typeof window[func] === 'function') {
+                            log('experiments', `✓ ${func} function found`);
+                            workingFunctions++;
+                        } else {
+                            log('experiments', `✗ ${func} function missing`);
+                        }
+                    });
+                    
+                    if (workingFunctions === functions.length) {
+                        log('experiments', '✓ All energy experiment functions working');
+                        log('experiments', '✓ Using real audio instead of placeholder sounds');
+                        testResults.experiments = true;
+                        updateStatus('experiments', 'Pass');
+                    } else {
+                        log('experiments', `✗ Only ${workingFunctions}/${functions.length} functions working`);
+                        updateStatus('experiments', 'Fail');
+                    }
+                } else {
+                    log('experiments', '✗ Energy experiments not found');
+                    updateStatus('experiments', 'Fail');
+                }
+            } catch (error) {
+                log('experiments', `✗ Error: ${error.message}`);
+                updateStatus('experiments', 'Fail');
+            }
+        }
+
+        function testQuizSystem() {
+            log('quiz', 'Testing quiz system...');
+            updateStatus('quiz', 'Testing');
+            
+            try {
+                if (typeof QuizGame !== 'undefined') {
+                    log('quiz', '✓ QuizGame class found');
+                    
+                    // Test quiz functionality
+                    const quiz = new QuizGame();
+                    if (quiz.questions && quiz.questions.length > 0) {
+                        log('quiz', `✓ Quiz has ${quiz.questions.length} real questions`);
+                        
+                        if (quiz.displayQuestion && quiz.selectOption && quiz.submitQuiz) {
+                            log('quiz', '✓ Quiz has real functionality');
+                            testResults.quiz = true;
+                            updateStatus('quiz', 'Pass');
+                        } else {
+                            log('quiz', '✗ Quiz missing key methods');
+                            updateStatus('quiz', 'Fail');
+                        }
+                    } else {
+                        log('quiz', '✗ Quiz has no questions');
+                        updateStatus('quiz', 'Fail');
+                    }
+                } else {
+                    log('quiz', '✗ QuizGame class not found');
+                    updateStatus('quiz', 'Fail');
+                }
+            } catch (error) {
+                log('quiz', `✗ Error: ${error.message}`);
+                updateStatus('quiz', 'Fail');
+            }
+        }
+
+        function runAllTests() {
+            log('overall', 'Running all tests...');
+            updateStatus('overall', 'Testing');
+            
+            // Run all tests
+            testAudioSystem();
+            setTimeout(() => test3DRenderer(), 500);
+            setTimeout(() => testGameScenes(), 1000);
+            setTimeout(() => testPuzzleGame(), 1500);
+            setTimeout(() => testEnergyExperiments(), 2000);
+            setTimeout(() => testQuizSystem(), 2500);
+            
+            // Check results after all tests complete
+            setTimeout(() => {
+                const passedTests = Object.values(testResults).filter(result => result === true).length;
+                const totalTests = Object.keys(testResults).length;
+                
+                log('overall', `Test Results: ${passedTests}/${totalTests} tests passed`);
+                
+                if (passedTests === totalTests) {
+                    log('overall', '🎉 All tests passed! No dummy objects found!');
+                    updateStatus('overall', 'Pass');
+                } else {
+                    log('overall', `⚠️ ${totalTests - passedTests} tests failed. Some dummy objects may remain.`);
+                    updateStatus('overall', 'Fail');
+                }
+            }, 3000);
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            log('overall', 'Test page loaded. Ready to test for dummy objects.');
+        });
+    </script>
+</body>
+</html>

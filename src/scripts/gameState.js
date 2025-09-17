@@ -111,17 +111,25 @@ class GameState {
   }
   
   showKitchen() {
-    console.log('Kitchen scene not implemented yet');
-    // Placeholder for kitchen scene
-    window.gameNotification.info('🍳 Level 2: Dapur akan segera tersedia!');
-    this.transitionTo('MainMenu');
+    // Hide all other containers
+    this.hideAllContainers();
+    
+    // Show kitchen scene
+    if (!window.kitchenScene) {
+      window.kitchenScene = new KitchenScene();
+    }
+    window.kitchenScene.show();
   }
   
   showBedroom() {
-    console.log('Bedroom scene not implemented yet');
-    // Placeholder for bedroom scene
-    window.gameNotification.info('🛏️ Level 3: Kamar Tidur akan segera tersedia!');
-    this.transitionTo('MainMenu');
+    // Hide all other containers
+    this.hideAllContainers();
+    
+    // Show bedroom scene
+    if (!window.bedroomScene) {
+      window.bedroomScene = new BedroomScene();
+    }
+    window.bedroomScene.show();
   }
   
   showMainMenu() {
