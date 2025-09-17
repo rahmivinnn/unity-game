@@ -11,12 +11,11 @@
 [build.environment]
   NODE_VERSION = "18"
 
-# Redirect rules for SPA routing
+# Redirect rules for SPA routing - fallback untuk semua route yang tidak ditemukan
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  conditions = {Role = ["admin"]}
 
 # Handle specific routes
 [[redirects]]
