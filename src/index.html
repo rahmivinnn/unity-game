@@ -24,7 +24,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: #000000;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -38,21 +38,21 @@
         }
 
         .splash-logo-img {
-            width: 120px;
-            height: 120px;
+            width: 200px;
+            height: 200px;
             object-fit: contain;
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
             animation: logoGlow 2s ease-in-out infinite alternate;
         }
 
         @keyframes logoGlow {
              0% { 
-                 filter: drop-shadow(0 0 20px #00ff88) drop-shadow(0 0 40px #00ff88);
+                 filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.4));
                  transform: scale(1);
              }
              100% { 
-                 filter: drop-shadow(0 0 30px #00ff88) drop-shadow(0 0 50px #00ff88) drop-shadow(0 0 70px #4a9eff);
-                 transform: scale(1.05);
+                 filter: drop-shadow(0 0 15px rgba(0, 255, 136, 0.6));
+                 transform: scale(1.02);
              }
          }
 
