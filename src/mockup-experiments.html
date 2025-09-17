@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Quest - Energy Experiments</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial Black', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.9);
+            padding: 20px;
+            z-index: 100;
+            border-bottom: 3px solid #ffd700;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            color: #ffd700;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .back-button {
+            background: linear-gradient(45deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+        }
+
+        .main-content {
+            margin-top: 100px;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .experiments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .experiment-card {
+            background: rgba(0,0,0,0.8);
+            border-radius: 20px;
+            border: 3px solid #ffd700;
+            padding: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .experiment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .experiment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+            border-color: #f6ad55;
+        }
+
+        .experiment-card:hover::before {
+            left: 100%;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .experiment-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #ffd700 0%, #f6ad55 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-right: 15px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .card-title {
+            color: #ffd700;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .card-description {
+            color: #ffffff;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .card-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            color: #a0aec0;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            color: #ffd700;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .card-status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-completed {
+            background: linear-gradient(45deg, #48bb78 0%, #38a169 100%);
+            color: white;
+        }
+
+        .status-locked {
+            background: linear-gradient(45deg, #e53e3e 0%, #c53030 100%);
+            color: white;
+        }
+
+        .status-available {
+            background: linear-gradient(45deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+        }
+
+        .play-button {
+            background: linear-gradient(45deg, #ffd700 0%, #f6ad55 100%);
+            color: #2d3748;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .play-button:disabled {
+            background: #718096;
+            color: #a0aec0;
+            cursor: not-allowed;
+        }
+
+        .floating-elements {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-icon {
+            position: absolute;
+            font-size: 20px;
+            animation: floatAround 15s linear infinite;
+            opacity: 0.3;
+        }
+
+        .floating-icon:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .floating-icon:nth-child(2) { left: 30%; animation-delay: -5s; }
+        .floating-icon:nth-child(3) { left: 50%; animation-delay: -10s; }
+        .floating-icon:nth-child(4) { left: 70%; animation-delay: -3s; }
+        .floating-icon:nth-child(5) { left: 90%; animation-delay: -8s; }
+
+        .progress-summary {
+            background: rgba(0,0,0,0.8);
+            border-radius: 20px;
+            border: 3px solid #ffd700;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .summary-title {
+            color: #ffd700;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .summary-stat {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .summary-stat-value {
+            color: #ffd700;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .summary-stat-label {
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        .ai-assistant {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            animation: assistantFloat 3s ease-in-out infinite;
+            cursor: pointer;
+            z-index: 50;
+        }
+
+        @keyframes floatAround {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        @keyframes assistantFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-icon">⚡</div>
+        <div class="floating-icon">🔋</div>
+        <div class="floating-icon">💡</div>
+        <div class="floating-icon">🔌</div>
+        <div class="floating-icon">⚙️</div>
+    </div>
+
+    <div class="header">
+        <div class="header-content">
+            <h1 class="page-title">🧪 Energy Experiments</h1>
+            <button class="back-button">← Kembali</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="progress-summary">
+            <h2 class="summary-title">Progress Eksperimen</h2>
+            <div class="summary-stats">
+                <div class="summary-stat">
+                    <div class="summary-stat-value">7</div>
+                    <div class="summary-stat-label">Selesai</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="summary-stat-value">3</div>
+                    <div class="summary-stat-label">Tersedia</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="summary-stat-value">2</div>
+                    <div class="summary-stat-label">Terkunci</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="summary-stat-value">1,250</div>
+                    <div class="summary-stat-label">Total Poin</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="experiments-grid">
+            <div class="experiment-card">
+                <div class="card-header">
+                    <div class="experiment-icon">💡</div>
+                    <div class="card-title">Lampu LED vs Pijar</div>
+                </div>
+                <div class="card-description">
+                    Bandingkan konsumsi energi antara lampu LED dan lampu pijar tradisional dalam berbagai kondisi pencahayaan.
+                </div>
+                <div class="card-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Durasi</div>
+                        <div class="stat-value">5 menit</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Poin</div>
+                        <div class="stat-value">150</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Level</div>
+                        <div class="stat-value">Mudah</div>
+                    </div>
+                </div>
+                <div class="card-status">
+                    <span class="status-badge status-completed">✓ Selesai</span>
+                    <button class="play-button">Ulangi</button>
+                </div>
+            </div>
+
+            <div class="experiment-card">
+                <div class="card-header">
+                    <div class="experiment-icon">🔌</div>
+                    <div class="card-title">Phantom Load</div>
+                </div>
+                <div class="card-description">
+                    Temukan perangkat mana yang masih mengonsumsi listrik meski dalam mode standby dan cara menghemat energi.
+                </div>
+                <div class="card-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Durasi</div>
+                        <div class="stat-value">8 menit</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Poin</div>
+                        <div class="stat-value">200</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Level</div>
+                        <div class="stat-value">Sedang</div>
+                    </div>
+                </div>
+                <div class="card-status">
+                    <span class="status-badge status-available">▶ Tersedia</span>
+                    <button class="play-button">Mulai</button>
+                </div>
+            </div>
+
+            <div class="experiment-card">
+                <div class="card-header">
+                    <div class="experiment-icon">❄️</div>
+                    <div class="card-title">Efisiensi AC</div>
+                </div>
+                <div class="card-description">
+                    Pelajari bagaimana suhu, isolasi, dan pengaturan AC mempengaruhi konsumsi listrik rumah.
+                </div>
+                <div class="card-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Durasi</div>
+                        <div class="stat-value">12 menit</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Poin</div>
+                        <div class="stat-value">300</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Level</div>
+                        <div class="stat-value">Sulit</div>
+                    </div>
+                </div>
+                <div class="card-status">
+                    <span class="status-badge status-locked">🔒 Terkunci</span>
+                    <button class="play-button" disabled>Level 5</button>
+                </div>
+            </div>
+
+            <div class="experiment-card">
+                <div class="card-header">
+                    <div class="experiment-icon">🔋</div>
+                    <div class="card-title">Solar Panel</div>
+                </div>
+                <div class="card-description">
+                    Simulasi panel surya dan bagaimana cuaca, sudut, dan waktu mempengaruhi produksi energi.
+                </div>
+                <div class="card-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Durasi</div>
+                        <div class="stat-value">10 menit</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Poin</div>
+                        <div class="stat-value">250</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Level</div>
+                        <div class="stat-value">Sedang</div>
+                    </div>
+                </div>
+                <div class="card-status">
+                    <span class="status-badge status-completed">✓ Selesai</span>
+                    <button class="play-button">Ulangi</button>
+                </div>
+            </div>
+
+            <div class="experiment-card">
+                <div class="card-header">
+                    <div class="experiment-icon">🏠</div>
+                    <div class="card-title">Smart Home</div>
+                </div>
+                <div class="card-description">
+                    Rancang sistem rumah pintar yang optimal untuk menghemat energi dengan sensor dan otomasi.
+                </div>
+                <div class="card-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Durasi</div>
+                        <div class="stat-value">15 menit</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Poin</div>
+                        <div class="stat-value">400</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Level</div>
+                        <div class="stat-value">Expert</div>
+                    </div>
+                </div>
+                <div class="card-status">
+                    <span class="status-badge status-available">▶ Tersedia</span>
+                    <button class="play-button">Mulai</button>
+                </div>
+            </div>
+
+            <div class="experiment-card">
+                <div class="card-header">
+                    <div class="experiment-icon">⚡</div>
+                    <div class="card-title">Generator Listrik</div>
+                </div>
+                <div class="card-description">
+                    Eksplorasi berbagai cara menghasilkan listrik: angin, air, panas, dan gerakan manusia.
+                </div>
+                <div class="card-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Durasi</div>
+                        <div class="stat-value">7 menit</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Poin</div>
+                        <div class="stat-value">180</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Level</div>
+                        <div class="stat-value">Mudah</div>
+                    </div>
+                </div>
+                <div class="card-status">
+                    <span class="status-badge status-completed">✓ Selesai</span>
+                    <button class="play-button">Ulangi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ai-assistant">
+        🤖
+    </div>
+</body>
+</html>

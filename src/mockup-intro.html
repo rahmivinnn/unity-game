@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Quest - Intro Animation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial Black', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .night-sky {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 20%, #2d3561 0%, #1a1a2e 70%);
+            animation: skyPulse 4s ease-in-out infinite;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite alternate;
+        }
+
+        .star:nth-child(1) { top: 10%; left: 20%; width: 3px; height: 3px; animation-delay: 0s; }
+        .star:nth-child(2) { top: 15%; left: 80%; width: 2px; height: 2px; animation-delay: 0.5s; }
+        .star:nth-child(3) { top: 25%; left: 60%; width: 4px; height: 4px; animation-delay: 1s; }
+        .star:nth-child(4) { top: 30%; left: 10%; width: 2px; height: 2px; animation-delay: 1.5s; }
+        .star:nth-child(5) { top: 40%; left: 90%; width: 3px; height: 3px; animation-delay: 2s; }
+
+        .cartoon-house {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 300px;
+            background: linear-gradient(45deg, #4a5568 0%, #2d3748 100%);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            animation: houseGlow 3s ease-in-out infinite;
+        }
+
+        .house-roof {
+            position: absolute;
+            top: -60px;
+            left: -20px;
+            width: 440px;
+            height: 80px;
+            background: linear-gradient(45deg, #e53e3e 0%, #c53030 100%);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .house-windows {
+            position: absolute;
+            top: 40px;
+            left: 50px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #ffd700 0%, #ffed4e 100%);
+            border-radius: 10px;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.2);
+            animation: windowFlicker 2s ease-in-out infinite;
+        }
+
+        .house-windows:nth-child(3) {
+            left: 270px;
+        }
+
+        .house-door {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 150px;
+            background: linear-gradient(45deg, #8b4513 0%, #654321 100%);
+            border-radius: 10px 10px 0 0;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .news-overlay {
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            background: rgba(0,0,0,0.8);
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid #ffd700;
+            max-width: 400px;
+            animation: newsSlide 1s ease-out;
+        }
+
+        .news-title {
+            color: #ff6b6b;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .news-text {
+            color: #ffffff;
+            font-size: 18px;
+            line-height: 1.4;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .kid-character {
+            position: absolute;
+            bottom: 10%;
+            right: 15%;
+            width: 120px;
+            height: 180px;
+            background: linear-gradient(45deg, #4299e1 0%, #3182ce 100%);
+            border-radius: 60px 60px 20px 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            animation: kidBounce 2s ease-in-out infinite;
+        }
+
+        .kid-head {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+            background: #fdbcb4;
+            border-radius: 50%;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+
+        .speech-bubble {
+            position: absolute;
+            top: -120px;
+            left: -100px;
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 20px;
+            border: 3px solid #ffd700;
+            max-width: 200px;
+            animation: bubblePop 0.5s ease-out;
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 15px solid #ffd700;
+        }
+
+        .speech-text {
+            color: #2d3748;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .ai-cursor {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: #ffd700;
+            clip-path: polygon(0% 0%, 100% 50%, 60% 60%, 40% 100%);
+            animation: cursorPoint 2s ease-in-out infinite;
+            bottom: 25%;
+            left: 45%;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        @keyframes skyPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @keyframes houseGlow {
+            0%, 100% { box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+            50% { box-shadow: 0 20px 60px rgba(255,215,0,0.3); }
+        }
+
+        @keyframes windowFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes newsSlide {
+            0% { transform: translateX(-100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes kidBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes bubblePop {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes cursorPoint {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.1); }
+        }
+
+        .title-overlay {
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+
+        .game-title {
+            color: #ffd700;
+            font-size: 36px;
+            font-weight: bold;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+            margin-bottom: 10px;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        .subtitle {
+            color: #ffffff;
+            font-size: 18px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { text-shadow: 3px 3px 6px rgba(0,0,0,0.7); }
+            50% { text-shadow: 3px 3px 6px rgba(255,215,0,0.5), 0 0 20px rgba(255,215,0,0.3); }
+        }
+    </style>
+</head>
+<body>
+    <div class="night-sky">
+        <div class="stars">
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+        </div>
+    </div>
+
+    <div class="title-overlay">
+        <h1 class="game-title">Energy Quest</h1>
+        <p class="subtitle">Misteri Hemat Listrik</p>
+    </div>
+
+    <div class="news-overlay">
+        <div class="news-title">BERITA TERKINI!</div>
+        <div class="news-text">Ilmuwan hilang! Pecahkan teka-teki listrik untuk mengungkap misteri rumah pintar yang gelap.</div>
+    </div>
+
+    <div class="cartoon-house">
+        <div class="house-roof"></div>
+        <div class="house-windows"></div>
+        <div class="house-windows"></div>
+        <div class="house-door"></div>
+    </div>
+
+    <div class="kid-character">
+        <div class="kid-head"></div>
+        <div class="speech-bubble">
+            <div class="speech-text">Masuk dan selidiki!</div>
+        </div>
+    </div>
+
+    <div class="ai-cursor"></div>
+</body>
+</html>

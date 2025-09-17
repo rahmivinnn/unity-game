@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Quest - Ruang Tamu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial Black', Arial, sans-serif;
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            cursor: grab;
+        }
+
+        body.dragging {
+            cursor: grabbing;
+        }
+
+        .room-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #4a5568 0%, #2d3748 50%, #1a202c 100%);
+        }
+
+        .floor {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(45deg, #8b4513 0%, #654321 100%);
+            background-image: 
+                repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(0,0,0,0.1) 50px, rgba(0,0,0,0.1) 52px);
+        }
+
+        .wall-left {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 15%;
+            height: 70%;
+            background: linear-gradient(to right, #4a5568 0%, #718096 100%);
+            border-right: 3px solid #2d3748;
+        }
+
+        .wall-right {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 15%;
+            height: 70%;
+            background: linear-gradient(to left, #4a5568 0%, #718096 100%);
+            border-left: 3px solid #2d3748;
+        }
+
+        .game-ui {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            z-index: 100;
+        }
+
+        .energy-meter {
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            border-radius: 15px;
+            border: 3px solid #ffd700;
+            min-width: 200px;
+        }
+
+        .meter-title {
+            color: #ffd700;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .meter-bar {
+            width: 100%;
+            height: 25px;
+            background: #2d3748;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .meter-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #e53e3e 0%, #ff6b6b 100%);
+            width: 75%;
+            border-radius: 15px;
+            animation: energyPulse 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        .meter-fill::after {
+            content: '750W';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .objective-panel {
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            border-radius: 15px;
+            border: 3px solid #4299e1;
+            max-width: 300px;
+        }
+
+        .objective-title {
+            color: #4299e1;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .objective-text {
+            color: #ffffff;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .draggable-item {
+            position: absolute;
+            cursor: grab;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .draggable-item:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+
+        .draggable-item.dragging {
+            cursor: grabbing;
+            transform: scale(1.1);
+            z-index: 50;
+            filter: brightness(1.3);
+        }
+
+        .tv {
+            bottom: 35%;
+            left: 25%;
+            width: 200px;
+            height: 120px;
+            background: linear-gradient(45deg, #2d3748 0%, #1a202c 100%);
+            border-radius: 10px;
+            border: 5px solid #4a5568;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .tv-screen {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 20px;
+            background: linear-gradient(45deg, #4299e1 0%, #63b3ed 100%);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: tvFlicker 3s ease-in-out infinite;
+        }
+
+        .tv-stand {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 15px;
+            background: #4a5568;
+            border-radius: 5px;
+        }
+
+        .lamp {
+            bottom: 35%;
+            right: 25%;
+            width: 80px;
+            height: 150px;
+        }
+
+        .lamp-base {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 20px;
+            background: linear-gradient(45deg, #4a5568 0%, #2d3748 100%);
+            border-radius: 10px;
+        }
+
+        .lamp-pole {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 80px;
+            background: linear-gradient(45deg, #718096 0%, #4a5568 100%);
+            border-radius: 4px;
+        }
+
+        .lamp-shade {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 60px;
+            background: linear-gradient(45deg, #ffd700 0%, #f6ad55 100%);
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 20px rgba(255,215,0,0.5);
+            animation: lampGlow 4s ease-in-out infinite;
+        }
+
+        .ac-unit {
+            top: 20%;
+            right: 20%;
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(45deg, #e2e8f0 0%, #cbd5e0 100%);
+            border-radius: 10px;
+            border: 3px solid #a0aec0;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        .ac-vents {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            background: repeating-linear-gradient(
+                0deg,
+                #a0aec0,
+                #a0aec0 3px,
+                transparent 3px,
+                transparent 8px
+            );
+            border-radius: 5px;
+        }
+
+        .ac-indicator {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 12px;
+            height: 12px;
+            background: #48bb78;
+            border-radius: 50%;
+            animation: acBlink 2s ease-in-out infinite;
+        }
+
+        .fan {
+            top: 30%;
+            left: 45%;
+            width: 100px;
+            height: 100px;
+        }
+
+        .fan-base {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 30px;
+            background: linear-gradient(45deg, #4a5568 0%, #2d3748 100%);
+            border-radius: 5px;
+        }
+
+        .fan-blades {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #718096 20%, transparent 20%);
+            border-radius: 50%;
+            animation: fanRotate 1s linear infinite;
+        }
+
+        .fan-blades::before,
+        .fan-blades::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 8px;
+            background: #4a5568;
+            border-radius: 4px;
+        }
+
+        .fan-blades::before {
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+
+        .fan-blades::after {
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+
+        .power-outlet {
+            bottom: 40%;
+            left: 5%;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #f7fafc 0%, #edf2f7 100%);
+            border-radius: 5px;
+            border: 2px solid #a0aec0;
+            position: relative;
+        }
+
+        .outlet-holes {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .outlet-holes::before,
+        .outlet-holes::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #2d3748;
+            border-radius: 50%;
+        }
+
+        .outlet-holes::before {
+            top: -8px;
+            left: -3px;
+        }
+
+        .outlet-holes::after {
+            top: -8px;
+            right: -3px;
+        }
+
+        .energy-indicator {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: #ffd700;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .draggable-item:hover .energy-indicator {
+            opacity: 1;
+        }
+
+        .connection-line {
+            position: absolute;
+            height: 3px;
+            background: linear-gradient(45deg, #ffd700 0%, #f6ad55 100%);
+            border-radius: 2px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            animation: energyFlow 2s linear infinite;
+        }
+
+        .connection-line.active {
+            opacity: 1;
+        }
+
+        .ai-cursor {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #ffd700;
+            clip-path: polygon(0% 0%, 100% 50%, 60% 60%, 40% 100%);
+            animation: cursorMove 5s ease-in-out infinite;
+            z-index: 60;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        .hint-bubble {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            color: #ffffff;
+            padding: 15px 20px;
+            border-radius: 20px;
+            border: 2px solid #ffd700;
+            font-size: 14px;
+            text-align: center;
+            max-width: 400px;
+            animation: hintPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes energyPulse {
+            0%, 100% { box-shadow: inset 0 0 10px rgba(255,0,0,0.3); }
+            50% { box-shadow: inset 0 0 20px rgba(255,0,0,0.6); }
+        }
+
+        @keyframes tvFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes lampGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255,215,0,0.5); }
+            50% { box-shadow: 0 0 30px rgba(255,215,0,0.8); }
+        }
+
+        @keyframes acBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes fanRotate {
+            0% { transform: translateX(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) rotate(360deg); }
+        }
+
+        @keyframes energyFlow {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 0; }
+        }
+
+        @keyframes cursorMove {
+            0%, 100% { top: 60%; left: 20%; }
+            25% { top: 40%; left: 70%; }
+            50% { top: 50%; left: 50%; }
+            75% { top: 30%; left: 30%; }
+        }
+
+        @keyframes hintPulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.02); }
+        }
+    </style>
+</head>
+<body>
+    <div class="room-container">
+        <div class="floor"></div>
+        <div class="wall-left"></div>
+        <div class="wall-right"></div>
+
+        <div class="game-ui">
+            <div class="energy-meter">
+                <div class="meter-title">⚡ Konsumsi Energi</div>
+                <div class="meter-bar">
+                    <div class="meter-fill"></div>
+                </div>
+                <div style="color: #ffffff; font-size: 12px; text-align: center;">Target: < 500W</div>
+            </div>
+
+            <div class="objective-panel">
+                <div class="objective-title">🎯 Misi</div>
+                <div class="objective-text">
+                    Atur perangkat elektronik untuk mengurangi konsumsi listrik di bawah 500W. Seret perangkat untuk menyalakan/mematikan.
+                </div>
+            </div>
+        </div>
+
+        <!-- Draggable Items -->
+        <div class="draggable-item tv">
+            <div class="tv-screen">📺</div>
+            <div class="tv-stand"></div>
+            <div class="energy-indicator">200W</div>
+        </div>
+
+        <div class="draggable-item lamp">
+            <div class="lamp-shade"></div>
+            <div class="lamp-pole"></div>
+            <div class="lamp-base"></div>
+            <div class="energy-indicator">60W</div>
+        </div>
+
+        <div class="draggable-item ac-unit">
+            <div class="ac-vents"></div>
+            <div class="ac-indicator"></div>
+            <div class="energy-indicator">400W</div>
+        </div>
+
+        <div class="draggable-item fan">
+            <div class="fan-blades"></div>
+            <div class="fan-base"></div>
+            <div class="energy-indicator">75W</div>
+        </div>
+
+        <div class="power-outlet">
+            <div class="outlet-holes"></div>
+        </div>
+
+        <!-- Connection Lines -->
+        <div class="connection-line active" style="bottom: 42%; left: 7%; width: 200px; transform: rotate(15deg);"></div>
+        <div class="connection-line active" style="bottom: 42%; right: 7%; width: 180px; transform: rotate(-20deg);"></div>
+
+        <div class="ai-cursor"></div>
+
+        <div class="hint-bubble">
+            💡 Tip: Seret perangkat ke stopkontak untuk menyalakan, atau jauh dari stopkontak untuk mematikan!
+        </div>
+    </div>
+
+    <script>
+        // Simple drag and drop functionality for demonstration
+        let isDragging = false;
+        let currentElement = null;
+        let offset = { x: 0, y: 0 };
+
+        document.querySelectorAll('.draggable-item').forEach(item => {
+            item.addEventListener('mousedown', startDrag);
+        });
+
+        function startDrag(e) {
+            isDragging = true;
+            currentElement = e.currentTarget;
+            currentElement.classList.add('dragging');
+            document.body.classList.add('dragging');
+            
+            const rect = currentElement.getBoundingClientRect();
+            offset.x = e.clientX - rect.left;
+            offset.y = e.clientY - rect.top;
+            
+            e.preventDefault();
+        }
+
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', stopDrag);
+
+        function drag(e) {
+            if (!isDragging || !currentElement) return;
+            
+            const x = e.clientX - offset.x;
+            const y = e.clientY - offset.y;
+            
+            currentElement.style.left = x + 'px';
+            currentElement.style.top = y + 'px';
+        }
+
+        function stopDrag() {
+            if (currentElement) {
+                currentElement.classList.remove('dragging');
+                currentElement = null;
+            }
+            document.body.classList.remove('dragging');
+            isDragging = false;
+        }
+    </script>
+</body>
+</html>

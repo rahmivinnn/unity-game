@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Quest - Gerbang Terkunci</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial Black', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .mysterious-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 30%, #2d3561 0%, #1a1a2e 70%);
+            animation: mysteryPulse 6s ease-in-out infinite;
+        }
+
+        .gate-container {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 300px;
+            perspective: 1000px;
+        }
+
+        .gate {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #2d3748 0%, #1a202c 100%);
+            border-radius: 20px;
+            border: 5px solid #4a5568;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+            transform: rotateY(-5deg);
+            animation: gateFloat 4s ease-in-out infinite;
+        }
+
+        .gate-frame {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 3px solid #718096;
+            border-radius: 15px;
+            background: linear-gradient(45deg, #4a5568 0%, #2d3748 100%);
+        }
+
+        .lock-mechanism {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(45deg, #e53e3e 0%, #c53030 100%);
+            border-radius: 50%;
+            border: 8px solid #2d3748;
+            box-shadow: 
+                0 0 30px rgba(229,62,62,0.5),
+                inset 0 0 20px rgba(0,0,0,0.3);
+            animation: lockPulse 3s ease-in-out infinite;
+        }
+
+        .lock-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: lockShake 2s ease-in-out infinite;
+        }
+
+        .energy-keys {
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            right: 10%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .energy-key {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+            position: relative;
+            animation: keyFloat 3s ease-in-out infinite;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .energy-key.collected {
+            background: linear-gradient(45deg, #48bb78 0%, #38a169 100%);
+            box-shadow: 0 0 20px rgba(72,187,120,0.5);
+        }
+
+        .energy-key.locked {
+            background: linear-gradient(45deg, #718096 0%, #4a5568 100%);
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            opacity: 0.6;
+        }
+
+        .energy-key:nth-child(2) {
+            animation-delay: -1s;
+        }
+
+        .energy-key:nth-child(3) {
+            animation-delay: -2s;
+        }
+
+        .energy-key:hover:not(.locked) {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
+
+        .progress-panel {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            padding: 25px;
+            border-radius: 20px;
+            border: 3px solid #ffd700;
+            text-align: center;
+            min-width: 350px;
+        }
+
+        .panel-title {
+            color: #ffd700;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .progress-description {
+            color: #ffffff;
+            font-size: 16px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .keys-progress {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .key-slot {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #4a5568;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .key-slot.filled {
+            background: linear-gradient(45deg, #ffd700 0%, #f6ad55 100%);
+            border-color: #ffd700;
+            color: #2d3748;
+            box-shadow: 0 0 15px rgba(255,215,0,0.5);
+            animation: slotGlow 2s ease-in-out infinite;
+        }
+
+        .overall-progress {
+            margin-bottom: 20px;
+        }
+
+        .progress-label {
+            color: #a0aec0;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #2d3748;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid #4a5568;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #ffd700 0%, #f6ad55 100%);
+            width: 60%;
+            border-radius: 15px;
+            animation: progressShine 3s ease-in-out infinite;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '3/5 Kunci';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #2d3748;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .hint-text {
+            color: #4299e1;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        .floating-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ffd700;
+            border-radius: 50%;
+            animation: particleDrift 8s linear infinite;
+        }
+
+        .particle:nth-child(1) { left: 20%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 40%; animation-delay: -2s; }
+        .particle:nth-child(3) { left: 60%; animation-delay: -4s; }
+        .particle:nth-child(4) { left: 80%; animation-delay: -6s; }
+
+        .mystery-text {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            padding: 15px 25px;
+            border-radius: 15px;
+            border: 2px solid #667eea;
+            color: #ffffff;
+            font-size: 16px;
+            text-align: center;
+            max-width: 500px;
+            animation: mysteryGlow 4s ease-in-out infinite;
+        }
+
+        .ai-helper {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+            animation: helperBob 3s ease-in-out infinite;
+            cursor: pointer;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(45deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+        }
+
+        @keyframes mysteryPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes gateFloat {
+            0%, 100% { transform: rotateY(-5deg) translateY(0); }
+            50% { transform: rotateY(-5deg) translateY(-10px); }
+        }
+
+        @keyframes lockPulse {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 30px rgba(229,62,62,0.5),
+                    inset 0 0 20px rgba(0,0,0,0.3);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 50px rgba(229,62,62,0.8),
+                    inset 0 0 30px rgba(0,0,0,0.5);
+            }
+        }
+
+        @keyframes lockShake {
+            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+            25% { transform: translate(-50%, -50%) rotate(-2deg); }
+            75% { transform: translate(-50%, -50%) rotate(2deg); }
+        }
+
+        @keyframes keyFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes slotGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(255,215,0,0.5); }
+            50% { box-shadow: 0 0 25px rgba(255,215,0,0.8); }
+        }
+
+        @keyframes progressShine {
+            0%, 100% { box-shadow: inset 0 0 10px rgba(255,215,0,0.3); }
+            50% { box-shadow: inset 0 0 20px rgba(255,215,0,0.6); }
+        }
+
+        @keyframes particleDrift {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes mysteryGlow {
+            0%, 100% { border-color: #667eea; }
+            50% { border-color: #764ba2; }
+        }
+
+        @keyframes helperBob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="mysterious-bg"></div>
+
+    <div class="floating-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <button class="back-button">← Kembali</button>
+
+    <div class="progress-panel">
+        <h2 class="panel-title">🔐 Gerbang Terkunci</h2>
+        <p class="progress-description">
+            Kumpulkan semua Kunci Energi untuk membuka gerbang menuju laboratorium rahasia Dr. Watt!
+        </p>
+        
+        <div class="keys-progress">
+            <div class="key-slot filled">⚡</div>
+            <div class="key-slot filled">💡</div>
+            <div class="key-slot filled">🔋</div>
+            <div class="key-slot">🔌</div>
+            <div class="key-slot">⚙️</div>
+        </div>
+
+        <div class="overall-progress">
+            <div class="progress-label">Progress Keseluruhan</div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+
+        <p class="hint-text">
+            💡 Selesaikan quiz dan eksperimen untuk mendapatkan kunci yang tersisa!
+        </p>
+    </div>
+
+    <div class="energy-keys">
+        <div class="energy-key collected">⚡</div>
+        <div class="energy-key collected">💡</div>
+        <div class="energy-key locked">🔌</div>
+    </div>
+
+    <div class="gate-container">
+        <div class="gate">
+            <div class="gate-frame">
+                <div class="lock-mechanism">
+                    <div class="lock-icon">🔒</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mystery-text">
+        "Hanya mereka yang menguasai misteri energi yang dapat memasuki laboratorium ini..." - Dr. Watt
+    </div>
+
+    <div class="ai-helper">
+        🤖
+    </div>
+</body>
+</html>

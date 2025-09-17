@@ -32,8 +32,24 @@
                 <h1 class="game-title-quest">QUEST</h1>
                 <!-- Transparent button over Energy Quest text -->
                 <button class="transparent-title-btn" onclick="loadSplashScreen()" title="Klik untuk ke Splashscreen"></button>
+                <!-- Animated particles around title -->
+                <div class="title-particles">
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                </div>
             </div>
-            <p class="game-subtitle">Misteri Hemat Listrik</p>
+            <p class="game-subtitle">🔋 Misteri Hemat Listrik ⚡</p>
+            <!-- Progress indicator -->
+            <div class="global-progress">
+                <div class="progress-text">Progress Keseluruhan</div>
+                <div class="progress-bar-global">
+                    <div class="progress-fill-global" id="global-progress-fill"></div>
+                </div>
+                <div class="progress-percentage" id="global-progress-text">0%</div>
+            </div>
         </div>
 
         <!-- Top Right Options -->
@@ -186,5 +202,86 @@
     <script src="scripts/kitchenScene.js"></script>
     <script src="scripts/bedroomScene.js"></script>
     <script src="scripts/main-menu.js"></script>
+    
+    <script>
+        // Enhanced Main Menu with Dynamic Progress
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate progress loading animation
+            setTimeout(() => {
+                updateGlobalProgress();
+            }, 1000);
+            
+            // Add hover effects to buttons
+            const buttons = document.querySelectorAll('.unity-btn');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                    this.style.boxShadow = '0 15px 30px rgba(0,0,0,0.4)';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                    this.style.boxShadow = '0 8px 16px rgba(0,0,0,0.3)';
+                });
+            });
+        });
+        
+        function updateGlobalProgress() {
+            const progressFill = document.getElementById('global-progress-fill');
+            const progressText = document.getElementById('global-progress-text');
+            
+            // Calculate progress based on completed levels (example)
+            let completedLevels = 0;
+            const totalLevels = 5;
+            
+            // Check localStorage for completed levels
+            if (localStorage.getItem('level1_completed')) completedLevels++;
+            if (localStorage.getItem('level2_completed')) completedLevels++;
+            if (localStorage.getItem('quiz_completed')) completedLevels++;
+            if (localStorage.getItem('experiments_completed')) completedLevels++;
+            if (localStorage.getItem('final_gate_unlocked')) completedLevels++;
+            
+            const percentage = Math.round((completedLevels / totalLevels) * 100);
+            
+            // Animate progress bar
+            setTimeout(() => {
+                progressFill.style.width = percentage + '%';
+                progressText.textContent = percentage + '%';
+            }, 500);
+            
+            // Add completion effects
+            if (percentage === 100) {
+                progressFill.style.background = 'linear-gradient(45deg, #00ff00 0%, #32cd32 100%)';
+                progressText.textContent = '🎉 SELESAI! 🎉';
+            }
+        }
+        
+        // Enhanced button click effects
+        function addClickEffect(element) {
+            element.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                element.style.transform = 'scale(1)';
+            }, 150);
+        }
+        
+        // Override existing functions to add effects
+        const originalLoadMainGame = window.loadMainGame;
+        window.loadMainGame = function() {
+            addClickEffect(event.target.closest('.unity-btn'));
+            if (originalLoadMainGame) originalLoadMainGame();
+        };
+        
+        const originalLoadQuiz = window.loadQuiz;
+        window.loadQuiz = function() {
+            addClickEffect(event.target.closest('.unity-btn'));
+            if (originalLoadQuiz) originalLoadQuiz();
+        };
+        
+        const originalLoadExperiments = window.loadExperiments;
+        window.loadExperiments = function() {
+            addClickEffect(event.target.closest('.unity-btn'));
+            if (originalLoadExperiments) originalLoadExperiments();
+        };
+    </script>
 </body>
 </html>

@@ -15,18 +15,34 @@
 <body>
     <!-- Navigation Header -->
     <div class="experiment-nav">
+        <!-- Animated Background Elements -->
+        <div class="nav-background-effects">
+            <div class="energy-particle"></div>
+            <div class="energy-particle"></div>
+            <div class="energy-particle"></div>
+            <div class="energy-wave"></div>
+        </div>
+        
         <div class="nav-left">
             <button id="back-to-catalog-btn" class="back-to-catalog-btn" style="display: none;">
                 <i class="fas fa-th-large"></i>
                 Katalog
             </button>
             <div class="nav-title">
-                <i class="fas fa-flask"></i>
-                ENERGY EXPERIMENTS
+                <i class="fas fa-flask animated-flask"></i>
+                ENERGY EXPERIMENTS ⚡
+                <div class="title-glow"></div>
             </div>
         </div>
         <div class="experiment-counter">
-            <span id="nav-current">1</span> / <span id="nav-total">50</span>
+            <div class="counter-badge">
+                <span id="nav-current">1</span> / <span id="nav-total">50</span>
+            </div>
+            <div class="completion-indicator">
+                <div class="completion-ring">
+                    <div class="completion-fill"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -42,24 +58,68 @@
 
             <!-- Experiment Area -->
             <div class="experiment-area">
+                <!-- Electric Field Background -->
+                <div class="electric-field">
+                    <div class="field-line"></div>
+                    <div class="field-line"></div>
+                    <div class="field-line"></div>
+                </div>
+                
                 <!-- Left Object -->
                 <div class="experiment-object left" id="left-object">
+                    <div class="object-glow"></div>
+                    <div class="voltage-indicator">
+                        <div class="voltage-bar">
+                            <div class="voltage-fill"></div>
+                        </div>
+                    </div>
                     <div class="object-label" id="left-name">Object 1</div>
-                    <div class="object-voltage" id="left-voltage">0V</div>
+                    <div class="object-voltage" id="left-voltage">0V ⚡</div>
+                    <div class="object-status">
+                        <i class="fas fa-circle status-dot"></i>
+                        <span class="status-text">Ready</span>
+                    </div>
                 </div>
 
                 <!-- Connector -->
                 <div class="connector-area">
                     <div id="connector" class="connector">
-                        <span id="connector-name">Connector</span>
+                        <div class="connector-pulse"></div>
+                        <span id="connector-name">🔌 Connector</span>
+                        <div class="connector-status">
+                            <i class="fas fa-unlink"></i>
+                        </div>
                     </div>
-                    <div id="connection-line" class="connection-line"></div>
+                    <div id="connection-line" class="connection-line">
+                        <div class="current-flow"></div>
+                        <div class="current-particles">
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Right Object -->
                 <div class="experiment-object right" id="right-object">
+                    <div class="object-glow"></div>
+                    <div class="voltage-indicator">
+                        <div class="voltage-bar">
+                            <div class="voltage-fill"></div>
+                        </div>
+                    </div>
                     <div class="object-label" id="right-name">Object 2</div>
-                    <div class="object-voltage" id="right-voltage">0V</div>
+                    <div class="object-voltage" id="right-voltage">0V ⚡</div>
+                    <div class="object-status">
+                        <i class="fas fa-circle status-dot"></i>
+                        <span class="status-text">Ready</span>
+                    </div>
+                </div>
+                
+                <!-- Safety Warning -->
+                <div class="safety-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Simulasi Aman - Virtual Lab</span>
                 </div>
             </div>
 

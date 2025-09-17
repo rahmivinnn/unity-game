@@ -20,30 +20,71 @@
         
         <!-- Quiz Header -->
         <div class="quiz-header">
-            <h1 class="quiz-title">Energy Quest: Misteri Hemat Listrik</h1>
-            <h2 class="quiz-subtitle">Kuis Pengetahuan Energi</h2>
+            <div class="header-decoration">
+                <div class="energy-orb"></div>
+                <div class="energy-orb"></div>
+                <div class="energy-orb"></div>
+            </div>
+            <h1 class="quiz-title">⚡ Energy Quest: Misteri Hemat Listrik ⚡</h1>
+            <h2 class="quiz-subtitle">🧠 Kuis Pengetahuan Energi 🔋</h2>
             <div class="quiz-progress">
                 <span id="question-counter">Soal 1 dari 20</span>
                 <div class="progress-bar">
                     <div id="progress-fill" class="progress-fill"></div>
+                    <div class="progress-glow"></div>
                 </div>
+                <div class="score-display-mini">
+                    <span>Skor: </span>
+                    <span id="current-score">0</span>
+                    <span>/</span>
+                    <span id="max-score">20</span>
+                </div>
+            </div>
+            <!-- Timer -->
+            <div class="quiz-timer">
+                <i class="fas fa-clock"></i>
+                <span id="timer-display">05:00</span>
             </div>
         </div>
 
         <!-- Quiz Content -->
         <div class="quiz-content">
             <div id="question-container" class="question-container">
+                <div class="question-number-badge">
+                    <span id="question-badge">Q1</span>
+                </div>
                 <div id="question-text" class="question-text"></div>
                 <div id="options-container" class="options-container">
                     <!-- Options will be dynamically generated -->
+                </div>
+                <!-- Feedback Area -->
+                <div id="feedback-area" class="feedback-area" style="display: none;">
+                    <div id="feedback-icon" class="feedback-icon"></div>
+                    <div id="feedback-text" class="feedback-text"></div>
+                    <div id="explanation-text" class="explanation-text"></div>
                 </div>
             </div>
 
             <!-- Quiz Controls -->
             <div class="quiz-controls">
-                <button id="prev-btn" class="quiz-btn secondary" disabled>Sebelumnya</button>
-                <button id="next-btn" class="quiz-btn primary" disabled>Selanjutnya</button>
-                <button id="submit-btn" class="quiz-btn success" style="display: none;">Selesai</button>
+                <button id="prev-btn" class="quiz-btn secondary" disabled>
+                    <i class="fas fa-chevron-left"></i> Sebelumnya
+                </button>
+                <button id="next-btn" class="quiz-btn primary" disabled>
+                    Selanjutnya <i class="fas fa-chevron-right"></i>
+                </button>
+                <button id="submit-btn" class="quiz-btn success" style="display: none;">
+                    <i class="fas fa-check"></i> Selesai
+                </button>
+            </div>
+            
+            <!-- Streak Counter -->
+            <div class="streak-counter">
+                <div class="streak-icon">🔥</div>
+                <div class="streak-text">
+                    <span>Streak: </span>
+                    <span id="streak-count">0</span>
+                </div>
             </div>
         </div>
 
