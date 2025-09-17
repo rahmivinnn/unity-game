@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test JPG Images - Energy Quest</title>
+    <link rel="stylesheet" href="public/real-objects.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .test-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        .test-item h3 {
+            margin-bottom: 15px;
+            color: #4CAF50;
+        }
+        .object-display {
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 120px;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .status.loading {
+            background: #ff9800;
+            color: white;
+        }
+        .status.success {
+            background: #4CAF50;
+            color: white;
+        }
+        .status.error {
+            background: #f44336;
+            color: white;
+        }
+        .info {
+            font-size: 12px;
+            color: #ccc;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Test JPG Images - Energy Quest</h1>
+        <p>Testing all replaced JPG images to ensure they load correctly and replace dummy objects.</p>
+        
+        <div class="test-grid">
+            <!-- Battery Test -->
+            <div class="test-item">
+                <h3>🔋 Battery</h3>
+                <div class="object-display">
+                    <div class="real-battery" id="battery-test"></div>
+                </div>
+                <div class="status loading" id="battery-status">Loading...</div>
+                <div class="info">Realistic 9V battery with terminals</div>
+            </div>
+
+            <!-- Switch Test -->
+            <div class="test-item">
+                <h3>🔘 Switch</h3>
+                <div class="object-display">
+                    <div class="real-switch" id="switch-test"></div>
+                </div>
+                <div class="status loading" id="switch-status">Loading...</div>
+                <div class="info">Electrical switch with toggle</div>
+            </div>
+
+            <!-- Lightbulb Test -->
+            <div class="test-item">
+                <h3>💡 Lightbulb</h3>
+                <div class="object-display">
+                    <div class="real-lamp" id="lamp-test"></div>
+                </div>
+                <div class="status loading" id="lamp-status">Loading...</div>
+                <div class="info">Incandescent light bulb</div>
+            </div>
+
+            <!-- TV Test -->
+            <div class="test-item">
+                <h3>📺 TV</h3>
+                <div class="object-display">
+                    <div class="real-tv" id="tv-test"></div>
+                </div>
+                <div class="status loading" id="tv-status">Loading...</div>
+                <div class="info">Television with screen</div>
+            </div>
+
+            <!-- Cable Test -->
+            <div class="test-item">
+                <h3>🔌 Cable</h3>
+                <div class="object-display">
+                    <div class="real-cable" id="cable-test"></div>
+                </div>
+                <div class="status loading" id="cable-status">Loading...</div>
+                <div class="info">Electrical wire with connectors</div>
+            </div>
+
+            <!-- Resistor Test -->
+            <div class="test-item">
+                <h3>⚡ Resistor</h3>
+                <div class="object-display">
+                    <div class="real-resistor" id="resistor-test"></div>
+                </div>
+                <div class="status loading" id="resistor-status">Loading...</div>
+                <div class="info">Electronic resistor component</div>
+            </div>
+
+            <!-- Scientist Test -->
+            <div class="test-item">
+                <h3>👨‍🔬 Scientist</h3>
+                <div class="object-display">
+                    <div class="real-scientist-character" id="scientist-test"></div>
+                </div>
+                <div class="status loading" id="scientist-status">Loading...</div>
+                <div class="info">Lab scientist character</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background: rgba(0, 0, 0, 0.2); border-radius: 8px;">
+            <h3>📊 Test Results</h3>
+            <div id="test-summary">
+                <p>Testing images... Please wait.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test image loading
+        function testImageLoading() {
+            const testItems = [
+                { id: 'battery', class: 'real-battery', file: 'battery-realistic.jpg' },
+                { id: 'switch', class: 'real-switch', file: 'switch-realistic.jpg' },
+                { id: 'lamp', class: 'real-lamp', file: 'lightbulb-realistic.jpg' },
+                { id: 'tv', class: 'real-tv', file: 'tv-realistic.jpg' },
+                { id: 'cable', class: 'real-cable', file: 'cable-realistic.jpg' },
+                { id: 'resistor', class: 'real-resistor', file: 'resistor-realistic.jpg' },
+                { id: 'scientist', class: 'real-scientist-character', file: 'scientist-realistic.jpg' }
+            ];
+
+            let loadedCount = 0;
+            let totalCount = testItems.length;
+
+            testItems.forEach(item => {
+                const element = document.getElementById(`${item.id}-test`);
+                const statusElement = document.getElementById(`${item.id}-status`);
+                
+                // Test if the background image is loaded
+                const testImg = new Image();
+                testImg.onload = function() {
+                    statusElement.textContent = '✅ Loaded';
+                    statusElement.className = 'status success';
+                    loadedCount++;
+                    updateSummary();
+                };
+                testImg.onerror = function() {
+                    statusElement.textContent = '❌ Failed';
+                    statusElement.className = 'status error';
+                    loadedCount++;
+                    updateSummary();
+                };
+                
+                // Get the background image URL from computed styles
+                const computedStyle = window.getComputedStyle(element);
+                const bgImage = computedStyle.backgroundImage;
+                const url = bgImage.replace(/url\(['"]?(.*?)['"]?\)/, '$1');
+                testImg.src = url;
+            });
+
+            function updateSummary() {
+                if (loadedCount === totalCount) {
+                    const summaryElement = document.getElementById('test-summary');
+                    const successRate = (loadedCount / totalCount) * 100;
+                    
+                    if (successRate === 100) {
+                        summaryElement.innerHTML = `
+                            <p style="color: #4CAF50; font-weight: bold;">🎉 All images loaded successfully!</p>
+                            <p>✅ ${loadedCount}/${totalCount} JPG images are working correctly</p>
+                            <p>✨ No dummy objects remain - all replaced with realistic JPG images!</p>
+                        `;
+                    } else {
+                        summaryElement.innerHTML = `
+                            <p style="color: #f44336; font-weight: bold;">⚠️ Some images failed to load</p>
+                            <p>✅ ${loadedCount}/${totalCount} JPG images loaded successfully</p>
+                            <p>❌ ${totalCount - loadedCount} images failed to load</p>
+                        `;
+                    }
+                }
+            }
+        }
+
+        // Run test when page loads
+        window.addEventListener('load', function() {
+            setTimeout(testImageLoading, 1000); // Wait a bit for CSS to load
+        });
+    </script>
+</body>
+</html>

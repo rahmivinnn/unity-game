@@ -4,7 +4,7 @@
 .real-battery {
     width: 60px;
     height: 100px;
-    background-image: url('./real-images/battery-realistic.svg');
+    background-image: url('./real-images-jpg/battery-realistic.jpg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -28,7 +28,7 @@
 .real-switch {
     width: 80px;
     height: 120px;
-    background-image: url('./real-images/switch-realistic.svg');
+    background-image: url('./real-images-jpg/switch-realistic.jpg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -55,7 +55,7 @@
 .real-lamp {
     width: 80px;
     height: 120px;
-    background-image: url('./real-images/lightbulb-realistic.svg');
+    background-image: url('./real-images-jpg/lightbulb-realistic.jpg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -94,7 +94,7 @@
 .real-cable {
     width: 200px;
     height: 60px;
-    background-image: url('./real-images/wire-realistic.svg');
+    background-image: url('./real-images-jpg/cable-realistic.jpg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -117,7 +117,7 @@
 .real-resistor {
     width: 120px;
     height: 50px;
-    background-image: url('./real-images/resistor-realistic.svg');
+    background-image: url('./real-images-jpg/resistor-realistic.jpg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -249,82 +249,39 @@
 .real-tv {
     width: 120px;
     height: 90px;
-    background: linear-gradient(145deg, #2c3e50, #34495e);
+    background-image: url('./real-images-jpg/tv-realistic.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
     border-radius: 8px;
     position: relative;
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 3px solid #1a252f;
 }
 
-.real-tv::before {
-    content: '';
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    right: 8px;
-    bottom: 20px;
-    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
-    border-radius: 4px;
-    border: 2px solid #0f172a;
-}
-
-.real-tv::after {
-    content: '';
-    position: absolute;
-    bottom: 4px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 30px;
-    height: 8px;
-    background: linear-gradient(90deg, #64748b, #94a3b8);
-    border-radius: 4px;
-}
 
 .real-tv:hover {
     filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4)) brightness(1.1);
     transform: scale(1.05);
 }
 
-.real-tv.active::before {
-    background: linear-gradient(135deg, #059669, #10b981);
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+.real-tv.active {
+    filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.5)) brightness(1.2);
 }
 
 /* ===== SCIENTIST CHARACTER REALISTIS ===== */
 .real-scientist-character {
     width: 120px;
     height: 180px;
+    background-image: url('./real-images-jpg/scientist-realistic.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
     position: relative;
     cursor: pointer;
     transition: all 0.3s ease;
-}
-
-/* Kepala */
-.real-scientist-character::before {
-    content: '';
-    position: absolute;
-    top: 10px;
-    left: 35px;
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, #fbbf24, #f59e0b);
-    border-radius: 50%;
-    border: 2px solid #92400e;
-}
-
-/* Badan */
-.real-scientist-character::after {
-    content: '';
-    position: absolute;
-    top: 55px;
-    left: 25px;
-    width: 70px;
-    height: 100px;
-    background: linear-gradient(135deg, #ffffff, #f3f4f6);
-    border-radius: 10px;
-    border: 2px solid #6b7280;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
 }
 
 .real-scientist-character:hover {
