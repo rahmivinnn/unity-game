@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Quest - Puzzle Inventory</title>
+    <link rel="stylesheet" href="puzzle-game.css">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <!-- Game Container -->
+    <div id="puzzle-game-container">
+        <!-- HUD (Heads Up Display) -->
+        <div id="game-hud">
+            <!-- Power Meter -->
+            <div id="power-meter">
+                <div class="meter-label">Progress Puzzle</div>
+                <div class="meter-bar">
+                    <div id="puzzle-fill" class="meter-fill"></div>
+                </div>
+                <div id="puzzle-value" class="meter-value">0%</div>
+            </div>
+            
+            <!-- Puzzle Pieces Inventory -->
+            <div id="puzzle-inventory">
+                <div class="inventory-label">Inventory Puzzle</div>
+                <div class="inventory-grid" id="puzzle-pieces-container">
+                    <!-- Puzzle pieces will be dynamically added here -->
+                </div>
+            </div>
+            
+            <!-- Mini Map -->
+            <div id="mini-map">
+                <div class="map-label">Peta Puzzle</div>
+                <div class="map-container">
+                    <div id="zone-puzzle" class="map-zone active" data-zone="puzzle">
+                        <div class="zone-icon">🧩</div>
+                        <div class="zone-name">Puzzle Zone</div>
+                    </div>
+                    <div id="zone-energy" class="map-zone" data-zone="energy">
+                        <div class="zone-icon">⚡</div>
+                        <div class="zone-name">Energy Game</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Game Area -->
+        <div id="game-world">
+            <!-- Puzzle Zone -->
+            <div id="puzzle-zone" class="game-zone active">
+                <div class="zone-background puzzle-bg"></div>
+                <div class="zone-title">
+                    <h2>PUZZLE INVENTORY</h2>
+                    <p>Susun kepingan puzzle untuk membuka kunci energi!</p>
+                </div>
+                
+                <!-- Character -->
+                <div id="character" class="character">
+                    <img src="Image/avatar.png" alt="Character">
+                    <div class="character-speech">
+                        <p>"Halo! Aku butuh bantuanmu untuk menyusun puzzle ini. Seret kepingan puzzle dari inventory ke area puzzle untuk menyelesaikannya!"</p>
+                    </div>
+                </div>
+                
+                <!-- Puzzle Board -->
+                <div id="puzzle-board">
+                    <div class="puzzle-grid" id="puzzle-grid">
+                        <!-- Puzzle slots will be dynamically created here -->
+                    </div>
+                </div>
+                
+                <!-- Puzzle Image Preview -->
+                <div id="puzzle-preview">
+                    <div class="preview-label">Gambar Target</div>
+                    <div class="preview-image">
+                        <img id="target-image" src="" alt="Target Puzzle Image">
+                    </div>
+                </div>
+                
+                <!-- Zone Completion Reward -->
+                <div id="puzzle-reward" class="zone-reward hidden">
+                    <div class="reward-sparkle"></div>
+                    <div class="energy-key-reward">
+                        <div class="key-icon">🔑</div>
+                        <div class="key-text">Kunci Energi Puzzle</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Energy Game Zone -->
+            <div id="energy-zone" class="game-zone">
+                <div class="zone-background energy-bg"></div>
+                <div class="zone-title">
+                    <h2>ENERGY GAME</h2>
+                    <p>Kembali ke game energi setelah menyelesaikan puzzle</p>
+                </div>
+                
+                <div class="energy-game-link">
+                    <a href="energy-game.html" class="energy-link-btn">
+                        <div class="btn-icon">⚡</div>
+                        <div class="btn-text">Masuk Energy Game</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI Cursor -->
+        <div id="ai-cursor" class="ai-cursor hidden">
+            <div class="cursor-glow"></div>
+            <div class="cursor-pointer">👆</div>
+        </div>
+        
+        <!-- Feedback Messages -->
+        <div id="feedback-container">
+            <!-- Dynamic feedback messages will appear here -->
+        </div>
+    </div>
+    
+    <!-- Game Scripts -->
+    <script src="audio-manager.js"></script>
+    <script src="puzzle-assets.js"></script>
+    <script type="module" src="puzzle-game.js"></script>
+</body>
+</html>
