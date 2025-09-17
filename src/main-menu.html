@@ -42,14 +42,6 @@
                 </div>
             </div>
             <p class="game-subtitle">🔋 Misteri Hemat Listrik ⚡</p>
-            <!-- Progress indicator -->
-            <div class="global-progress">
-                <div class="progress-text">Progress Keseluruhan</div>
-                <div class="progress-bar-global">
-                    <div class="progress-fill-global" id="global-progress-fill"></div>
-                </div>
-                <div class="progress-percentage" id="global-progress-text">0%</div>
-            </div>
         </div>
 
         <!-- Top Right Options -->
@@ -204,12 +196,8 @@
     <script src="scripts/main-menu.js"></script>
     
     <script>
-        // Enhanced Main Menu with Dynamic Progress
+        // Enhanced Main Menu
         document.addEventListener('DOMContentLoaded', function() {
-            // Simulate progress loading animation
-            setTimeout(() => {
-                updateGlobalProgress();
-            }, 1000);
             
             // Add hover effects to buttons
             const buttons = document.querySelectorAll('.unity-btn');
@@ -226,35 +214,6 @@
             });
         });
         
-        function updateGlobalProgress() {
-            const progressFill = document.getElementById('global-progress-fill');
-            const progressText = document.getElementById('global-progress-text');
-            
-            // Calculate progress based on completed levels (example)
-            let completedLevels = 0;
-            const totalLevels = 5;
-            
-            // Check localStorage for completed levels
-            if (localStorage.getItem('level1_completed')) completedLevels++;
-            if (localStorage.getItem('level2_completed')) completedLevels++;
-            if (localStorage.getItem('quiz_completed')) completedLevels++;
-            if (localStorage.getItem('experiments_completed')) completedLevels++;
-            if (localStorage.getItem('final_gate_unlocked')) completedLevels++;
-            
-            const percentage = Math.round((completedLevels / totalLevels) * 100);
-            
-            // Animate progress bar
-            setTimeout(() => {
-                progressFill.style.width = percentage + '%';
-                progressText.textContent = percentage + '%';
-            }, 500);
-            
-            // Add completion effects
-            if (percentage === 100) {
-                progressFill.style.background = 'linear-gradient(45deg, #00ff00 0%, #32cd32 100%)';
-                progressText.textContent = '🎉 SELESAI! 🎉';
-            }
-        }
         
         // Enhanced button click effects
         function addClickEffect(element) {

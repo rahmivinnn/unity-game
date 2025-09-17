@@ -245,7 +245,7 @@
     <!-- Video Cutscene -->
     <div id="video-container">
         <video id="cutscene-video" autoplay muted>
-            <source src="/public/Video/opening.mp4" type="video/mp4">
+            <source src="public/Video/opening.mp4" type="video/mp4">
             Video tidak dapat dimuat.
         </video>
         <button id="skip-button">Skip ⏭</button>
@@ -261,11 +261,11 @@
                 
                 // Array of 5 cutscene videos
                 this.cutsceneVideos = [
-                    '/public/Video/opening.mp4',
-                    '/public/Video/ilmuwan.mp4',
-                    '/public/Video/video.mp4',
-                    '/public/Video/video action.mp4',
-                    '/public/Video/final.mp4'
+                    'public/Video/opening.mp4',
+                    'public/Video/ilmuwan.mp4',
+                    'public/Video/video.mp4',
+                    'public/Video/video action.mp4',
+                    'public/Video/final.mp4'
                 ];
                 this.currentVideoIndex = 0;
                 
@@ -276,7 +276,7 @@
                 // Start splash screen sequence
                 setTimeout(() => {
                     this.showCutscene();
-                }, 5500); // Wait for splash animations to complete
+                }, 3000); // Reduced wait time for better UX
 
                 // Skip button functionality
                 this.skipButton.addEventListener('click', () => {
@@ -293,6 +293,23 @@
                     console.log('Video failed to load, trying next video or proceeding to main menu');
                     this.playNextVideo();
                 });
+
+                // Fallback: if no videos work, go to main menu after 10 seconds
+                setTimeout(() => {
+                    if (this.videoContainer.style.display === 'block' && this.video.paused) {
+                        console.log('Fallback: No videos loaded, going to main menu');
+                        this.skipToMainMenu();
+                    }
+                }, 10000);
+
+                // Keyboard support for skipping
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
+                        if (this.videoContainer.style.display === 'block') {
+                            this.skipToMainMenu();
+                        }
+                    }
+                });
             }
 
             showCutscene() {
@@ -304,17 +321,24 @@
             playCurrentVideo() {
                 if (this.currentVideoIndex < this.cutsceneVideos.length) {
                     const videoSrc = this.cutsceneVideos[this.currentVideoIndex];
+                    console.log('Loading video:', videoSrc);
                     this.video.src = videoSrc;
                     
-                    // Try to play video
-                    this.video.play().catch(error => {
-                        console.log('Video autoplay failed:', error);
-                        // If autoplay fails, try next video after short delay
-                        setTimeout(() => {
-                            this.playNextVideo();
-                        }, 2000);
-                    });
+                    // Load the video first
+                    this.video.load();
+                    
+                    // Try to play video after a short delay to ensure it's loaded
+                    setTimeout(() => {
+                        this.video.play().catch(error => {
+                            console.log('Video autoplay failed:', error);
+                            // If autoplay fails, try next video after short delay
+                            setTimeout(() => {
+                                this.playNextVideo();
+                            }, 1000);
+                        });
+                    }, 500);
                 } else {
+                    console.log('All videos played, going to main menu');
                     this.skipToMainMenu();
                 }
             }
