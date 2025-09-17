@@ -1,0 +1,72 @@
+<svg width="200" height="80" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradients for realistic resistor -->
+    <linearGradient id="resistorBody" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f4e4bc;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#e6d7b3;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#d4c5a0;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#c2b38d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#b0a17a;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="wireGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#ffed4e;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#fff176;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#ffed4e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffc107;stop-opacity:1" />
+    </linearGradient>
+    
+    <radialGradient id="bodyHighlight" cx="30%" cy="20%" r="50%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0" />
+    </radialGradient>
+    
+    <filter id="resistorShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="3" stdDeviation="2" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  
+  <!-- Resistor shadow -->
+  <rect x="50" y="25" width="100" height="30" rx="15" ry="15" fill="#000000" opacity="0.15" transform="translate(1,2)"/>
+  
+  <!-- Left wire -->
+  <rect x="10" y="37" width="45" height="6" fill="url(#wireGradient)" filter="url(#resistorShadow)"/>
+  <ellipse cx="12" cy="40" rx="2" ry="3" fill="url(#wireGradient)"/>
+  
+  <!-- Right wire -->
+  <rect x="145" y="37" width="45" height="6" fill="url(#wireGradient)" filter="url(#resistorShadow)"/>
+  <ellipse cx="188" cy="40" rx="2" ry="3" fill="url(#wireGradient)"/>
+  
+  <!-- Main resistor body -->
+  <rect x="50" y="25" width="100" height="30" rx="15" ry="15" fill="url(#resistorBody)" filter="url(#resistorShadow)"/>
+  
+  <!-- Color bands (representing resistance value) -->
+  <!-- First band - Brown (1) -->
+  <rect x="65" y="25" width="8" height="30" fill="#8B4513" rx="4" ry="15"/>
+  
+  <!-- Second band - Black (0) -->
+  <rect x="78" y="25" width="8" height="30" fill="#2F2F2F" rx="4" ry="15"/>
+  
+  <!-- Third band - Red (2) -->
+  <rect x="91" y="25" width="8" height="30" fill="#FF0000" rx="4" ry="15"/>
+  
+  <!-- Fourth band - Gold (tolerance) -->
+  <rect x="120" y="25" width="6" height="30" fill="#FFD700" rx="3" ry="15"/>
+  
+  <!-- Body highlight for 3D effect -->
+  <rect x="50" y="25" width="100" height="30" rx="15" ry="15" fill="url(#bodyHighlight)"/>
+  
+  <!-- Text marking -->
+  <text x="100" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" fill="#666666">1kΩ</text>
+  <text x="100" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="5" fill="#888888">±5%</text>
+  
+  <!-- Realistic wear and scratches -->
+  <line x1="55" y1="30" x2="60" y2="35" stroke="#c2b38d" stroke-width="0.3" opacity="0.6"/>
+  <circle cx="130" cy="45" r="0.5" fill="#b0a17a" opacity="0.7"/>
+  <line x1="140" y1="50" x2="145" y2="48" stroke="#c2b38d" stroke-width="0.3" opacity="0.6"/>
+  
+  <!-- Wire connection points -->
+  <circle cx="50" cy="40" r="1.5" fill="#e6d7b3"/>
+  <circle cx="150" cy="40" r="1.5" fill="#e6d7b3"/>
+</svg>

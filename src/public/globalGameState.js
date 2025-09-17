@@ -93,6 +93,10 @@ class GlobalGameState {
         return Object.values(this.gameData.energyKeys).filter(key => key).length;
     }
     
+    hasEnergyKey(keyName) {
+        return this.gameData.energyKeys[keyName] || false;
+    }
+    
     // Testing method - untuk memberikan semua kunci energi
     unlockAllEnergyKeys() {
         Object.keys(this.gameData.energyKeys).forEach(key => {

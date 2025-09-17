@@ -1,11 +1,24 @@
 // In-Game Notification System
 class InGameNotification {
     constructor() {
-        this.createNotificationContainer();
         this.notifications = [];
+        this.containerCreated = false;
+        this.ensureContainer();
+    }
+
+    ensureContainer() {
+        if (this.containerCreated) return;
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.createNotificationContainer());
+        } else {
+            this.createNotificationContainer();
+        }
     }
 
     createNotificationContainer() {
+        if (this.containerCreated) return;
+        
         // Remove existing container if any
         const existing = document.getElementById('game-notification-container');
         if (existing) {
@@ -23,10 +36,19 @@ class InGameNotification {
             pointer-events: none;
             font-family: 'Arial', sans-serif;
         `;
-        document.body.appendChild(container);
+        
+        if (document.body) {
+            document.body.appendChild(container);
+            this.containerCreated = true;
+        }
     }
 
     show(message, type = 'info', duration = 4000) {
+        // Ensure container exists before showing notification
+        if (!this.containerCreated) {
+            this.createNotificationContainer();
+        }
+        
         const notification = document.createElement('div');
         const notificationId = Date.now() + Math.random();
         

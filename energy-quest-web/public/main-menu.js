@@ -1,4 +1,4 @@
-﻿// Main Menu Controller
+// Main Menu Controller
 export class MainMenuController {
     constructor() {
         this.backgroundMusic = null;
@@ -52,7 +52,7 @@ function loadMainGame() {
     if (window.mainMenu) {
         window.mainMenu.stopBackgroundMusic();
     }
-    window.location.href = 'public/energy-game.html';
+    window.location.href = 'src/scene2-level1.html';
 }
 
 function loadExperiments() {

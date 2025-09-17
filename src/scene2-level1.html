@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="public/main.css">
     <link rel="stylesheet" href="public/scene2-level1.css">
     <link rel="stylesheet" href="public/real-objects.css">
+    <link rel="stylesheet" href="public/back-button.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="public/audio-manager.js"></script>
 </head>
 <body>
@@ -63,7 +65,7 @@
         <div id="living-room-main">
             <!-- Karakter Pemandu Ilmuwan -->
             <div id="character-guide" class="character-guide">
-                <img src="./public/real-images/scientist-character.svg" alt="Scientist Guide" width="120" height="150" class="character-svg">
+                <div class="real-scientist-character"></div>
                 <div class="character-speech-bubble hidden" id="character-speech">
                     <div class="speech-content">
                         <p id="speech-text">🔍 Selamat datang di rumah misterius! Bantu saya menemukan petunjuk dengan menghubungkan listrik!</p>
@@ -78,13 +80,14 @@
                 <div class="interactive-item battery" id="battery-obj" data-object="battery">
                     <div class="object-highlight"></div>
                     <div class="object-label">🔋 Baterai</div>
+                    <div class="real-battery"></div>
                 </div>
 
                 <!-- Saklar -->
                 <div class="interactive-item switch" id="switch-obj" data-object="switch">
                     <div class="object-highlight"></div>
                     <div class="object-label">🔘 Saklar</div>
-                    <img src="./public/real-images/switch.svg" alt="Switch" width="50" height="70" class="switch-svg">
+                    <div class="real-switch"></div>
                 </div>
 
                 <!-- Lampu -->
@@ -92,7 +95,7 @@
                     <div class="object-highlight"></div>
                     <div class="object-label">💡 Lampu</div>
                     <div class="lamp-glow" id="lamp-glow">
-                        <img src="./public/real-images/lamp.svg" alt="Lamp" width="60" height="80" class="lamp-svg">
+                        <div class="real-lightbulb"></div>
                     </div>
                 </div>
 
@@ -101,7 +104,7 @@
                     <div class="object-highlight"></div>
                     <div class="object-label">📺 TV Petunjuk</div>
                     <div class="tv-screen" id="tv-screen">
-                        <img src="./public/real-images/tv.svg" alt="TV" width="80" height="60" class="tv-svg">
+                        <div class="real-tv"></div>
                     </div>
                 </div>
 
@@ -326,6 +329,12 @@
     <audio id="sfx-ding" preload="auto">
         <source src="public/sounds/click.mp3" type="audio/mpeg">
     </audio>
+
+    <!-- Back Button -->
+    <a href="main-menu.html" class="back-button">
+        <i class="fas fa-arrow-left btn-icon"></i>
+        <span class="btn-text">Kembali</span>
+    </a>
 
     <!-- JavaScript -->
     <script src="public/globalGameState.js"></script>

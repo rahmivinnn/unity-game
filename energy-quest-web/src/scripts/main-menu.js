@@ -224,14 +224,14 @@ function loadQuiz() {
     window.location.href = 'quiz.html';
 }
 
-function loadGame2D() {
+function loadMainGame() {
     // Stop background music
     if (window.mainMenu) {
         window.mainMenu.stopBackgroundMusic();
     }
     
-    // Navigate to 2D game page
-    window.location.href = 'public/game-2d.html';
+    // Navigate to scene2-level1 puzzle listrik
+    window.location.href = 'scene2-level1.html';
 }
 
 function loadMainGame() {

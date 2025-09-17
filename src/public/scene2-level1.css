@@ -356,6 +356,11 @@
     height: 60px;
 }
 
+.battery .real-battery {
+    width: 100%;
+    height: 100%;
+}
+
 .switch {
     top: 45%;
     left: 35%;
@@ -363,11 +368,21 @@
     height: 60px;
 }
 
+.switch .real-switch {
+    width: 100%;
+    height: 100%;
+}
+
 .lamp {
     top: 25%;
     left: 55%;
     width: 70px;
     height: 80px;
+}
+
+.lamp .real-lightbulb {
+    width: 100%;
+    height: 100%;
 }
 
 .lamp-glow {
@@ -397,6 +412,17 @@
     right: 20%;
     width: 120px;
     height: 90px;
+}
+
+.tv .real-tv {
+    width: 100%;
+    height: 100%;
+}
+
+/* Character positioning */
+#character-guide .real-scientist-character {
+    width: 120px;
+    height: 150px;
 }
 
 .tv-screen {

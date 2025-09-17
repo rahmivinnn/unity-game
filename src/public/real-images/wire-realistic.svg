@@ -1,0 +1,75 @@
+<svg width="300" height="100" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradients for realistic wire -->
+    <linearGradient id="wireCore" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#ffed4e;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#fff176;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#ffed4e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffc107;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="wireInsulation" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff5722;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#ff7043;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ff8a65;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#ff7043;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e64a19;stop-opacity:1" />
+    </linearGradient>
+    
+    <radialGradient id="wireHighlight" cx="30%" cy="20%" r="50%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0" />
+    </radialGradient>
+    
+    <filter id="wireShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Wire shadow -->
+  <path d="M 20 50 Q 75 30, 150 50 Q 225 70, 280 50" 
+        stroke="#000000" stroke-width="8" fill="none" opacity="0.2" transform="translate(1,2)"/>
+  
+  <!-- Main wire insulation -->
+  <path d="M 20 50 Q 75 30, 150 50 Q 225 70, 280 50" 
+        stroke="url(#wireInsulation)" stroke-width="8" fill="none" filter="url(#wireShadow)"/>
+  
+  <!-- Wire highlight for 3D effect -->
+  <path d="M 20 50 Q 75 30, 150 50 Q 225 70, 280 50" 
+        stroke="url(#wireHighlight)" stroke-width="3" fill="none"/>
+  
+  <!-- Exposed copper ends -->
+  <circle cx="20" cy="50" r="6" fill="url(#wireCore)" filter="url(#wireShadow)"/>
+  <circle cx="280" cy="50" r="6" fill="url(#wireCore)" filter="url(#wireShadow)"/>
+  
+  <!-- Copper wire strands at ends -->
+  <g transform="translate(20,50)">
+    <circle cx="-8" cy="0" r="2" fill="url(#wireCore)"/>
+    <circle cx="-6" cy="-2" r="1.5" fill="url(#wireCore)"/>
+    <circle cx="-6" cy="2" r="1.5" fill="url(#wireCore)"/>
+    <circle cx="-4" cy="0" r="1.5" fill="url(#wireCore)"/>
+    <circle cx="-4" cy="-3" r="1" fill="url(#wireCore)"/>
+    <circle cx="-4" cy="3" r="1" fill="url(#wireCore)"/>
+  </g>
+  
+  <g transform="translate(280,50)">
+    <circle cx="8" cy="0" r="2" fill="url(#wireCore)"/>
+    <circle cx="6" cy="-2" r="1.5" fill="url(#wireCore)"/>
+    <circle cx="6" cy="2" r="1.5" fill="url(#wireCore)"/>
+    <circle cx="4" cy="0" r="1.5" fill="url(#wireCore)"/>
+    <circle cx="4" cy="-3" r="1" fill="url(#wireCore)"/>
+    <circle cx="4" cy="3" r="1" fill="url(#wireCore)"/>
+  </g>
+  
+  <!-- Wire texture lines -->
+  <path d="M 30 47 Q 85 27, 160 47 Q 235 67, 270 47" 
+        stroke="#d32f2f" stroke-width="0.5" fill="none" opacity="0.7"/>
+  <path d="M 30 53 Q 85 33, 160 53 Q 235 73, 270 53" 
+        stroke="#d32f2f" stroke-width="0.5" fill="none" opacity="0.7"/>
+  
+  <!-- Realistic wear marks -->
+  <circle cx="100" cy="42" r="0.5" fill="#d32f2f" opacity="0.8"/>
+  <circle cx="200" cy="58" r="0.5" fill="#d32f2f" opacity="0.8"/>
+  <line x1="120" y1="45" x2="125" y2="47" stroke="#d32f2f" stroke-width="0.3" opacity="0.6"/>
+</svg>

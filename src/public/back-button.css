@@ -1,0 +1,114 @@
+/* Back Button Styles */
+.back-button {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 25px;
+    background: linear-gradient(145deg, 
+        rgba(20, 20, 20, 0.9) 0%, 
+        rgba(40, 40, 40, 0.8) 50%, 
+        rgba(10, 10, 10, 0.9) 100%);
+    border: 2px solid rgba(100, 100, 100, 0.4);
+    border-radius: 30px;
+    color: #ffffff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 
+        0 6px 20px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+    text-decoration: none;
+    user-select: none;
+}
+
+.back-button:hover {
+    background: linear-gradient(145deg, 
+        rgba(40, 40, 40, 0.9) 0%, 
+        rgba(60, 60, 60, 0.8) 50%, 
+        rgba(20, 20, 20, 0.9) 100%);
+    border-color: rgba(150, 150, 150, 0.6);
+    box-shadow: 
+        0 8px 30px rgba(0, 0, 0, 0.5),
+        0 0 25px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px) scale(1.05);
+}
+
+.back-button:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+.back-button .btn-icon {
+    font-size: 1.3rem;
+    color: #ffffff;
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.3),
+        0 0 20px rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-button:hover .btn-icon {
+    color: #f0f0f0;
+    text-shadow: 
+        0 0 15px rgba(255, 255, 255, 0.5),
+        0 0 30px rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.back-button .btn-text {
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .back-button {
+        bottom: 20px;
+        left: 20px;
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+    
+    .back-button .btn-icon {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .back-button {
+        bottom: 15px;
+        left: 15px;
+        padding: 10px 18px;
+        font-size: 0.9rem;
+        gap: 8px;
+    }
+    
+    .back-button .btn-icon {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-height: 600px) and (orientation: landscape) {
+    .back-button {
+        bottom: 10px;
+        left: 15px;
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .back-button .btn-icon {
+        font-size: 1rem;
+    }
+}

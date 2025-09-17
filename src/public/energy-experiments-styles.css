@@ -7,10 +7,51 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 50%, #2d2d5f 100%);
+    background: linear-gradient(135deg, #0a1628 0%, #1e3a8a 50%, #1e40af 100%);
     color: white;
     overflow-x: hidden;
     min-height: 100vh;
+}
+
+/* Mobile Landscape Optimization */
+@media screen and (orientation: landscape) and (max-height: 600px) {
+    body {
+        font-size: 14px;
+    }
+    
+    .experiment-nav {
+        padding: 10px 20px;
+    }
+    
+    .nav-title {
+        font-size: 20px;
+    }
+    
+    .experiments-catalog {
+        padding: 80px 15px 15px;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    
+    .experiment-card {
+        padding: 15px;
+        min-height: 120px;
+    }
+    
+    .experiment-card h3 {
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+    
+    .experiment-card p {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+    
+    .start-experiment-btn {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
 }
 
 .experiments-container {
@@ -35,11 +76,156 @@ body {
     border-bottom: 2px solid #00ffff;
 }
 
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
 .nav-title {
     font-size: 24px;
     font-weight: bold;
     color: #00ffff;
     text-shadow: 0 0 10px #00ffff;
+}
+
+.back-to-catalog-btn {
+    background: rgba(0, 255, 255, 0.2);
+    color: #00ffff;
+    border: 2px solid #00ffff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.back-to-catalog-btn:hover {
+    background: rgba(0, 255, 255, 0.4);
+    transform: scale(1.05);
+}
+
+/* Pulse animation for back to catalog button */
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+    }
+    70% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
+
+/* Sidebar catalog styles */
+.catalog-sidebar {
+    border-right: 3px solid #1e40af;
+    backdrop-filter: blur(10px);
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.catalog-sidebar:hover {
+    box-shadow: 2px 0 30px rgba(30, 64, 175, 0.3);
+}
+
+.catalog-sidebar .experiment-card {
+    margin: 10px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.catalog-sidebar .experiment-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(5px);
+}
+
+.catalog-sidebar h2 {
+    color: #fff;
+    text-align: center;
+    padding: 20px 10px;
+    margin: 0;
+    font-size: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Catalog return notification */
+.catalog-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    color: white;
+    padding: 0;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    animation: slideInRight 0.5s ease-out;
+    display: none;
+}
+
+.notification-content {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.notification-content i {
+    font-size: 20px;
+    color: #fff;
+}
+
+.notification-content span {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.close-notification {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.close-notification:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 .experiment-counter {
@@ -281,7 +467,7 @@ body {
 
 /* Battery Lab Styles */
 .battery-lab {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
 }
 
 .battery-bank {
@@ -503,7 +689,7 @@ body {
 
 /* Nuclear Lab Styles */
 .nuclear-lab {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
     position: relative;
 }
 
@@ -664,7 +850,7 @@ body {
 
 /* Fusion Lab Styles */
 .fusion-lab {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
     position: relative;
 }
 
@@ -930,6 +1116,177 @@ body {
     text-shadow: 0 0 5px #00ffff;
 }
 
+/* Experiments Catalog Styles */
+.experiments-catalog {
+    padding: 100px 30px 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.catalog-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.catalog-header h2 {
+    font-size: 36px;
+    color: #00ffff;
+    text-shadow: 0 0 20px #00ffff;
+    margin-bottom: 10px;
+}
+
+.catalog-header p {
+    font-size: 18px;
+    color: #cccccc;
+    opacity: 0.9;
+}
+
+.catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    padding: 20px 0;
+}
+
+.experiment-card {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    border-radius: 15px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.experiment-card:hover {
+    transform: translateY(-5px);
+    border-color: #00ffff;
+    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
+}
+
+.experiment-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #00ffff, #ff00ff, #ffff00);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.experiment-card:hover::before {
+    opacity: 1;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.experiment-number {
+    background: rgba(0, 255, 255, 0.2);
+    color: #00ffff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.experiment-category {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.card-content {
+    margin-bottom: 20px;
+}
+
+.experiment-title {
+    font-size: 20px;
+    color: #ffffff;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.experiment-description {
+    color: #cccccc;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.experiment-specs {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.difficulty {
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.difficulty-mudah {
+    background: rgba(76, 175, 80, 0.3);
+    color: #4caf50;
+    border: 1px solid #4caf50;
+}
+
+.difficulty-sedang {
+    background: rgba(255, 193, 7, 0.3);
+    color: #ffc107;
+    border: 1px solid #ffc107;
+}
+
+.difficulty-sulit {
+    background: rgba(244, 67, 54, 0.3);
+    color: #f44336;
+    border: 1px solid #f44336;
+}
+
+.card-footer {
+    text-align: center;
+}
+
+.start-experiment-btn {
+    background: linear-gradient(45deg, #00ffff, #0080ff);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.start-experiment-btn:hover {
+    background: linear-gradient(45deg, #0080ff, #00ffff);
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+}
+
+.start-experiment-btn i {
+    font-size: 12px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .experiment-nav {
@@ -975,6 +1332,19 @@ body {
     .city-zones {
         flex-direction: column;
         gap: 20px;
+    }
+    
+    .catalog-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .catalog-header h2 {
+        font-size: 28px;
+    }
+    
+    .experiments-catalog {
+        padding: 80px 20px 20px;
     }
 }
 

@@ -6,6 +6,7 @@
     <title>Gerbang Evaluasi Akhir - Energy Quest</title>
     <link rel="stylesheet" href="public/final-gate.css">
     <link rel="stylesheet" href="public/main.css">
+    <link rel="stylesheet" href="public/back-button.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="public/globalGameState.js"></script>
@@ -200,9 +201,15 @@
     <audio id="quiz-audio">
         <source src="public/audio/quiz-background.mp3" type="audio/mpeg">
     </audio>
-    <audio id="success-audio">
+    <audio id="success-sound" preload="auto">
         <source src="public/audio/success.mp3" type="audio/mpeg">
     </audio>
+
+    <!-- Back Button -->
+    <a href="main-menu.html" class="back-button">
+        <i class="fas fa-arrow-left btn-icon"></i>
+        <span class="btn-text">Kembali</span>
+    </a>
 
     <!-- Scripts -->
     <script src="scripts/globalGameState.js"></script>

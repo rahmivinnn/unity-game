@@ -6,10 +6,44 @@
 }
 
 body {
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    margin: 0;
+    padding: 0;
     overflow: hidden;
     height: 100vh;
+}
+
+/* Mobile Landscape Optimization */
+@media screen and (orientation: landscape) and (max-height: 600px) {
+    body {
+        font-size: 14px;
+    }
+    
+    .game-container {
+        padding: 10px;
+    }
+    
+    .energy-meter {
+        height: 15px;
+        font-size: 12px;
+    }
+    
+    .appliance {
+        width: 60px;
+        height: 60px;
+        font-size: 12px;
+    }
+    
+    .control-panel {
+        padding: 10px;
+        gap: 10px;
+    }
+    
+    .control-button {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
 }
 
 .game-container {

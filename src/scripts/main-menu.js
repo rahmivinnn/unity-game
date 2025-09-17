@@ -240,8 +240,8 @@ function loadMainGame() {
         window.mainMenu.stopBackgroundMusic();
     }
     
-    // Navigate to 2D game page
-    window.location.href = 'public/game-2d.html';
+    // Navigate to scene2-level1 puzzle listrik
+    window.location.href = 'scene2-level1.html';
 }
 
 function loadQuiz() {
@@ -255,13 +255,21 @@ function loadQuiz() {
 }
 
 function loadEnergyGame() {
+    console.log('Loading Energy Game...');
+    
     // Stop background music
     if (window.mainMenu) {
         window.mainMenu.stopBackgroundMusic();
     }
     
-    // Navigate to energy game zones page
-    window.location.href = 'energy-game-zones.html';
+    // Add loading effect
+    document.body.style.transition = 'opacity 0.5s ease';
+    document.body.style.opacity = '0.3';
+    
+    setTimeout(() => {
+        // Navigate to energy game page
+        window.location.href = 'public/energy-game.html';
+    }, 500);
 }
 
 function loadExperiments() {

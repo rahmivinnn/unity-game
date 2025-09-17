@@ -6,10 +6,11 @@ class ElectricalExperimentsUI {
         this.score = 0;
         this.isConnected = false;
         this.completedExperiments = new Set();
+        this.catalogMode = true;
         
         this.initializeUI();
         this.setupEventListeners();
-        this.loadExperiment(0);
+        this.showCatalog();
         this.setupCategoryFilter();
         this.startEducationalTips();
     }
@@ -32,6 +33,14 @@ class ElectricalExperimentsUI {
         // Navigation
         document.getElementById('prev-btn').addEventListener('click', () => this.previousExperiment());
         document.getElementById('next-btn').addEventListener('click', () => this.nextExperiment());
+        
+        // Back to catalog button
+        const backToCatalogBtn = document.getElementById('back-to-catalog-btn');
+        if (backToCatalogBtn) {
+            backToCatalogBtn.addEventListener('click', () => {
+                this.showCatalogFromExperiment();
+            });
+        }
         
         // Object interactions
         document.getElementById('left-object').addEventListener('click', () => this.showObjectDetails('left'));
@@ -300,6 +309,246 @@ class ElectricalExperimentsUI {
                 }, 300);
             }
         }, 10000);
+    }
+
+    showCatalog() {
+        this.catalogMode = true;
+        
+        // Hide experiment interface
+        const experimentDisplay = document.querySelector('.experiment-display');
+        const infoPanel = document.querySelector('.info-panel');
+        if (experimentDisplay) experimentDisplay.style.display = 'none';
+        if (infoPanel) infoPanel.style.display = 'none';
+        
+        // Show catalog interface
+        this.createCatalogInterface();
+    }
+
+    createCatalogInterface() {
+        // Remove existing catalog if any
+        const existingCatalog = document.getElementById('experiments-catalog');
+        if (existingCatalog) {
+            existingCatalog.remove();
+        }
+
+        // Create catalog container
+        const catalogContainer = document.createElement('div');
+        catalogContainer.id = 'experiments-catalog';
+        catalogContainer.className = 'experiments-catalog';
+        catalogContainer.innerHTML = `
+            <div class="catalog-header">
+                <h2>KATALOG EKSPERIMEN LISTRIK</h2>
+                <p>Pilih eksperimen yang ingin Anda pelajari (${this.experiments.experiments.length} eksperimen tersedia)</p>
+            </div>
+            <div class="catalog-grid" id="catalog-grid">
+                <!-- Experiments will be populated here -->
+            </div>
+        `;
+
+        // Insert catalog after navigation header
+        const navHeader = document.querySelector('.experiment-nav');
+        if (navHeader) {
+            navHeader.insertAdjacentElement('afterend', catalogContainer);
+        } else {
+            document.querySelector('.experiments-container').prepend(catalogContainer);
+        }
+
+        // Populate experiments
+        this.populateCatalog();
+    }
+
+    populateCatalog() {
+        const catalogGrid = document.getElementById('catalog-grid');
+        if (!catalogGrid) return;
+
+        catalogGrid.innerHTML = '';
+
+        this.experiments.experiments.forEach((experiment, index) => {
+            const experimentCard = document.createElement('div');
+            experimentCard.className = 'experiment-card';
+            experimentCard.innerHTML = `
+                <div class="card-header">
+                    <span class="experiment-number">#${experiment.id}</span>
+                    <span class="experiment-category">${experiment.category}</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="experiment-title">${experiment.title}</h3>
+                    <p class="experiment-description">${experiment.description}</p>
+                    <div class="experiment-specs">
+                        <span class="difficulty difficulty-${experiment.difficulty}">${experiment.difficulty}</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="start-experiment-btn" data-index="${index}">
+                        <i class="fas fa-play"></i>
+                        Mulai Eksperimen
+                    </button>
+                </div>
+            `;
+
+            // Add click event to start experiment
+            const startBtn = experimentCard.querySelector('.start-experiment-btn');
+            startBtn.addEventListener('click', () => {
+                this.startExperiment(index);
+            });
+
+            catalogGrid.appendChild(experimentCard);
+        });
+    }
+
+    startExperiment(index) {
+        this.catalogMode = false;
+        
+        // DON'T HIDE CATALOG - Instead minimize it to sidebar
+        const catalog = document.getElementById('experiments-catalog');
+        if (catalog) {
+            // Transform catalog to sidebar instead of hiding
+            catalog.classList.add('catalog-sidebar');
+            catalog.classList.remove('experiments-catalog');
+            // Keep it visible but smaller
+            catalog.style.display = 'block';
+            catalog.style.position = 'fixed';
+            catalog.style.left = '0';
+            catalog.style.top = '0';
+            catalog.style.width = '300px';
+            catalog.style.height = '100vh';
+            catalog.style.zIndex = '1000';
+            catalog.style.overflow = 'auto';
+            catalog.style.background = 'rgba(0, 0, 0, 0.9)';
+            catalog.style.transform = 'translateX(-250px)'; // Partially hidden
+            catalog.style.transition = 'transform 0.3s ease';
+        }
+        
+        // Show experiment interface with margin for sidebar
+        const experimentDisplay = document.querySelector('.experiment-display');
+        const infoPanel = document.querySelector('.info-panel');
+        if (experimentDisplay) {
+            experimentDisplay.style.display = 'block';
+            experimentDisplay.style.marginLeft = '50px'; // Space for sidebar
+        }
+        if (infoPanel) {
+            infoPanel.style.display = 'block';
+            infoPanel.style.marginLeft = '50px'; // Space for sidebar
+        }
+        
+        // Add hover effect to show full catalog
+        if (catalog) {
+            catalog.addEventListener('mouseenter', () => {
+                catalog.style.transform = 'translateX(0)';
+            });
+            catalog.addEventListener('mouseleave', () => {
+                catalog.style.transform = 'translateX(-250px)';
+            });
+        }
+        
+        // Show back to catalog button with better visibility
+        const backToCatalogBtn = document.getElementById('back-to-catalog-btn');
+        if (backToCatalogBtn) {
+            backToCatalogBtn.style.display = 'flex';
+            backToCatalogBtn.classList.add('pulse-animation');
+        }
+        
+        // Load the selected experiment
+        this.loadExperiment(index);
+        
+        // Show notification about sidebar catalog
+        this.showSidebarNotification();
+    }
+
+    showCatalogFromExperiment() {
+        // Hide experiment interface
+        const experimentDisplay = document.querySelector('.experiment-display');
+        const infoPanel = document.querySelector('.info-panel');
+        if (experimentDisplay) {
+            experimentDisplay.style.display = 'none';
+            experimentDisplay.style.marginLeft = '0'; // Reset margin
+        }
+        if (infoPanel) {
+            infoPanel.style.display = 'none';
+            infoPanel.style.marginLeft = '0'; // Reset margin
+        }
+        
+        // Hide back to catalog button and remove animation
+        const backToCatalogBtn = document.getElementById('back-to-catalog-btn');
+        if (backToCatalogBtn) {
+            backToCatalogBtn.style.display = 'none';
+            backToCatalogBtn.classList.remove('pulse-animation');
+        }
+        
+        // Restore catalog to full view
+        const catalog = document.getElementById('experiments-catalog');
+        if (catalog) {
+            // Reset all sidebar styles
+            catalog.classList.remove('catalog-sidebar');
+            catalog.classList.add('experiments-catalog');
+            catalog.style.position = 'static';
+            catalog.style.left = 'auto';
+            catalog.style.top = 'auto';
+            catalog.style.width = 'auto';
+            catalog.style.height = 'auto';
+            catalog.style.zIndex = 'auto';
+            catalog.style.overflow = 'visible';
+            catalog.style.background = '';
+            catalog.style.transform = 'none';
+            catalog.style.transition = '';
+            catalog.style.marginLeft = '0';
+            catalog.style.display = 'block';
+        } else {
+            this.createCatalogInterface();
+        }
+        
+        this.catalogMode = true;
+    }
+
+    showSidebarNotification() {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = 'catalog-notification';
+        notification.innerHTML = `
+            <div class="notification-content">
+                <span>💡 Katalog tersedia di sidebar kiri! Hover untuk melihat semua eksperimen</span>
+                <button onclick="this.parentElement.parentElement.remove()" class="close-notification">×</button>
+            </div>
+        `;
+        
+        // Add to body
+        document.body.appendChild(notification);
+        
+        // Auto-hide after 7 seconds
+        setTimeout(() => {
+            if (notification && notification.parentElement) {
+                notification.remove();
+            }
+        }, 7000);
+    }
+
+    showCatalogReturnNotification() {
+        // Create or show notification about returning to catalog
+        let notification = document.getElementById('catalog-return-notification');
+        
+        if (!notification) {
+            notification = document.createElement('div');
+            notification.id = 'catalog-return-notification';
+            notification.className = 'catalog-notification';
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Klik tombol "Katalog" untuk kembali ke daftar eksperimen</span>
+                    <button class="close-notification" onclick="this.parentElement.parentElement.style.display='none'">×</button>
+                </div>
+            `;
+            document.body.appendChild(notification);
+        }
+        
+        // Show notification
+        notification.style.display = 'block';
+        
+        // Auto hide after 5 seconds
+        setTimeout(() => {
+            if (notification) {
+                notification.style.display = 'none';
+            }
+        }, 5000);
     }
 
     showObjectDetails(side) {

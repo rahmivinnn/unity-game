@@ -81,11 +81,11 @@ body {
 /* Header Container */
 .header-container {
     position: absolute;
-    top: 20px;
+    top: 10px;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
-    z-index: 10;
+    z-index: 20;
 }
 
 .main-logo {
@@ -157,7 +157,7 @@ body {
     right: 30px;
     display: flex;
     gap: 15px;
-    z-index: 10;
+    z-index: 15;
 }
 
 .small-btn {
@@ -203,7 +203,7 @@ body {
 .level-menu {
     position: absolute;
     left: 50%;
-    top: 55%;
+    top: 65%;
     transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
@@ -649,13 +649,98 @@ body {
     
     .level-menu {
         left: 30px;
+        gap: 12px;
+    }
+}
+
+/* Tablet and smaller desktop */
+@media (max-width: 1024px) {
+    .level-menu {
+        left: 20px;
+        top: 45%;
+        gap: 10px;
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+    
+    .unity-btn {
+        width: 300px;
+        padding: 14px 20px;
+    }
+    
+    .game-title {
+        font-size: 3rem;
     }
 }
 
 /* Mobile Portrait */
 @media (max-width: 768px) and (orientation: portrait) {
     .header-container {
-        top: 20px;
+        top: 5px;
+    }
+    
+    .game-title {
+        font-size: 2rem;
+        letter-spacing: 2px;
+    }
+    
+    .game-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .level-menu {
+        left: 50%;
+        transform: translateX(-50%);
+        top: 35%;
+        gap: 8px;
+        width: 90%;
+        max-width: 320px;
+        max-height: 60vh;
+        overflow-y: auto;
+        padding-bottom: 20px;
+    }
+    
+    .unity-btn {
+        width: 100%;
+        padding: 12px 15px;
+        gap: 12px;
+        min-height: 50px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .btn-icon {
+        font-size: 1.5rem;
+        width: 40px;
+    }
+    
+    .btn-title {
+        font-size: 1rem;
+    }
+    
+    .btn-desc {
+        font-size: 0.8rem;
+    }
+    
+    .top-options {
+        top: 10px;
+        right: 10px;
+        gap: 8px;
+    }
+    
+    .small-btn {
+        padding: 8px 12px;
+        font-size: 0.75rem;
+        min-height: 36px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* Mobile Landscape and General Mobile */
+@media (max-width: 768px) {
+    .header-container {
+        top: 5px;
     }
     
     .game-title {
@@ -668,102 +753,43 @@ body {
     }
     
     .level-menu {
-        left: 50%;
-        transform: translateX(-50%);
-        top: 45%;
-        gap: 18px;
-        width: 90%;
-        max-width: 320px;
-    }
-    
-    .unity-btn {
-        width: 100%;
-        padding: 18px 20px;
-        gap: 15px;
-        min-height: 60px;
-        touch-action: manipulation;
-        -webkit-tap-highlight-color: transparent;
-    }
-    
-    .btn-icon {
-        font-size: 1.8rem;
-        width: 50px;
-    }
-    
-    .btn-title {
-        font-size: 1.2rem;
-    }
-    
-    .btn-desc {
-        font-size: 0.9rem;
-    }
-    
-    .top-options {
-        top: 20px;
-        right: 20px;
-        gap: 12px;
-    }
-    
-    .small-btn {
-        padding: 12px 18px;
-        font-size: 0.85rem;
-        min-height: 44px;
-        touch-action: manipulation;
-        -webkit-tap-highlight-color: transparent;
-    }
-}
-
-/* Mobile Landscape and General Mobile */
-@media (max-width: 768px) {
-    .header-container {
-        top: 20px;
-    }
-    
-    .game-title {
-        font-size: 2.5rem;
-        letter-spacing: 2px;
-    }
-    
-    .game-subtitle {
-        font-size: 1.1rem;
-    }
-    
-    .level-menu {
         left: 20px;
-        top: 45%;
-        gap: 15px;
+        top: 40%;
+        gap: 8px;
+        max-height: 55vh;
+        overflow-y: auto;
     }
     
     .unity-btn {
-        width: 280px;
-        padding: 14px 20px;
-        gap: 15px;
+        width: 260px;
+        padding: 10px 15px;
+        gap: 12px;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
     }
     
     .btn-icon {
-        font-size: 1.8rem;
-        width: 50px;
+        font-size: 1.5rem;
+        width: 40px;
     }
     
     .btn-title {
-        font-size: 1.2rem;
+        font-size: 1rem;
     }
     
     .btn-desc {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
     }
     
     .top-options {
-        top: 20px;
-        right: 20px;
-        gap: 10px;
+        top: 15px;
+        right: 15px;
+        gap: 8px;
     }
     
     .small-btn {
-        padding: 10px 15px;
-        font-size: 0.8rem;
+        padding: 8px 12px;
+        font-size: 0.75rem;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
     }
@@ -860,21 +886,88 @@ body {
     color: #d8bfd8;
 }
 
+/* Landscape mode for mobile */
+@media (max-height: 600px) and (orientation: landscape) {
+    .header-container {
+        top: 2px;
+    }
+    
+    .game-title {
+        font-size: 1.8rem;
+    }
+    
+    .game-subtitle {
+        font-size: 0.8rem;
+    }
+    
+    .level-menu {
+        left: 15px;
+        top: 30%;
+        gap: 6px;
+        max-height: 65vh;
+        overflow-y: auto;
+    }
+    
+    .unity-btn {
+        width: 240px;
+        padding: 8px 12px;
+        min-height: 40px;
+    }
+    
+    .btn-icon {
+        font-size: 1.3rem;
+        width: 35px;
+    }
+    
+    .btn-title {
+        font-size: 0.9rem;
+    }
+    
+    .btn-desc {
+        font-size: 0.7rem;
+    }
+    
+    .top-options {
+        top: 5px;
+        right: 10px;
+        gap: 6px;
+    }
+    
+    .small-btn {
+        padding: 6px 10px;
+        font-size: 0.7rem;
+        min-height: 32px;
+    }
+}
+
 @media (max-width: 360px) {
     .unity-btn {
         width: 220px;
-        padding: 10px 15px;
+        padding: 8px 12px;
     }
     
     .level-menu {
         left: 10px;
+        gap: 6px;
     }
     
     .header-container {
-        top: 15px;
+        top: 5px;
     }
     
     .main-logo {
-        width: 60px;
+        width: 50px;
+    }
+    
+    .game-title {
+        font-size: 1.8rem;
+    }
+    
+    .btn-title {
+        font-size: 0.9rem;
+    }
+    
+    .btn-desc {
+        font-size: 0.7rem;
     }
 }

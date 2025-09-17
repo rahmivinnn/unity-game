@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Quest - Energy Experiments</title>
+    <link rel="stylesheet" href="./public/main.css">
+    <link rel="stylesheet" href="./public/energy-experiments-styles.css">
+    <link rel="stylesheet" href="./public/back-button.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="./public/globalGameState.js"></script>
+    <script src="./public/audio-manager.js"></script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <div class="experiment-nav">
+        <div class="nav-left">
+            <button id="back-to-catalog-btn" class="back-to-catalog-btn" style="display: none;">
+                <i class="fas fa-th-large"></i>
+                Katalog
+            </button>
+            <div class="nav-title">
+                <i class="fas fa-flask"></i>
+                ENERGY EXPERIMENTS
+            </div>
+        </div>
+        <div class="experiment-counter">
+            <span id="nav-current">1</span> / <span id="nav-total">50</span>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="experiments-container">
+        <!-- Experiment Display -->
+        <div class="experiment-display">
+            <div class="experiment-header">
+                <h2 id="experiment-title">Loading...</h2>
+                <span id="experiment-category" class="category-badge">Category</span>
+                <span id="difficulty-badge" class="difficulty-badge">Easy</span>
+            </div>
+
+            <!-- Experiment Area -->
+            <div class="experiment-area">
+                <!-- Left Object -->
+                <div class="experiment-object left" id="left-object">
+                    <div class="object-label" id="left-name">Object 1</div>
+                    <div class="object-voltage" id="left-voltage">0V</div>
+                </div>
+
+                <!-- Connector -->
+                <div class="connector-area">
+                    <div id="connector" class="connector">
+                        <span id="connector-name">Connector</span>
+                    </div>
+                    <div id="connection-line" class="connection-line"></div>
+                </div>
+
+                <!-- Right Object -->
+                <div class="experiment-object right" id="right-object">
+                    <div class="object-label" id="right-name">Object 2</div>
+                    <div class="object-voltage" id="right-voltage">0V</div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="experiment-controls">
+                <button id="connect-btn" class="control-btn primary">
+                    <i class="fas fa-link"></i>
+                    Hubungkan
+                </button>
+                <button id="test-btn" class="control-btn secondary" disabled>
+                    <i class="fas fa-bolt"></i>
+                    Test Rangkaian
+                </button>
+                <button id="complete-btn" class="control-btn success" disabled>
+                    <i class="fas fa-check"></i>
+                    Selesai
+                </button>
+            </div>
+        </div>
+
+        <!-- Information Panel -->
+        <div class="info-panel">
+            <!-- Experiment Info -->
+            <div class="info-section">
+                <h3>Deskripsi Eksperimen</h3>
+                <p id="experiment-description">Loading description...</p>
+            </div>
+
+            <div class="info-section">
+                <h3>Tugas</h3>
+                <p id="task-section">Loading task...</p>
+            </div>
+
+            <div class="info-section">
+                <h3>Penjelasan</h3>
+                <p id="explanation-section">Loading explanation...</p>
+            </div>
+
+            <!-- Specifications -->
+            <div class="info-section">
+                <h3>Spesifikasi</h3>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span>Tegangan:</span>
+                        <span id="spec-voltage">0V</span>
+                    </div>
+                    <div class="spec-item">
+                        <span>Resistansi:</span>
+                        <span id="spec-resistance">0Ω</span>
+                    </div>
+                    <div class="spec-item">
+                        <span>Tipe:</span>
+                        <span id="spec-type">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Educational Content -->
+            <div class="info-section">
+                <h3>Tips Edukasi</h3>
+                <div id="educational-tip" class="educational-tip">
+                    Loading educational content...
+                </div>
+                <div id="formula-display" class="formula-display"></div>
+                <div id="real-world-apps" class="real-world-apps"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="experiment-navigation">
+        <button id="prev-btn" class="nav-btn">
+            <i class="fas fa-chevron-left"></i>
+            Sebelumnya
+        </button>
+        
+        <div class="experiment-counter-main">
+            <span id="current-number">1</span> / <span id="total-number">50</span>
+        </div>
+        
+        <button id="next-btn" class="nav-btn">
+            Selanjutnya
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div id="progress-fill" class="progress-fill"></div>
+        </div>
+        <div class="score-display">
+            Score: <span id="score">0</span>
+        </div>
+    </div>
+
+    <!-- Category Filter -->
+    <div id="category-filter" class="category-filter">
+        <button class="filter-btn active" data-category="all">Semua</button>
+    </div>
+
+    <!-- Search -->
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Cari eksperimen...">
+        <button id="random-btn" class="random-btn">
+            <i class="fas fa-random"></i>
+            Random
+        </button>
+    </div>
+
+    <!-- Feedback -->
+    <div id="feedback" class="feedback"></div>
+
+    <!-- Educational Tip Display -->
+    <div id="electrical-tip" class="electrical-tip"></div>
+
+    <!-- Back Button -->
+    <a href="main-menu.html" class="back-button">
+        <i class="fas fa-arrow-left btn-icon"></i>
+        <span class="btn-text">Kembali</span>
+    </a>
+
+    <!-- Audio -->
+    <audio id="ambient-lab" loop>
+        <source src="./public/audio/ambient_lab.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Scripts -->
+    <script src="./public/electrical-experiments.js"></script>
+    <script src="./public/electrical-experiments-ui.js"></script>
+    <script src="./scripts/narrativeSystem.js"></script>
+    
+    <script>
+        // Initialize the experiments UI when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                window.experimentsUI = new ElectricalExperimentsUI();
+                console.log('Energy Experiments UI initialized successfully');
+            } catch (error) {
+                console.error('Error initializing Energy Experiments UI:', error);
+            }
+        });
+    </script>
+</body>
+</html>
