@@ -384,22 +384,22 @@
                 console.log('GameFlowController initialized');
                 this.startSplashScreen();
                 
-                // Safety timeout - if no video loads within 10 seconds, go to main menu
+                // Safety timeout - if no video loads within 5 seconds, go to main menu
                 setTimeout(() => {
                     if (this.currentVideoIndex < this.videos.length) {
                         console.log('Video loading timeout, proceeding to main menu');
                         this.goToMainMenu();
                     }
-                }, 10000);
+                }, 5000);
             }
             
             startSplashScreen() {
                 console.log('Starting splash screen');
                 
-                // After 3 seconds, go to cutscene
+                // After 2 seconds, go to cutscene (faster transition)
                 setTimeout(() => {
                     this.goToCutscene();
-                }, 3000);
+                }, 2000);
             }
             
             goToCutscene() {

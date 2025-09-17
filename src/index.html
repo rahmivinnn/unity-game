@@ -279,6 +279,13 @@
             Video tidak dapat dimuat.
         </video>
         <button id="skip-button">Skip ⏭</button>
+        <div id="fallback-menu" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white;">
+            <h2>Video tidak dapat dimuat</h2>
+            <p>Klik tombol di bawah untuk melanjutkan ke menu utama</p>
+            <button onclick="window.location.href='main-menu.html'" style="padding: 10px 20px; font-size: 16px; background: #00ff88; color: black; border: none; border-radius: 5px; cursor: pointer;">
+                Lanjut ke Menu Utama
+            </button>
+        </div>
     </div>
 
     <script>
@@ -300,45 +307,73 @@
                 ];
                 this.currentVideoIndex = 0;
                 this.failedVideos = 0; // Track failed video attempts
+                this.skipVideos = false; // Flag to skip videos entirely
                 
                 this.init();
             }
 
             init() {
+                console.log('GameLoader initialized');
+                
+                // Test if videos are accessible
+                this.testVideoAccess();
+                
                 // Start splash screen sequence
                 setTimeout(() => {
+                    console.log('Splash screen timeout reached, showing cutscene');
                     this.showCutscene();
-                }, 5500); // Wait for splash animations to complete
+                }, 3000); // Reduced from 5500 to 3000 for faster transition
 
                 // Skip button functionality
                 this.skipButton.addEventListener('click', () => {
+                    console.log('Skip button clicked');
                     this.skipToMainMenu();
                 });
 
                 // Auto proceed when video ends
                 this.video.addEventListener('ended', () => {
+                    console.log('Video ended, playing next video');
                     this.playNextVideo();
                 });
 
                 // Handle video load error
-                this.video.addEventListener('error', () => {
-                    console.log('Video failed to load, trying next video or proceeding to main menu');
+                this.video.addEventListener('error', (e) => {
+                    console.log('Video failed to load, trying next video or proceeding to main menu', e);
                     this.playNextVideo();
                 });
                 
-                // Safety timeout - if no video loads within 10 seconds, go to main menu
+                // Safety timeout - if no video loads within 5 seconds, go to main menu
                 setTimeout(() => {
                     if (this.currentVideoIndex < this.cutsceneVideos.length) {
                         console.log('Video loading timeout, proceeding to main menu');
                         this.skipToMainMenu();
                     }
-                }, 10000);
+                }, 5000);
             }
 
             showCutscene() {
+                console.log('Showing cutscene');
+                
+                // Check if we should skip videos entirely (for debugging or if videos consistently fail)
+                if (this.skipVideos || this.failedVideos >= 2) {
+                    console.log('Skipping videos, going directly to main menu');
+                    this.skipToMainMenu();
+                    return;
+                }
+                
                 this.splashScreen.style.display = 'none';
                 this.videoContainer.style.display = 'block';
+                
+                // Try to play videos, but if they fail, skip to main menu after 2 seconds
                 this.playCurrentVideo();
+                
+                // Additional safety: if no video starts playing within 2 seconds, skip to main menu
+                setTimeout(() => {
+                    if (this.video.paused || this.video.readyState < 3) {
+                        console.log('No video playing, skipping to main menu');
+                        this.skipToMainMenu();
+                    }
+                }, 2000);
             }
 
             playCurrentVideo() {
@@ -401,7 +436,32 @@
                 }
             }
 
+            testVideoAccess() {
+                // Test if the first video is accessible
+                const testVideo = document.createElement('video');
+                testVideo.src = this.cutsceneVideos[0];
+                testVideo.addEventListener('error', () => {
+                    console.log('Video test failed, will skip videos');
+                    this.skipVideos = true;
+                });
+                testVideo.addEventListener('loadeddata', () => {
+                    console.log('Video test successful, videos are accessible');
+                });
+                testVideo.load();
+            }
+
             skipToMainMenu() {
+                console.log('Skipping to main menu');
+                
+                // If videos failed to load, show fallback menu
+                if (this.skipVideos || this.failedVideos >= 2) {
+                    const fallbackMenu = document.getElementById('fallback-menu');
+                    if (fallbackMenu) {
+                        fallbackMenu.style.display = 'block';
+                        return;
+                    }
+                }
+                
                 // Fade out effect
                 this.videoContainer.style.transition = 'opacity 0.5s ease-out';
                 this.videoContainer.style.opacity = '0';
