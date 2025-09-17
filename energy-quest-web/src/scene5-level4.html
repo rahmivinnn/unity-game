@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene 5 - Level 4: Evaluasi Akhir Ruang Bawah Tanah</title>
+    <link rel="stylesheet" href="public/main.css">
+    <link rel="stylesheet" href="public/scene5-level4.css">
+    <script src="public/audio-manager.js"></script>
+</head>
+<body>
+    <!-- Scene 5 Level 4 Container -->
+    <div id="scene5-level4-container" class="scene-container hidden">
+        <!-- Background -->
+        <div class="scene-background">
+            <img src="public/images/basement-background.jpg" alt="Latar Belakang Ruang Bawah Tanah" class="background-image">
+            <div class="background-overlay"></div>
+        </div>
+
+        <!-- Puzzle Game Container (Similar to main puzzle) -->
+        <div id="final-puzzle-container" class="puzzle-game-container">
+            <!-- Header -->
+            <div id="final-puzzle-header" class="puzzle-header">
+                <div id="final-puzzle-title" class="puzzle-title">
+                    <h1>Evaluasi Akhir Pengetahuan Energi</h1>
+                    <p>Gunakan pengetahuan yang telah Anda pelajari untuk menyelesaikan tantangan akhir</p>
+                </div>
+                
+                <div id="final-timer-display" class="timer-display">
+                    <span id="final-timer-text">Waktu Tersisa</span>
+                    <span id="final-timer-value">10:00</span>
+                </div>
+                
+                <div id="final-motivational-text" class="motivational-text">
+                    Buktikan bahwa Anda telah menguasai esensi manajemen energi!
+                </div>
+            </div>
+
+            <!-- Left Panel -->
+            <div class="hud-left-panel">
+                <div class="level-info">
+                    <h2>Level 4: Ruang Bawah Tanah</h2>
+                    <p>Tantangan Evaluasi Akhir</p>
+                </div>
+                
+                <div class="progress-panel">
+                    <h3>Progres Penyelesaian</h3>
+                    <div class="progress-bar">
+                        <div id="quiz-progress" class="progress-fill">0%</div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="current-question">1</span> / <span id="total-questions">10</span>
+                    </div>
+                </div>
+                
+                <div class="score-panel">
+                    <h3>Skor Saat Ini</h3>
+                    <div class="score-display">
+                        <span id="current-score">0</span> / <span id="max-score">100</span>
+                    </div>
+                    <div class="score-breakdown">
+                        <div class="score-item">
+                            <span>Jawaban Benar:</span>
+                            <span id="correct-count">0</span>
+                        </div>
+                        <div class="score-item">
+                            <span>Jawaban Salah:</span>
+                            <span id="wrong-count">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="energy-keys-panel">
+                    <h3>Kunci yang Terkumpul</h3>
+                    <div id="collected-keys" class="energy-keys">
+                        <!-- Kunci energi akan ditambahkan secara dinamis -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="hud-right-panel">
+                <div class="hint-panel">
+                    <h3>Sistem Petunjuk</h3>
+                    <div id="hint-display" class="hint-display">
+                        <p id="hint-text">Baca setiap pertanyaan dengan cermat, gunakan pengetahuan yang telah Anda pelajari di level sebelumnya.</p>
+                    </div>
+                    <div class="hint-controls">
+                        <button id="hint-btn" class="hint-btn" disabled>
+                            <span class="hint-icon">💡</span>
+                            <span>Dapatkan Petunjuk</span>
+                            <span id="hint-count">(3)</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="knowledge-panel">
+                    <h3>Tinjauan Pengetahuan</h3>
+                    <div class="knowledge-items">
+                        <div class="knowledge-item" data-topic="circuit">
+                            <span class="knowledge-icon">⚡</span>
+                            <span>Dasar Rangkaian</span>
+                        </div>
+                        <div class="knowledge-item" data-topic="efficiency">
+                            <span class="knowledge-icon">🌱</span>
+                            <span>Manajemen Efisiensi</span>
+                        </div>
+                        <div class="knowledge-item" data-topic="calculation">
+                            <span class="knowledge-icon">🧮</span>
+                            <span>Perhitungan Biaya Listrik</span>
+                        </div>
+                        <div class="knowledge-item" data-topic="conservation">
+                            <span class="knowledge-icon">💚</span>
+                            <span>Teknik Hemat Energi</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Quiz Area -->
+            <div id="final-quiz-area" class="quiz-area">
+                <!-- Question Display -->
+                <div id="question-container" class="question-container">
+                    <div class="question-header">
+                        <span class="question-number">Pertanyaan <span id="question-num">1</span></span>
+                        <span class="question-category" id="question-category">Dasar Rangkaian</span>
+                    </div>
+                    
+                    <div class="question-content">
+                        <h3 id="question-text" class="question-text">
+                            Dalam rangkaian sederhana, apa kondisi yang diperlukan untuk aliran arus listrik?
+                        </h3>
+                        
+                        <div id="question-image" class="question-image hidden">
+                            <img id="question-img" src="" alt="Gambar Pertanyaan">
+                        </div>
+                    </div>
+                    
+                    <div id="answer-options" class="answer-options">
+                        <!-- Opsi jawaban akan dibuat secara dinamis -->
+                    </div>
+                    
+                    <div class="question-controls">
+                        <button id="submit-answer" class="submit-btn" disabled>
+                            <span class="submit-icon">✓</span>
+                            <span>Kirim Jawaban</span>
+                        </button>
+                        
+                        <button id="skip-question" class="skip-btn">
+                            <span class="skip-icon">⏭</span>
+                            <span>Lewati Pertanyaan</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Answer Feedback -->
+                <div id="answer-feedback" class="answer-feedback hidden">
+                    <div class="feedback-content">
+                        <div id="feedback-result" class="feedback-result">
+                            <span id="feedback-icon" class="feedback-icon">✓</span>
+                            <span id="feedback-title" class="feedback-title">Jawaban Benar!</span>
+                        </div>
+                        
+                        <div id="feedback-explanation" class="feedback-explanation">
+                            <p id="explanation-text">Bagus! Arus listrik memerlukan rangkaian tertutup yang lengkap untuk dapat mengalir.</p>
+                        </div>
+                        
+                        <div class="feedback-controls">
+                            <button id="next-question" class="next-btn">
+                                <span class="next-icon">→</span>
+                                <span>Pertanyaan Berikutnya</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Knowledge Review Popup -->
+        <div id="knowledge-popup" class="knowledge-popup hidden">
+            <div class="popup-content">
+                <h3 id="knowledge-title">Pengetahuan Dasar Rangkaian</h3>
+                <div id="knowledge-content" class="knowledge-content">
+                    <p>Rangkaian adalah jalur aliran arus listrik. Rangkaian dasar terdiri dari:</p>
+                    <ul>
+                        <li>Sumber listrik (seperti baterai)</li>
+                        <li>Kabel (menghubungkan komponen)</li>
+                        <li>Beban (seperti lampu)</li>
+                        <li>Saklar (mengontrol arus)</li>
+                    </ul>
+                    <p>Arus listrik hanya dapat mengalir dalam rangkaian tertutup.</p>
+                </div>
+                <button id="knowledge-close" class="knowledge-close">Tutup</button>
+            </div>
+        </div>
+
+        <!-- Final Results -->
+        <div id="final-results" class="final-results hidden">
+            <div class="results-content">
+                <div class="results-header">
+                    <h2 id="results-title">Evaluasi Selesai!</h2>
+                    <div class="final-score">
+                        <span class="score-label">Skor Akhir</span>
+                        <span id="final-score-value" class="score-value">85</span>
+                        <span class="score-unit">/100</span>
+                    </div>
+                </div>
+                
+                <div class="results-breakdown">
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Tingkat Akurasi:</span>
+                        <span id="accuracy-rate" class="breakdown-value">85%</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Waktu Penyelesaian:</span>
+                        <span id="completion-time" class="breakdown-value">8:32</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Petunjuk Digunakan:</span>
+                        <span id="hints-used" class="breakdown-value">1 kali</span>
+                    </div>
+                </div>
+                
+                <div class="performance-rating">
+                    <h3>Peringkat Performa</h3>
+                    <div id="rating-display" class="rating-display">
+                        <div class="rating-stars">
+                            <span class="star active">★</span>
+                            <span class="star active">★</span>
+                            <span class="star active">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <div id="rating-text" class="rating-text">Penguasaan Baik</div>
+                    </div>
+                </div>
+                
+                <div class="achievement-unlock">
+                    <h3>Pencapaian Terbuka</h3>
+                    <div class="achievement-item">
+                        <img src="public/images/master_key.png" alt="Kunci Master Energi" class="achievement-image">
+                        <div class="achievement-info">
+                            <h4>Master Manajemen Energi</h4>
+                            <p>Berhasil menyelesaikan semua tantangan pengetahuan energi</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="final-message">
+                    <h3>Selamat!</h3>
+                    <p id="final-message-text">
+                        Anda telah berhasil menguasai pengetahuan inti manajemen energi. Dari dasar rangkaian hingga optimasi efisiensi, dari perhitungan biaya listrik hingga teknik hemat energi, Anda menunjukkan performa yang luar biasa.
+                        Sekarang Anda dapat menerapkan pengetahuan ini dalam kehidupan sehari-hari dan menjadi ahli manajemen energi yang sesungguhnya!
+                    </p>
+                </div>
+                
+                <div class="final-controls">
+                    <button id="restart-quiz" class="control-btn secondary">
+                        <span class="btn-icon">🔄</span>
+                        <span>Tantangan Ulang</span>
+                    </button>
+                    
+                    <button id="complete-game" class="control-btn primary">
+                        <span class="btn-icon">🏆</span>
+                        <span>Selesaikan Permainan</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hint Usage Popup -->
+        <div id="hint-popup" class="hint-popup hidden">
+            <div class="popup-content">
+                <h3>Informasi Petunjuk</h3>
+                <div id="hint-popup-content" class="hint-popup-content">
+                    <p>Pertanyaan ini menguji prinsip dasar rangkaian. Ingat kembali pengetahuan yang dipelajari di level ruang tamu.</p>
+                </div>
+                <div class="hint-controls">
+                    <span class="hint-cost">Menggunakan petunjuk akan mengurangi 5 poin</span>
+                    <div class="hint-buttons">
+                        <button id="use-hint" class="use-hint-btn">Gunakan Petunjuk</button>
+                        <button id="cancel-hint" class="cancel-hint-btn">Batal</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Screen -->
+        <div id="quiz-loading" class="quiz-loading hidden">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <h3>Memuat soal...</h3>
+                <p>Mohon tunggu, sistem sedang menyiapkan tantangan khusus untuk Anda</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="sfx-correct" preload="auto">
+        <source src="public/audio/sfx_correct.wav" type="audio/wav">
+    </audio>
+    <audio id="sfx-wrong" preload="auto">
+        <source src="public/audio/sfx_wrong.wav" type="audio/wav">
+    </audio>
+    <audio id="sfx-complete" preload="auto">
+        <source src="public/audio/sfx_complete.wav" type="audio/wav">
+    </audio>
+    <audio id="sfx-tick" preload="auto">
+        <source src="public/audio/sfx_tick.wav" type="audio/wav">
+    </audio>
+    <audio id="ambient-basement" preload="auto" loop>
+        <source src="public/audio/ambient_basement.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="final-victory" preload="auto">
+        <source src="public/audio/final_victory.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Scripts -->
+    <script src="scripts/scene5-level4.js"></script>
+</body>
+</html>

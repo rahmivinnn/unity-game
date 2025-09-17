@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Scene</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #1a237e;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        #gameContainer {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: #1a237e;
+            overflow: hidden;
+        }
+
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .game-title {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            pointer-events: auto;
+        }
+
+        .controls-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            pointer-events: auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .info-panel {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 300px;
+            pointer-events: auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.3);
+            border-top: 5px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div class="loading-screen" id="loadingScreen">
+            <div class="loading-spinner"></div>
+            <h2>Memuat Ruang Siswa...</h2>
+            <p>Menyiapkan lingkungan 3D yang interaktif</p>
+        </div>
+
+        <div class="ui-overlay">
+        </div>
+    </div>
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fflate@0.6.9/umd/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
+
+    <script>
+        // Global variables
+        let scene, camera, renderer, controls;
+        let loadingManager, fbxLoader;
+        let gameObjects = {};
+        let isAutoRotating = false;
+
+        // Initialize the 3D scene
+        function init() {
+            console.log('🚀 Initializing new SimCity scene...');
+
+            // Create scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB); // Sky blue background
+
+            // Create camera with proper settings
+            camera = new THREE.PerspectiveCamera(
+                75, // Field of view
+                window.innerWidth / window.innerHeight, // Aspect ratio
+                0.1, // Near clipping plane
+                1000 // Far clipping plane
+            );
+
+            // Set camera position inside the purple building for interior view
+            camera.position.set(0, 1.5, 1.5);
+            camera.lookAt(0, 0, 0);
+            console.log('📷 Camera position (interior):', camera.position);
+            console.log('📷 Camera looking at player: (0, 0, 0)');
+
+            // Create renderer
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: document.getElementById('gameCanvas'),
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.outputEncoding = THREE.sRGBEncoding;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.2;
+
+            // Create orbit controls focused on player
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.screenSpacePanning = false;
+            controls.minDistance = 1;
+            controls.maxDistance = 8;
+            controls.maxPolarAngle = Math.PI / 2;
+            controls.target.set(0, 0, 0); // Focus on player inside building
+            controls.autoRotate = false;
+
+            // Setup lighting
+            setupLighting();
+
+            // Setup loading manager
+            setupLoadingManager();
+
+            // Load 3D models
+            loadGameModels();
+
+            // Start render loop
+            animate();
+
+            console.log('✅ Scene initialized successfully!');
+        }
+
+        function setupLighting() {
+            // Ambient light for overall illumination
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambientLight);
+
+            // Main directional light (sun) - softer for interior
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+            directionalLight.position.set(5, 8, 3);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            directionalLight.shadow.camera.near = 0.5;
+            directionalLight.shadow.camera.far = 50;
+            directionalLight.shadow.camera.left = -10;
+            directionalLight.shadow.camera.right = 10;
+            directionalLight.shadow.camera.top = 10;
+            directionalLight.shadow.camera.bottom = -10;
+            scene.add(directionalLight);
+
+            // Point light for warm indoor feeling - brighter
+            const pointLight = new THREE.PointLight(0xffaa44, 1.0, 15);
+            pointLight.position.set(0, 2.5, 0);
+            pointLight.castShadow = true;
+            scene.add(pointLight);
+
+            // Hemisphere light for natural lighting
+            const hemisphereLight = new THREE.HemisphereLight(0x87CEEB, 0x8B4513, 0.4);
+            scene.add(hemisphereLight);
+        }
+
+        function setupLoadingManager() {
+            loadingManager = new THREE.LoadingManager();
+            
+            loadingManager.onLoad = function() {
+                console.log('✅ All models loaded successfully!');
+                hideLoadingScreen();
+            };
+
+            loadingManager.onProgress = function(url, itemsLoaded, itemsTotal) {
+                console.log(`📦 Loading: ${itemsLoaded}/${itemsTotal} - ${url}`);
+            };
+
+            loadingManager.onError = function(url) {
+                console.error('❌ Error loading:', url);
+            };
+
+            fbxLoader = new THREE.FBXLoader(loadingManager);
+        }
+
+        function loadGameModels() {
+            console.log('🔍 Starting to load models...');
+            
+            // Add simple ground for reference
+            const groundGeometry = new THREE.PlaneGeometry(10, 10);
+            const groundMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0x404040,
+                side: THREE.DoubleSide
+            });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.position.y = -0.1;
+            scene.add(ground);
+            console.log('⬜ Ground plane added for reference');
+
+            const modelsToLoad = [
+                {
+                    name: 'player',
+                    path: '/models/player.fbx',
+                    position: [0, 0, 0], // Player at center
+                    scale: [1, 1, 1],
+                    rotation: [0, Math.PI, 0] // Face towards camera
+                }
+            ];
+
+            modelsToLoad.forEach(modelConfig => {
+                console.log(`📦 Attempting to load: ${modelConfig.name} from ${modelConfig.path}`);
+                fbxLoader.load(
+                    modelConfig.path,
+                    (object) => {
+                        console.log(`✅ Successfully loaded: ${modelConfig.name}`);
+                        console.log(`📍 Setting position: ${modelConfig.position}`);
+                        
+                        // Set position, scale, and rotation
+                        object.position.set(...modelConfig.position);
+                        object.scale.set(...modelConfig.scale);
+                        object.rotation.set(...modelConfig.rotation);
+
+                        // Enable shadows and apply textures
+                        object.traverse((child) => {
+                            if (child.isMesh) {
+                                child.castShadow = true;
+                                child.receiveShadow = true;
+                                
+                                // Apply texture for player model with enhanced settings
+                                if (modelConfig.name === 'player' && child.material) {
+                                    const textureLoader = new THREE.TextureLoader();
+                                    const playerTexture = textureLoader.load('/textures/player-texture.jpg', 
+                                        (texture) => {
+                                            console.log('✅ Player texture loaded successfully');
+                                            texture.flipY = false; // Fix texture orientation
+                                            texture.wrapS = THREE.RepeatWrapping;
+                                            texture.wrapT = THREE.RepeatWrapping;
+                                            texture.minFilter = THREE.LinearFilter;
+                                            texture.magFilter = THREE.LinearFilter;
+                                        },
+                                        undefined,
+                                        (error) => {
+                                            console.error('❌ Error loading player texture:', error);
+                                        }
+                                    );
+                                    
+                                    // Create enhanced material with better visibility
+                                    const newMaterial = new THREE.MeshPhongMaterial({
+                                        map: playerTexture,
+                                        transparent: false,
+                                        side: THREE.DoubleSide,
+                                        shininess: 30,
+                                        specular: 0x111111,
+                                        color: 0xffffff // Ensure base color is white
+                                    });
+                                    
+                                    child.material = newMaterial;
+                                    console.log('🎨 Applied enhanced texture to player model');
+                                } else if (child.material) {
+                                    // Ensure other materials are visible
+                                    child.material.color = new THREE.Color(0xcccccc);
+                                    child.material.needsUpdate = true;
+                                }
+                            }
+                        });
+
+                        // Add click interaction
+                        object.userData = { 
+                            name: modelConfig.name,
+                            clickable: true,
+                            originalPosition: object.position.clone()
+                        };
+
+                        scene.add(object);
+                        gameObjects[modelConfig.name] = object;
+                        
+                        console.log(`✅ Loaded model: ${modelConfig.name}`);
+                        console.log(`🎯 Scene now has ${scene.children.length} objects`);
+                        console.log(`📍 Model position:`, object.position);
+                    },
+                    (progress) => {
+                        console.log(`📦 Loading ${modelConfig.name}: ${(progress.loaded / progress.total * 100)}%`);
+                    },
+                    (error) => {
+                        console.error(`❌ Error loading ${modelConfig.name}:`, error);
+                    }
+                );
+            });
+        }
+
+        function hideLoadingScreen() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            loadingScreen.classList.add('hidden');
+        }
+
+        // Camera control functions
+        function resetCamera() {
+            camera.position.set(-5, 3, 5);
+            controls.target.set(0, 1, 0);
+            controls.update();
+            console.log('📷 Camera reset to default position');
+        }
+
+        function toggleAutoRotate() {
+            isAutoRotating = !isAutoRotating;
+            controls.autoRotate = isAutoRotating;
+            controls.autoRotateSpeed = 2.0;
+            console.log(`🔄 Auto rotate: ${isAutoRotating ? 'ON' : 'OFF'}`);
+        }
+
+        function focusOnPlayer() {
+            if (gameObjects.player) {
+                const playerPos = gameObjects.player.position;
+                camera.position.set(playerPos.x - 3, playerPos.y + 2, playerPos.z + 3);
+                controls.target.copy(playerPos);
+                controls.update();
+                console.log('👤 Camera focused on player');
+            }
+        }
+
+        function focusOnRoom() {
+            camera.position.set(-5, 4, 5);
+            controls.target.set(0, 0, 0);
+            controls.update();
+            console.log('🏠 Camera focused on room overview');
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Update controls
+            controls.update();
+            
+            // Render scene
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Event listeners
+        window.addEventListener('resize', onWindowResize, false);
+
+        // Initialize when page loads
+        window.addEventListener('load', init);
+
+        console.log('🎮 SimCity 3D Scene Script Loaded');
+    </script>
+</body>
+</html>

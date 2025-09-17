@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene 4 - Level 3: Simulasi Biaya Listrik Laboratorium</title>
+    <link rel="stylesheet" href="public/main.css">
+    <link rel="stylesheet" href="public/scene4-level3.css">
+    <script src="public/audio-manager.js"></script>
+</head>
+<body>
+    <!-- Scene 4 Level 3 Container -->
+    <div id="scene4-level3-container" class="scene-container hidden">
+        <!-- Background -->
+        <div class="scene-background">
+            <img src="public/images/lab-background.jpg" alt="Latar Belakang Laboratorium" class="background-image">
+            <div class="background-overlay"></div>
+        </div>
+
+        <!-- HUD Interface -->
+        <div class="hud-interface">
+            <!-- Left Panel - Device Control -->
+            <div class="hud-left-panel">
+                <div class="level-info">
+                    <h2>Level 3: Laboratorium</h2>
+                    <p>Tantangan Simulasi Biaya Listrik</p>
+                </div>
+                
+                <div class="objectives-panel">
+                    <h3>Tujuan</h3>
+                    <ul class="objectives-list">
+                        <li id="obj-bill-limit" class="objective">
+                            <span class="obj-status">⏳</span>
+                            Tagihan listrik bulanan ≤ Rp300,000
+                        </li>
+                        <li id="obj-efficiency" class="objective">
+                            <span class="obj-status">⏳</span>
+                            Optimalkan waktu penggunaan perangkat
+                        </li>
+                        <li id="obj-calculation" class="objective">
+                            <span class="obj-status">⏳</span>
+                            Pahami rumus perhitungan biaya listrik
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="inventory-panel">
+                    <h3>Kunci Energi</h3>
+                    <div id="energy-keys-container" class="energy-keys">
+                        <!-- Kunci energi akan ditambahkan secara dinamis -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Bill Calculator -->
+            <div class="hud-right-panel">
+                <div class="bill-calculator">
+                    <h3>Kalkulator Tagihan Listrik Bulanan</h3>
+                    
+                    <div class="tariff-info">
+                        <span class="tariff-label">Tarif Listrik:</span>
+                        <span class="tariff-value">Rp1,467/kWh</span>
+                        <span class="tariff-note">(Harga contoh)</span>
+                    </div>
+                    
+                    <div class="formula-display">
+                        <h4>Rumus Perhitungan</h4>
+                        <div class="formula">
+                            <div class="formula-line">Konsumsi(kWh) = (Daya W × Waktu h) ÷ 1000</div>
+                            <div class="formula-line">Biaya(Rp) = Total kWh × Tarif Rp/kWh</div>
+                        </div>
+                    </div>
+                    
+                    <div class="total-consumption">
+                        <h4>Total Konsumsi</h4>
+                        <div class="consumption-value">
+                            <span id="total-kwh">0</span> kWh/bulan
+                        </div>
+                    </div>
+                    
+                    <div class="monthly-bill">
+                        <h4>Estimasi Tagihan Bulanan</h4>
+                        <div class="bill-value" id="monthly-bill-amount">
+                            Rp 0
+                        </div>
+                        <div class="bill-status" id="bill-status">
+                            <span class="status-icon">⏳</span>
+                            <span class="status-text">Sesuaikan waktu penggunaan perangkat</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <div class="game-area">
+            <!-- Lab Desktop Interface -->
+            <div class="lab-desktop">
+                <div class="desktop-header">
+                    <h2>Sistem Manajemen Konsumsi Energi Perangkat Rumah</h2>
+                    <div class="system-status">
+                        <span class="status-indicator active"></span>
+                        <span>Sistem Berjalan</span>
+                    </div>
+                </div>
+                
+                <!-- Device Control Panel -->
+                <div class="device-control-panel">
+                    <h3>Pengaturan Waktu Operasi Perangkat</h3>
+                    
+                    <!-- Device List -->
+                    <div class="device-list">
+                        <!-- Lampu -->
+                        <div class="device-item" data-device="lamp">
+                            <div class="device-info">
+                                <div class="device-icon">💡</div>
+                                <div class="device-details">
+                                    <h4>Lampu LED</h4>
+                                    <span class="device-power">15W</span>
+                                </div>
+                            </div>
+                            <div class="device-controls">
+                                <label>Waktu penggunaan harian:</label>
+                                <div class="slider-container">
+                                    <input type="range" id="lamp-slider" class="time-slider" 
+                                           min="0" max="24" value="6" step="0.5" data-device="lamp">
+                                    <div class="slider-labels">
+                                        <span>0h</span>
+                                        <span>24h</span>
+                                    </div>
+                                </div>
+                                <div class="time-display">
+                                    <span id="lamp-time">6.0</span> jam/hari
+                                </div>
+                                <div class="energy-display">
+                                    Konsumsi: <span id="lamp-energy">2.7</span> kWh/bulan
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AC -->
+                        <div class="device-item" data-device="ac">
+                            <div class="device-info">
+                                <div class="device-icon">❄️</div>
+                                <div class="device-details">
+                                    <h4>AC Kecil</h4>
+                                    <span class="device-power">1000W</span>
+                                </div>
+                            </div>
+                            <div class="device-controls">
+                                <label>Waktu penggunaan harian:</label>
+                                <div class="slider-container">
+                                    <input type="range" id="ac-slider" class="time-slider" 
+                                           min="0" max="24" value="8" step="0.5" data-device="ac">
+                                    <div class="slider-labels">
+                                        <span>0h</span>
+                                        <span>24h</span>
+                                    </div>
+                                </div>
+                                <div class="time-display">
+                                    <span id="ac-time">8.0</span> jam/hari
+                                </div>
+                                <div class="energy-display">
+                                    Konsumsi: <span id="ac-energy">240.0</span> kWh/bulan
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TV -->
+                        <div class="device-item" data-device="tv">
+                            <div class="device-info">
+                                <div class="device-icon">📺</div>
+                                <div class="device-details">
+                                    <h4>TV LCD</h4>
+                                    <span class="device-power">120W</span>
+                                </div>
+                            </div>
+                            <div class="device-controls">
+                                <label>Waktu penggunaan harian:</label>
+                                <div class="slider-container">
+                                    <input type="range" id="tv-slider" class="time-slider" 
+                                           min="0" max="24" value="4" step="0.5" data-device="tv">
+                                    <div class="slider-labels">
+                                        <span>0h</span>
+                                        <span>24h</span>
+                                    </div>
+                                </div>
+                                <div class="time-display">
+                                    <span id="tv-time">4.0</span> jam/hari
+                                </div>
+                                <div class="energy-display">
+                                    Konsumsi: <span id="tv-energy">14.4</span> kWh/bulan
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Kulkas -->
+                        <div class="device-item" data-device="fridge">
+                            <div class="device-info">
+                                <div class="device-icon">🧊</div>
+                                <div class="device-details">
+                                    <h4>Kulkas</h4>
+                                    <span class="device-power">150W</span>
+                                </div>
+                            </div>
+                            <div class="device-controls">
+                                <label>Waktu penggunaan harian:</label>
+                                <div class="slider-container">
+                                    <input type="range" id="fridge-slider" class="time-slider" 
+                                           min="20" max="24" value="24" step="0.5" data-device="fridge">
+                                    <div class="slider-labels">
+                                        <span>20h</span>
+                                        <span>24h</span>
+                                    </div>
+                                </div>
+                                <div class="time-display">
+                                    <span id="fridge-time">24.0</span> jam/hari
+                                </div>
+                                <div class="energy-display">
+                                    Konsumsi: <span id="fridge-energy">108.0</span> kWh/bulan
+                                </div>
+                                <div class="device-note">* Kulkas perlu berjalan terus-menerus</div>
+                            </div>
+                        </div>
+
+                        <!-- Penanak Nasi -->
+                        <div class="device-item" data-device="rice-cooker">
+                            <div class="device-info">
+                                <div class="device-icon">🍚</div>
+                                <div class="device-details">
+                                    <h4>Penanak Nasi</h4>
+                                    <span class="device-power">300W</span>
+                                </div>
+                            </div>
+                            <div class="device-controls">
+                                <label>Waktu penggunaan harian:</label>
+                                <div class="slider-container">
+                                    <input type="range" id="rice-cooker-slider" class="time-slider" 
+                                           min="0" max="6" value="1" step="0.25" data-device="rice-cooker">
+                                    <div class="slider-labels">
+                                        <span>0h</span>
+                                        <span>6h</span>
+                                    </div>
+                                </div>
+                                <div class="time-display">
+                                    <span id="rice-cooker-time">1.0</span> jam/hari
+                                </div>
+                                <div class="energy-display">
+                                    Konsumsi: <span id="rice-cooker-energy">9.0</span> kWh/bulan
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Komputer -->
+                        <div class="device-item" data-device="computer">
+                            <div class="device-info">
+                                <div class="device-icon">💻</div>
+                                <div class="device-details">
+                                    <h4>Komputer Desktop</h4>
+                                    <span class="device-power">150W</span>
+                                </div>
+                            </div>
+                            <div class="device-controls">
+                                <label>Waktu penggunaan harian:</label>
+                                <div class="slider-container">
+                                    <input type="range" id="computer-slider" class="time-slider" 
+                                           min="0" max="16" value="6" step="0.5" data-device="computer">
+                                    <div class="slider-labels">
+                                        <span>0h</span>
+                                        <span>16h</span>
+                                    </div>
+                                </div>
+                                <div class="time-display">
+                                    <span id="computer-time">6.0</span> jam/hari
+                                </div>
+                                <div class="energy-display">
+                                    Konsumsi: <span id="computer-energy">27.0</span> kWh/bulan
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Preset Buttons -->
+                <div class="preset-panel">
+                    <h3>Pengaturan Preset</h3>
+                    <div class="preset-buttons">
+                        <button class="preset-btn" data-preset="saving">
+                            <span class="preset-icon">🌱</span>
+                            <span class="preset-name">Mode Hemat</span>
+                            <span class="preset-desc">Konfigurasi konsumsi terendah</span>
+                        </button>
+                        <button class="preset-btn" data-preset="normal">
+                            <span class="preset-icon">🏠</span>
+                            <span class="preset-name">Mode Standar</span>
+                            <span class="preset-desc">Konfigurasi penggunaan harian</span>
+                        </button>
+                        <button class="preset-btn" data-preset="comfort">
+                            <span class="preset-icon">✨</span>
+                            <span class="preset-name">Mode Nyaman</span>
+                            <span class="preset-desc">Konfigurasi kenyamanan tinggi</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Energy Breakdown Chart -->
+                <div class="energy-breakdown">
+                    <h3>Distribusi Konsumsi Energi</h3>
+                    <div class="chart-container">
+                        <canvas id="energy-chart" width="300" height="200"></canvas>
+                    </div>
+                    <div class="chart-legend" id="chart-legend">
+                        <!-- Legenda akan dibuat secara dinamis -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Device Detail Popup -->
+        <div id="device-detail-popup" class="device-detail-popup hidden">
+            <div class="popup-content">
+                <h3 id="detail-device-name">Detail Perangkat</h3>
+                <div class="detail-info">
+                    <div class="detail-row">
+                        <span class="detail-label">Daya Nominal:</span>
+                        <span id="detail-power" class="detail-value">150W</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Penggunaan Harian:</span>
+                        <span id="detail-hours" class="detail-value">6 jam</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Konsumsi Bulanan:</span>
+                        <span id="detail-monthly" class="detail-value">27 kWh</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Biaya Bulanan:</span>
+                        <span id="detail-cost" class="detail-value">Rp 39,609</span>
+                    </div>
+                </div>
+                <div class="calculation-steps">
+                    <h4>Langkah Perhitungan</h4>
+                    <div id="calculation-detail" class="calculation-detail">
+                        <!-- Langkah perhitungan akan dibuat secara dinamis -->
+                    </div>
+                </div>
+                <button id="detail-close" class="detail-close">Tutup</button>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div id="success-message" class="success-message hidden">
+            <div class="success-content">
+                <h2 id="success-title">Kontrol Biaya Listrik Berhasil!</h2>
+                <p id="success-text">Anda berhasil mengontrol tagihan listrik bulanan dalam batas anggaran dan memperoleh pengetahuan penting tentang manajemen energi.</p>
+                <div class="blueprint-reward">
+                    <img src="public/images/blueprint_secret_device.png" alt="Blueprint Perangkat Rahasia" class="blueprint-image">
+                    <p>Mendapat Blueprint Perangkat Rahasia!</p>
+                </div>
+                <button id="success-continue" class="success-btn">Lanjutkan Eksplorasi</button>
+            </div>
+        </div>
+
+        <!-- Educational Popup -->
+        <div id="educational-popup" class="educational-popup hidden">
+            <div class="edu-content">
+                <h3 id="edu-title">Pengetahuan Perhitungan Biaya Listrik</h3>
+                <p id="edu-content">Memahami perhitungan biaya listrik membantu mengontrol biaya listrik rumah tangga secara wajar</p>
+                <div id="edu-detail" class="edu-detail">
+                    Prinsip dasar perhitungan biaya listrik adalah: daya perangkat (watt) dikalikan waktu penggunaan (jam) menghasilkan konsumsi energi (watt-jam), kemudian dibagi 1000 untuk dikonversi menjadi kilowatt-jam (kWh). Terakhir dikalikan dengan tarif listrik untuk mendapat biaya sebenarnya. Memahami rumus ini dapat membantu kita: 1) Memilih perangkat hemat energi; 2) Mengatur waktu penggunaan listrik secara wajar; 3) Mengidentifikasi perangkat konsumsi tinggi; 4) Membuat rencana hemat energi.
+                </div>
+                <div class="edu-actions">
+                    <button id="edu-expand-btn" class="edu-expand">Pelajari Lebih Lanjut</button>
+                    <button id="edu-close" class="edu-close">Tutup</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hint Bubble -->
+        <div id="hint-bubble" class="hint-bubble hidden">
+            <div class="hint-content">
+                <p id="hint-text">Sesuaikan waktu penggunaan perangkat, kontrol tagihan listrik bulanan dalam batas Rp300,000</p>
+                <button id="hint-close" class="hint-close">×</button>
+            </div>
+        </div>
+
+        <!-- Warning Message -->
+        <div id="warning-message" class="warning-message hidden">
+            <div class="warning-content">
+                <h4>⚠️ Tagihan Listrik Melebihi Batas</h4>
+                <p id="warning-text">Tagihan listrik bulanan konfigurasi saat ini melebihi anggaran, silakan sesuaikan waktu penggunaan perangkat</p>
+                <div class="warning-suggestions">
+                    <p>Saran:</p>
+                    <ul id="warning-suggestions-list">
+                        <!-- Saran akan dibuat secara dinamis -->
+                    </ul>
+                </div>
+                <button id="warning-close" class="warning-close">Mengerti</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="sfx-ding" preload="auto">
+        <source src="public/audio/sfx_ding.wav" type="audio/wav">
+    </audio>
+    <audio id="sfx-buzz" preload="auto">
+        <source src="public/audio/sfx_buzz.wav" type="audio/wav">
+    </audio>
+    <audio id="sfx-click" preload="auto">
+        <source src="public/audio/sfx_click.wav" type="audio/wav">
+    </audio>
+    <audio id="ambient-lab" preload="auto" loop>
+        <source src="public/audio/ambient_lab.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Scripts -->
+    <script src="scripts/scene4-level3.js"></script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerbang Evaluasi Akhir - Energy Quest</title>
+    <link rel="stylesheet" href="public/final-gate.css">
+    <link rel="stylesheet" href="public/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="public/globalGameState.js"></script>
+</head>
+<body>
+    <!-- Background Video -->
+    <video autoplay muted loop id="background-video">
+        <source src="public/Video/final.mp4" type="video/mp4">
+    </video>
+
+    <!-- Main Container -->
+    <div id="final-gate-container">
+        <!-- Header -->
+        <div class="gate-header">
+            <div class="energy-keys-display">
+                <h2><i class="fas fa-key"></i> Kunci Energi Terkumpul</h2>
+                <div class="keys-grid">
+                    <div class="key-slot" data-key="ruangTamu">
+                        <i class="fas fa-key"></i>
+                        <span>Ruang Tamu</span>
+                    </div>
+                    <div class="key-slot" data-key="dapur">
+                        <i class="fas fa-key"></i>
+                        <span>Dapur</span>
+                    </div>
+                    <div class="key-slot" data-key="laboratorium">
+                        <i class="fas fa-key"></i>
+                        <span>Laboratorium</span>
+                    </div>
+                    <div class="key-slot" data-key="ruangBawahTanah">
+                        <i class="fas fa-key"></i>
+                        <span>Ruang Bawah Tanah</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gate Status -->
+        <div class="gate-status" id="gate-status">
+            <div class="gate-visual">
+                <div class="gate-door" id="gate-door">
+                    <div class="door-left"></div>
+                    <div class="door-right"></div>
+                    <div class="gate-lock" id="gate-lock">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+                <div class="energy-beam" id="energy-beam"></div>
+            </div>
+            
+            <div class="gate-message" id="gate-message">
+                <h2>Gerbang Evaluasi Akhir</h2>
+                <p id="gate-status-text">Kumpulkan semua 4 Kunci Energi untuk membuka gerbang...</p>
+            </div>
+        </div>
+
+        <!-- Quiz Section (Hidden initially) -->
+        <div class="quiz-section" id="quiz-section" style="display: none;">
+            <div class="quiz-header">
+                <h2><i class="fas fa-brain"></i> Evaluasi Akhir: Misteri Hemat Listrik</h2>
+                <div class="quiz-progress">
+                    <span id="question-counter">1 / 10</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-content">
+                <div class="question-container">
+                    <h3 id="question-text">Loading question...</h3>
+                    <div class="answers-grid" id="answers-grid">
+                        <!-- Answers will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="quiz-controls">
+                    <button class="quiz-btn" id="prev-btn" onclick="previousQuestion()" disabled>
+                        <i class="fas fa-arrow-left"></i> Sebelumnya
+                    </button>
+                    <button class="quiz-btn primary" id="next-btn" onclick="nextQuestion()" disabled>
+                        Selanjutnya <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="quiz-btn success" id="submit-btn" onclick="submitQuiz()" style="display: none;">
+                        <i class="fas fa-check"></i> Selesai
+                    </button>
+                </div>
+            </div>
+
+            <div class="quiz-info">
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Waktu: <span id="timer">10:00</span></span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-star"></i>
+                    <span>Skor: <span id="current-score">0</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section (Hidden initially) -->
+        <div class="results-section" id="results-section" style="display: none;">
+            <div class="results-container">
+                <div class="results-header">
+                    <h2><i class="fas fa-trophy"></i> Hasil Evaluasi</h2>
+                </div>
+
+                <div class="score-display">
+                    <div class="final-score">
+                        <span class="score-label">Skor Akhir</span>
+                        <span class="score-value" id="final-score">0</span>
+                        <span class="score-max">/ 1000</span>
+                    </div>
+                    <div class="score-breakdown">
+                        <div class="breakdown-item">
+                            <span>Jawaban Benar:</span>
+                            <span id="correct-answers">0 / 10</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Waktu Bonus:</span>
+                            <span id="time-bonus">0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Tingkat Kelulusan:</span>
+                            <span id="grade-level">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mystery-revelation" id="mystery-revelation">
+                    <!-- Will be populated based on score -->
+                </div>
+
+                <div class="results-actions">
+                    <button class="quiz-btn primary" onclick="retryQuiz()">
+                        <i class="fas fa-redo"></i> Coba Lagi
+                    </button>
+                    <button class="quiz-btn success" onclick="completeGame()">
+                        <i class="fas fa-home"></i> Selesai
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" onclick="goToMainMenu()">
+                <i class="fas fa-home"></i>
+                <span>Menu Utama</span>
+            </button>
+            <button class="nav-btn" onclick="showProgress()">
+                <i class="fas fa-chart-line"></i>
+                <span>Progress</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Progress Modal -->
+    <div id="progress-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('progress-modal')">&times;</span>
+            <h2><i class="fas fa-chart-line"></i> Progress Permainan</h2>
+            <div class="progress-details">
+                <div class="progress-item">
+                    <span>Level Selesai:</span>
+                    <span id="completed-levels">0 / 4</span>
+                </div>
+                <div class="progress-item">
+                    <span>Kunci Energi:</span>
+                    <span id="collected-keys">0 / 4</span>
+                </div>
+                <div class="progress-item">
+                    <span>Total Skor:</span>
+                    <span id="total-score">0</span>
+                </div>
+                <div class="progress-item">
+                    <span>Waktu Bermain:</span>
+                    <span id="play-time">0 menit</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="gate-audio" loop>
+        <source src="public/audio/gate-ambient.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="unlock-audio">
+        <source src="public/audio/gate-unlock.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="quiz-audio">
+        <source src="public/audio/quiz-background.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="success-audio">
+        <source src="public/audio/success.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Scripts -->
+    <script src="scripts/globalGameState.js"></script>
+    <script src="scripts/narrativeSystem.js"></script>
+    <script src="public/final-gate.js"></script>
+</body>
+</html>

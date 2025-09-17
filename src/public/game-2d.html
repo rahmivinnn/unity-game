@@ -1,0 +1,2447 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hubungkan Listrik - Game Edukasi</title>
+    <script src="globalGameState.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Performance optimization variables */
+            --animation-duration: 0.5s;
+            --spark-animation: sparkle 1s infinite;
+            --glow-animation: glow 2s ease-in-out infinite alternate;
+            --transition-speed: 0.3s;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            max-width: 1600px;
+            max-height: 720px;
+            background: url('lv room.png') center/cover;
+            position: relative;
+            border: none;
+            overflow: hidden;
+        }
+
+        /* Mobile Responsive Design */
+        @media screen and (max-width: 768px) {
+            .game-container {
+                width: 100vw;
+                height: 100vh;
+                max-width: none;
+                max-height: none;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .game-container {
+                width: 100vw;
+                height: 100vh;
+            }
+        }
+
+        /* Comprehensive Mobile Optimization */
+        @media screen and (max-width: 768px) {
+            .character-section {
+                flex-direction: column;
+                gap: 15px;
+                top: 18vh;
+            }
+            
+            .speech-bubble::before {
+                display: none;
+            }
+            
+            .game-elements {
+                bottom: 8vh;
+                gap: clamp(30px, 8vw, 80px);
+                flex-direction: row;
+                justify-content: space-around;
+            }
+            
+            .electrical-object {
+                min-width: 80px;
+                min-height: 50px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            body {
+                font-size: 14px;
+            }
+            
+            .character-section {
+                top: 15vh;
+                gap: 10px;
+            }
+            
+            .character {
+                width: clamp(80px, 15vw, 120px);
+                height: clamp(112px, 21vw, 168px);
+            }
+            
+            .speech-bubble {
+                font-size: clamp(12px, 2vw, 16px);
+                padding: clamp(10px, 2vw, 20px);
+                border-radius: 15px;
+            }
+            
+            .game-elements {
+                bottom: 5vh;
+                gap: clamp(20px, 5vw, 40px);
+            }
+            
+            .power-source {
+                width: clamp(80px, 12vw, 120px);
+                height: clamp(50px, 8vw, 75px);
+            }
+            
+            .cable {
+                width: clamp(120px, 20vw, 180px);
+                height: clamp(10px, 2vw, 15px);
+                margin: clamp(10px, 3vw, 20px) 0;
+            }
+        }
+
+        @media screen and (max-width: 360px) {
+            .main-title {
+                font-size: clamp(18px, 5vw, 32px);
+                top: 2vh;
+            }
+            
+            .subtitle {
+                font-size: clamp(12px, 2.5vw, 16px);
+                top: 8vh;
+            }
+            
+            .character-section {
+                top: 12vh;
+            }
+            
+            .game-elements {
+                bottom: 3vh;
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
+            }
+            
+            .electrical-object {
+                margin: 5px 0;
+            }
+        }
+
+        /* Touch-friendly interactions */
+        @media (hover: none) and (pointer: coarse) {
+            .electrical-object:hover {
+                transform: none;
+                filter: none;
+            }
+            
+            .electrical-object:active {
+                transform: scale(1.15);
+                filter: brightness(1.3);
+            }
+            
+            .audio-btn:hover {
+                transform: none;
+            }
+            
+            .audio-btn:active {
+                transform: scale(1.1);
+            }
+        }
+
+        /* Audio Button */
+        .audio-btn {
+            position: absolute;
+            top: 2vh;
+            left: 2vw;
+            width: 8vw;
+            height: 8vw;
+            max-width: 60px;
+            max-height: 60px;
+            min-width: 40px;
+            min-height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(16px, 3vw, 24px);
+            color: white;
+            transition: background 0.3s ease;
+            touch-action: manipulation;
+        }
+
+        .audio-btn:hover, .audio-btn:active {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* Next Button */
+        .next-btn {
+            position: absolute;
+            bottom: 2vh;
+            right: 2vw;
+            padding: clamp(8px, 2vw, 15px) clamp(15px, 4vw, 25px);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(14px, 3vw, 18px);
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+            min-width: 80px;
+            min-height: 44px;
+            z-index: 1000;
+        }
+
+        .next-btn:hover, .next-btn:active {
+            background: rgba(0, 0, 0, 0.9);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Main Title */
+        .main-title {
+            position: absolute;
+            top: 4vh;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: clamp(24px, 6vw, 52px);
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+            letter-spacing: 2px;
+            text-align: center;
+            width: 90%;
+        }
+
+        /* Subtitle */
+        .subtitle {
+            position: absolute;
+            top: 12vh;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: clamp(14px, 3vw, 20px);
+            color: #fff;
+            text-align: center;
+            max-width: 90%;
+            font-weight: 300;
+            padding: 0 10px;
+        }
+
+        /* Character and Speech Bubble */
+        .character-section {
+            position: absolute;
+            top: 20vh;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: clamp(15px, 3vw, 30px);
+            z-index: 10;
+            width: 90%;
+            max-width: 800px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .character {
+            width: clamp(120px, 20vw, 200px);
+            height: clamp(168px, 28vw, 280px);
+            background: url('avatar.png') center/contain no-repeat;
+            background-size: contain;
+            background-position: center;
+            position: relative;
+            border-radius: 15px;
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
+            flex-shrink: 0;
+        }
+
+        .speech-bubble {
+            background: #fff;
+            color: #333;
+            padding: clamp(15px, 3vw, 25px);
+            border-radius: 20px;
+            max-width: clamp(250px, 50vw, 450px);
+            font-size: clamp(14px, 2.5vw, 18px);
+            line-height: 1.5;
+            position: relative;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            border: 2px solid #ddd;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            left: -18px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border: 18px solid transparent;
+            border-right-color: #fff;
+        }
+
+        /* Game Elements Container */
+        .game-elements {
+            position: absolute;
+            bottom: 10vh;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: clamp(50px, 15vw, 200px);
+            z-index: 5;
+            width: 90%;
+            max-width: 1200px;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .electrical-object {
+            position: relative;
+            cursor: grab;
+            transition: all var(--transition-speed) ease;
+            user-select: none;
+            touch-action: manipulation;
+            min-width: 60px;
+            min-height: 40px;
+        }
+
+        .electrical-object:hover, .electrical-object:active {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .electrical-object.dragging {
+            cursor: grabbing;
+            z-index: 100;
+            transform: scale(1.2);
+        }
+
+        .power-source {
+            width: clamp(100px, 15vw, 140px);
+            height: clamp(60px, 10vw, 90px);
+            background: 
+                linear-gradient(145deg, #34495e 0%, #2c3e50 50%, #1a252f 100%),
+                repeating-linear-gradient(
+                    45deg,
+                    transparent 0px,
+                    transparent 2px,
+                    rgba(255,255,255,0.05) 2px,
+                    rgba(255,255,255,0.05) 4px
+                );
+            border: 3px solid #1a252f;
+            border-radius: 8px;
+            box-shadow: 
+                0 8px 16px rgba(0,0,0,0.5),
+                inset 0 2px 4px rgba(255,255,255,0.1),
+                inset 0 -2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .power-source::before {
+            content: '+';
+            position: absolute;
+            top: clamp(8px, 2vw, 15px);
+            left: clamp(12px, 3vw, 20px);
+            color: #e74c3c;
+            font-size: clamp(18px, 3.5vw, 26px);
+            font-weight: 900;
+            text-shadow: 
+                0 0 8px rgba(231, 76, 60, 0.8),
+                0 2px 4px rgba(0,0,0,0.5);
+            background: radial-gradient(circle, #e74c3c, #c0392b);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .power-source::after {
+            content: '−';
+            position: absolute;
+            top: clamp(8px, 2vw, 15px);
+            right: clamp(12px, 3vw, 20px);
+            color: #3498db;
+            font-size: clamp(20px, 4vw, 30px);
+            font-weight: 900;
+            text-shadow: 
+                0 0 8px rgba(52, 152, 219, 0.8),
+                0 2px 4px rgba(0,0,0,0.5);
+            background: radial-gradient(circle, #3498db, #2980b9);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .power-source .voltage-label {
+            position: absolute;
+            bottom: clamp(4px, 1vw, 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ecf0f1;
+            font-size: clamp(8px, 1.5vw, 12px);
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .power-source .voltage-label::before {
+            content: '12V DC';
+        }
+
+        .cable {
+            width: clamp(150px, 25vw, 220px);
+            height: clamp(16px, 3vw, 24px);
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #1a1a1a 0px,
+                    #2a2a2a 2px,
+                    #1a1a1a 4px
+                ),
+                linear-gradient(180deg, #333 0%, #1a1a1a 50%, #333 100%);
+            border-radius: 12px;
+            margin: clamp(15px, 4vw, 30px) 0;
+            box-shadow: 
+                0 4px 8px rgba(0,0,0,0.4),
+                inset 0 2px 4px rgba(255,255,255,0.05),
+                inset 0 -2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            border: 1px solid #0a0a0a;
+            overflow: hidden;
+        }
+
+        .cable::before {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 24px;
+            background: 
+                radial-gradient(circle at 30% 30%, #ff6b6b, #e74c3c),
+                linear-gradient(145deg, #c0392b, #a93226);
+            border-radius: 6px;
+            border: 2px solid #8b2635;
+            box-shadow: 
+                0 3px 6px rgba(0,0,0,0.4),
+                inset 0 1px 2px rgba(255,255,255,0.2);
+        }
+
+        .cable::after {
+            content: '';
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 24px;
+            background: 
+                radial-gradient(circle at 30% 30%, #74b9ff, #3498db),
+                linear-gradient(145deg, #2980b9, #2471a3);
+            border-radius: 6px;
+            border: 2px solid #1f5582;
+            box-shadow: 
+                0 3px 6px rgba(0,0,0,0.4),
+                inset 0 1px 2px rgba(255,255,255,0.2);
+        }
+
+        .cable .wire-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: calc(100% - 40px);
+            height: 10px;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #d4af37 0px,
+                    #ffd700 1px,
+                    #d4af37 2px
+                ),
+                linear-gradient(180deg, #ffd700 0%, #b8860b 50%, #ffd700 100%);
+            border-radius: 5px;
+            box-shadow: 
+                inset 0 2px 4px rgba(0,0,0,0.3),
+                inset 0 -1px 2px rgba(255,255,255,0.2);
+        }
+
+        .cable .wire-core::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: calc(100% - 20px);
+            height: 6px;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #cd853f 0px,
+                    #daa520 0.5px,
+                    #cd853f 1px
+                ),
+                linear-gradient(180deg, #daa520 0%, #b8860b 100%);
+            border-radius: 3px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .light-bulb {
+            width: 110px;
+            height: 130px;
+            background: 
+                radial-gradient(ellipse at 50% 30%, rgba(255,255,255,0.9) 0%, rgba(240,240,240,0.8) 70%, rgba(220,220,220,0.6) 100%),
+                linear-gradient(180deg, rgba(255,255,255,0.95), rgba(248,248,248,0.9));
+            border-radius: 55px 55px 25px 25px;
+            box-shadow: 
+                0 8px 16px rgba(0,0,0,0.4), 
+                inset 0 3px 6px rgba(255,255,255,0.8),
+                inset 0 -2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            border: 2px solid #ccc;
+            overflow: hidden;
+        }
+
+        .light-bulb::before {
+            content: '';
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 32px;
+            background: 
+                linear-gradient(180deg, #34495e 0%, #2c3e50 50%, #1a252f 100%),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent 0px,
+                    transparent 1px,
+                    rgba(255,255,255,0.1) 1px,
+                    rgba(255,255,255,0.1) 2px
+                );
+            border-radius: 0 0 12px 12px;
+            box-shadow: 
+                inset 0 3px 6px rgba(0,0,0,0.4),
+                0 2px 4px rgba(0,0,0,0.3);
+            border: 1px solid #1a252f;
+        }
+
+        .light-bulb::after {
+            content: '';
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: 
+                radial-gradient(circle at 30% 30%, #fff 0%, #FFD700 20%, #FFA500 60%, rgba(255, 165, 0, 0.3) 100%);
+            border-radius: 50%;
+            opacity: 0;
+            box-shadow: 
+                0 0 25px rgba(255, 215, 0, 0.8), 
+                0 0 50px rgba(255, 215, 0, 0.4),
+                inset 0 2px 4px rgba(255,255,255,0.3);
+            animation: ledGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes ledGlow {
+            0% { 
+                opacity: 0.3; 
+                transform: translateX(-50%) scale(0.8);
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+            }
+            100% { 
+                opacity: 0.9; 
+                transform: translateX(-50%) scale(1.1);
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.4);
+            }
+        }
+
+        .light-bulb .led-filament {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(180deg, #FFD700, #FFA500);
+            border-radius: 1px;
+            box-shadow: 0 0 5px rgba(255, 215, 0, 0.6);
+        }
+
+        .light-bulb .led-filament::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -8px;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 2px;
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            border-radius: 1px;
+            box-shadow: 0 0 3px rgba(255, 215, 0, 0.6);
+        }
+
+        .light-bulb.connected {
+            background: linear-gradient(180deg, rgba(255,255,0,0.9), rgba(255,215,0,0.8));
+            filter: drop-shadow(0 0 20px #FFD700) brightness(1.3);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            border-color: #FFD700;
+        }
+
+        .light-bulb.connected::after {
+            opacity: 1;
+            animation: glow 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { opacity: 0.7; transform: translateX(-50%) scale(1); }
+            to { opacity: 1; transform: translateX(-50%) scale(1.1); }
+        }
+
+        .connection-line {
+            position: absolute;
+            height: 6px;
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            border-radius: 3px;
+            z-index: 3;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .connection-line.active {
+            opacity: 1;
+        }
+
+        .drop-zone {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border: 3px dashed transparent;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.active {
+            border-color: #FFD700;
+            background: rgba(255, 215, 0, 0.1);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .object-label {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #FFD700;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        /* Realistic electrical components with CSS styling */
+        .source-element .element-icon {
+            width: 52px;
+            height: 52px;
+            background: 
+                radial-gradient(circle at 30% 30%, #4CAF50, #388E3C),
+                linear-gradient(145deg, #66BB6A, #43A047);
+            border: 2px solid #2E7D32;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 
+                0 4px 8px rgba(0,0,0,0.3),
+                inset 0 2px 4px rgba(255,255,255,0.2);
+        }
+
+        .source-element .element-icon::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: #333;
+            border-radius: 50%;
+            box-shadow: 16px 0 0 #333;
+        }
+
+        .source-element .element-icon::after {
+            content: '';
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: #333;
+            border-radius: 2px;
+        }
+        
+        .cable-element .element-icon {
+            width: 52px;
+            height: 52px;
+            background: 
+                linear-gradient(90deg, #FF9800 0%, #F57C00 50%, #FF9800 100%);
+            border: 2px solid #E65100;
+            border-radius: 26px;
+            position: relative;
+            box-shadow: 
+                0 4px 8px rgba(0,0,0,0.3),
+                inset 0 2px 4px rgba(255,255,255,0.2);
+        }
+
+        .cable-element .element-icon::before {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: #333;
+            border-radius: 50%;
+        }
+
+        .cable-element .element-icon::after {
+            content: '';
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: #333;
+            border-radius: 50%;
+        }
+        
+        .outlet-element .element-icon {
+            width: 52px;
+            height: 52px;
+            background: 
+                radial-gradient(circle at 30% 30%, #FFD700, #FFC107),
+                linear-gradient(145deg, #FFEB3B, #FFC107);
+            border: 2px solid #FF8F00;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 
+                0 4px 8px rgba(0,0,0,0.3),
+                inset 0 2px 4px rgba(255,255,255,0.2);
+        }
+
+        .outlet-element .element-icon::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 20%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 16px;
+            background: #333;
+            border-radius: 1px;
+            box-shadow: 0 16px 0 #333, -8px 8px 0 #333, 8px 8px 0 #333;
+        }
+
+        .outlet-element .element-icon::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 10%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 8px;
+            background: #333;
+            border-radius: 4px;
+        }
+
+        .element-label {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Progress Indicator */
+        .progress-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        /* Hidden elements for game logic */
+        .hidden {
+            display: none;
+        }
+
+        /* Realistic Physics Animations */
+        @keyframes electricFlow {
+            0% { 
+                background-position: 0% 50%;
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            }
+            50% { 
+                background-position: 100% 50%;
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            }
+            100% { 
+                background-position: 0% 50%;
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            }
+        }
+
+        @keyframes sparkEffect {
+            0%, 100% { 
+                opacity: 0;
+                transform: scale(0.8) rotate(0deg);
+            }
+            50% { 
+                opacity: 1;
+                transform: scale(1.2) rotate(180deg);
+            }
+        }
+
+        @keyframes voltageFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes connectionPulse {
+            0% { 
+                transform: scale(1);
+                box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+            }
+            100% { 
+                transform: scale(1);
+                box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+            }
+        }
+
+        @keyframes dragHover {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes lightBulbGlow {
+            0% { 
+                filter: brightness(1) drop-shadow(0 0 5px rgba(255, 215, 0, 0.3));
+            }
+            50% { 
+                filter: brightness(1.3) drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+            }
+            100% { 
+                filter: brightness(1) drop-shadow(0 0 5px rgba(255, 215, 0, 0.3));
+            }
+        }
+
+        /* Enhanced Interactive States */
+        .electrical-object:hover {
+            animation: dragHover 1s ease-in-out infinite;
+            cursor: grab;
+            transform-origin: center;
+        }
+
+        .electrical-object:active {
+            cursor: grabbing;
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
+
+        .electrical-object.connected {
+            animation: connectionPulse 2s ease-in-out infinite;
+        }
+
+        .electrical-object.powered {
+            animation: lightBulbGlow 1.5s ease-in-out infinite;
+        }
+
+        .drop-zone.drag-over {
+            background: radial-gradient(circle, rgba(0, 255, 0, 0.2), transparent);
+            border: 3px dashed #00ff00;
+            animation: connectionPulse 0.5s ease-in-out infinite;
+        }
+
+        .voltage-label.active {
+            animation: voltageFlicker 1s ease-in-out infinite;
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+        }
+
+        .wire-core.active {
+            background: linear-gradient(90deg, 
+                #FFD700 0%, 
+                #FFA500 25%, 
+                #FFD700 50%, 
+                #FFA500 75%, 
+                #FFD700 100%);
+            background-size: 200% 100%;
+            animation: electricFlow 1s linear infinite;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+        }
+
+        .led-filament.active {
+            background: radial-gradient(circle, 
+                rgba(255, 255, 255, 1) 0%,
+                rgba(255, 215, 0, 0.9) 30%,
+                rgba(255, 165, 0, 0.7) 60%,
+                transparent 100%);
+            animation: sparkEffect 0.8s ease-in-out infinite;
+        }
+
+        /* Realistic Connection Lines */
+        .connection-line {
+            position: absolute;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                #FFD700 0%, 
+                #FFA500 50%, 
+                #FFD700 100%);
+            background-size: 200% 100%;
+            border-radius: 2px;
+            z-index: 5;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .connection-line.active {
+            opacity: 1;
+            animation: electricFlow 1s linear infinite;
+        }
+
+        /* Particle Effects */
+        .spark-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #FFD700;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkEffect 0.5s ease-out forwards;
+        }
+
+        /* Object Type Variations */
+        .power-source.type-chemistry {
+            background: 
+                linear-gradient(145deg, #3498db 0%, #2980b9 50%, #1f618d 100%),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent 0px,
+                    transparent 3px,
+                    rgba(255,255,255,0.1) 3px,
+                    rgba(255,255,255,0.1) 6px
+                );
+            border-color: #1f618d;
+            position: relative;
+        }
+
+        .power-source.type-chemistry::before {
+            content: 'CHEM';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: clamp(10px, 2vw, 14px);
+            font-weight: 900;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+        }
+
+        .power-source.type-chemistry .voltage-label::before {
+            content: 'H₂SO₄';
+        }
+
+        .power-source.type-biology {
+            background: 
+                linear-gradient(145deg, #27ae60 0%, #2ecc71 50%, #1e8449 100%),
+                repeating-linear-gradient(
+                    45deg,
+                    transparent 0px,
+                    transparent 2px,
+                    rgba(255,255,255,0.08) 2px,
+                    rgba(255,255,255,0.08) 4px
+                );
+            border-color: #1e8449;
+            position: relative;
+        }
+
+        .power-source.type-biology::before {
+            content: 'BIO';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: clamp(10px, 2vw, 14px);
+            font-weight: 900;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+        }
+
+        .power-source.type-biology .voltage-label::before {
+            content: '400x';
+        }
+
+        .power-source.type-physics {
+            background: 
+                linear-gradient(145deg, #8e44ad 0%, #9b59b6 50%, #6c3483 100%),
+                repeating-linear-gradient(
+                    135deg,
+                    transparent 0px,
+                    transparent 2px,
+                    rgba(255,255,255,0.06) 2px,
+                    rgba(255,255,255,0.06) 4px
+                );
+            border-color: #6c3483;
+            position: relative;
+        }
+
+        .power-source.type-physics::before {
+            content: 'PHYS';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: clamp(9px, 1.8vw, 13px);
+            font-weight: 900;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 0.5px;
+        }
+
+        .power-source.type-physics .voltage-label::before {
+            content: 'N-S';
+        }
+
+        .power-source.type-botany {
+            background: 
+                linear-gradient(145deg, #f39c12 0%, #e67e22 50%, #d68910 100%),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent 0px,
+                    transparent 2px,
+                    rgba(255,255,255,0.1) 2px,
+                    rgba(255,255,255,0.1) 4px
+                );
+            border-color: #d68910;
+            position: relative;
+        }
+
+        .power-source.type-botany::before {
+            content: 'BOT';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: clamp(10px, 2vw, 14px);
+            font-weight: 900;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+        }
+
+        .power-source.type-botany .voltage-label::before {
+            content: 'Seed';
+        }
+
+        .cable.type-pipette {
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #1e3a5f 0px,
+                    #2c5282 2px,
+                    #1e3a5f 4px
+                ),
+                linear-gradient(180deg, #3182ce 0%, #2c5282 50%, #3182ce 100%);
+            border-color: #1a365d;
+        }
+
+        .cable.type-pipette .wire-core {
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #63b3ed 0px,
+                    #90cdf4 1px,
+                    #63b3ed 2px
+                ),
+                linear-gradient(180deg, #90cdf4 0%, #4299e1 100%);
+        }
+
+        .cable.type-slide {
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #1c4532 0px,
+                    #276749 2px,
+                    #1c4532 4px
+                ),
+                linear-gradient(180deg, #38a169 0%, #2f855a 50%, #38a169 100%);
+            border-color: #1a202c;
+        }
+
+        .cable.type-slide .wire-core {
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #68d391 0px,
+                    #9ae6b4 1px,
+                    #68d391 2px
+                ),
+                linear-gradient(180deg, #9ae6b4 0%, #48bb78 100%);
+        }
+
+        .cable.type-pendulum {
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #44337a 0px,
+                    #553c9a 2px,
+                    #44337a 4px
+                ),
+                linear-gradient(180deg, #805ad5 0%, #6b46c1 50%, #805ad5 100%);
+            border-color: #322659;
+        }
+
+        .cable.type-pendulum .wire-core {
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #b794f6 0px,
+                    #d6bcfa 1px,
+                    #b794f6 2px
+                ),
+                linear-gradient(180deg, #d6bcfa 0%, #9f7aea 100%);
+        }
+
+        .cable.type-water {
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #744210 0px,
+                    #975a16 2px,
+                    #744210 4px
+                ),
+                linear-gradient(180deg, #d69e2e 0%, #b7791f 50%, #d69e2e 100%);
+            border-color: #5f370e;
+        }
+
+        .cable.type-water .wire-core {
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #f6e05e 0px,
+                    #faf089 1px,
+                    #f6e05e 2px
+                ),
+                linear-gradient(180deg, #faf089 0%, #ecc94b 100%);
+        }
+
+        .light-bulb.type-beaker {
+            border-radius: 20px 20px 40px 40px;
+            background: 
+                radial-gradient(ellipse at 50% 40%, rgba(52, 152, 219, 0.3) 0%, rgba(41, 128, 185, 0.2) 70%, rgba(31, 97, 141, 0.1) 100%),
+                linear-gradient(180deg, rgba(255,255,255,0.9), rgba(240,248,255,0.8));
+            border: 2px solid #3498db;
+        }
+
+        .light-bulb.type-beaker::after {
+            background: 
+                radial-gradient(circle at 30% 30%, #fff 0%, #3498db 20%, #2980b9 60%, rgba(52, 152, 219, 0.3) 100%);
+            box-shadow: 
+                0 0 25px rgba(52, 152, 219, 0.8), 
+                0 0 50px rgba(52, 152, 219, 0.4),
+                inset 0 2px 4px rgba(255,255,255,0.3);
+        }
+
+        .light-bulb.type-petri {
+            border-radius: 50%;
+            background: 
+                radial-gradient(ellipse at 50% 40%, rgba(39, 174, 96, 0.3) 0%, rgba(46, 204, 113, 0.2) 70%, rgba(30, 132, 73, 0.1) 100%),
+                linear-gradient(180deg, rgba(255,255,255,0.9), rgba(240,255,248,0.8));
+            border: 2px solid #27ae60;
+        }
+
+        .light-bulb.type-petri::after {
+            background: 
+                radial-gradient(circle at 30% 30%, #fff 0%, #27ae60 20%, #2ecc71 60%, rgba(39, 174, 96, 0.3) 100%);
+            box-shadow: 
+                0 0 25px rgba(39, 174, 96, 0.8), 
+                0 0 50px rgba(46, 204, 113, 0.4),
+                inset 0 2px 4px rgba(255,255,255,0.3);
+        }
+
+        .light-bulb.type-prism {
+            border-radius: 10px;
+            background: 
+                radial-gradient(ellipse at 50% 40%, rgba(142, 68, 173, 0.3) 0%, rgba(155, 89, 182, 0.2) 70%, rgba(108, 52, 131, 0.1) 100%),
+                linear-gradient(180deg, rgba(255,255,255,0.9), rgba(248,240,255,0.8));
+            border: 2px solid #8e44ad;
+            clip-path: none;
+        }
+
+        .light-bulb.type-prism::after {
+            background: 
+                radial-gradient(circle at 30% 30%, #fff 0%, #8e44ad 20%, #9b59b6 60%, rgba(142, 68, 173, 0.3) 100%);
+            box-shadow: 
+                0 0 25px rgba(142, 68, 173, 0.8), 
+                0 0 50px rgba(155, 89, 182, 0.4),
+                inset 0 2px 4px rgba(255,255,255,0.3);
+        }
+
+        .light-bulb.type-pot {
+            border-radius: 30px 30px 50px 50px;
+            background: 
+                radial-gradient(ellipse at 50% 40%, rgba(243, 156, 18, 0.3) 0%, rgba(230, 126, 34, 0.2) 70%, rgba(214, 137, 16, 0.1) 100%),
+                linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,248,240,0.8));
+            border: 2px solid #f39c12;
+        }
+
+        .light-bulb.type-pot::after {
+            background: 
+                radial-gradient(circle at 30% 30%, #fff 0%, #f39c12 20%, #e67e22 60%, rgba(243, 156, 18, 0.3) 100%);
+            box-shadow: 
+                0 0 30px rgba(243, 156, 18, 0.9), 
+                0 0 60px rgba(230, 126, 34, 0.5),
+                inset 0 2px 4px rgba(255,255,255,0.3);
+        }
+
+        /* Mobile-First Responsive Design - Play Store Quality */
+        @media (max-width: 1200px) {
+            .game-container {
+                padding: 15px;
+                gap: 20px;
+            }
+            
+            .main-title {
+                font-size: 2.5rem;
+                margin-bottom: 15px;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+                margin-bottom: 20px;
+            }
+            
+            .character-section {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+                margin-bottom: 25px;
+            }
+            
+            .character {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .speech-bubble {
+                max-width: 90%;
+                font-size: 0.95rem;
+                padding: 15px 20px;
+            }
+            
+            .game-elements {
+                flex-direction: column;
+                align-items: center;
+                gap: 25px;
+                margin-bottom: 30px;
+            }
+            
+            .electrical-object {
+                width: 140px;
+                height: 140px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 10px;
+                gap: 15px;
+                min-height: 100vh;
+                justify-content: flex-start;
+                padding-top: 60px;
+            }
+            
+            .main-title {
+                font-size: 2rem;
+                margin-bottom: 10px;
+                text-align: center;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+                margin-bottom: 15px;
+                text-align: center;
+                line-height: 1.4;
+            }
+            
+            .progress-indicator {
+                top: 10px;
+                right: 10px;
+                padding: 8px 15px;
+                font-size: 14px;
+                border-radius: 8px;
+            }
+            
+            .audio-btn {
+                top: 10px;
+                left: 10px;
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+            
+            .character-section {
+                margin-bottom: 20px;
+                gap: 12px;
+            }
+            
+            .character {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .speech-bubble {
+                max-width: 95%;
+                font-size: 0.9rem;
+                padding: 12px 18px;
+                line-height: 1.3;
+            }
+            
+            .game-elements {
+                gap: 20px;
+                margin-bottom: 20px;
+                width: 100%;
+                max-width: 350px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .electrical-object {
+                width: 120px;
+                height: 120px;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
+            }
+            
+            .object-label {
+                font-size: 14px;
+                bottom: -25px;
+            }
+            
+            .voltage-label {
+                font-size: 12px;
+                top: -20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-container {
+                padding: 8px;
+                gap: 12px;
+                padding-top: 50px;
+            }
+            
+            .main-title {
+                font-size: 1.6rem;
+                margin-bottom: 8px;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+                margin-bottom: 12px;
+                padding: 0 10px;
+            }
+            
+            .progress-indicator {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            .audio-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            
+            .character {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .speech-bubble {
+                font-size: 0.8rem;
+                padding: 10px 15px;
+                max-width: 98%;
+            }
+            
+            .game-elements {
+                gap: 15px;
+                max-width: 300px;
+            }
+            
+            .electrical-object {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .object-label {
+                font-size: 12px;
+                bottom: -20px;
+            }
+            
+            .voltage-label {
+                font-size: 10px;
+                top: -18px;
+            }
+            
+            #reset-progress {
+                font-size: 10px !important;
+                padding: 3px 8px !important;
+                margin-left: 8px !important;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .main-title {
+                font-size: 1.4rem;
+            }
+            
+            .subtitle {
+                font-size: 0.8rem;
+            }
+            
+            .game-elements {
+                max-width: 280px;
+                gap: 12px;
+            }
+            
+            .electrical-object {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .speech-bubble {
+                font-size: 0.75rem;
+                padding: 8px 12px;
+            }
+        }
+
+        /* Landscape orientation for mobile */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .game-container {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-around;
+                align-items: flex-start;
+                padding: 10px;
+                gap: 10px;
+            }
+            
+            .main-title {
+                width: 100%;
+                text-align: center;
+                font-size: 1.5rem;
+                margin-bottom: 5px;
+            }
+            
+            .subtitle {
+                width: 100%;
+                text-align: center;
+                font-size: 0.8rem;
+                margin-bottom: 10px;
+            }
+            
+            .character-section {
+                flex: 1;
+                min-width: 200px;
+                margin-bottom: 0;
+            }
+            
+            .character {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .speech-bubble {
+                font-size: 0.7rem;
+                padding: 8px 12px;
+            }
+            
+            .game-elements {
+                flex: 1;
+                min-width: 300px;
+                flex-direction: row;
+                justify-content: space-around;
+                margin-bottom: 0;
+            }
+            
+            .electrical-object {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Audio Button -->
+        <button class="audio-btn" id="audio-btn">🔊</button>
+
+        <!-- Next Button -->
+        <button class="next-btn" id="next-btn">NEXT</button>
+
+        <!-- Progress Indicator -->
+         <div class="progress-indicator">
+             <span id="current-experiment">1</span> / <span id="total-experiments">50</span>
+             <button id="reset-progress" style="margin-left: 10px; padding: 5px 10px; background: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">Reset</button>
+         </div>
+
+        <!-- Main Title -->
+        <h1 class="main-title">HUBUNGKAN LISTRIK</h1>
+
+        <!-- Subtitle -->
+        <p class="subtitle">Bantu karakter menyalakan lampu dengan menghubungkan kabel ke stop kontak</p>
+
+        <!-- Character and Speech Bubble -->
+        <div class="character-section">
+            <div class="character"></div>
+            <div class="speech-bubble">
+                "Halo! Aku butuh bantuanmu untuk menghubungkan kabel listrik ke stop kontak agar lampu bisa menyala. Seret kabel dari sumber listrik ke stop kontak yang tepat!"
+            </div>
+        </div>
+
+        <!-- Game Elements -->
+        <div class="game-elements">
+            <div class="electrical-object power-source" draggable="true" data-type="source" id="power-source">
+                <div class="object-label">Sumber Listrik</div>
+                <div class="voltage-label"></div>
+                <div class="drop-zone" data-accepts="cable"></div>
+            </div>
+            <div class="electrical-object cable" draggable="true" data-type="cable" id="cable">
+                <div class="object-label">Kabel Listrik</div>
+                <div class="wire-core"></div>
+            </div>
+            <div class="electrical-object light-bulb" data-type="bulb" id="light-bulb">
+                <div class="object-label">Lampu LED</div>
+                <div class="led-filament"></div>
+                <div class="drop-zone" data-accepts="cable"></div>
+            </div>
+        </div>
+        
+        <!-- Connection lines will be drawn here -->
+        <div id="connections-container"></div>
+
+        <!-- Hidden experiment data container -->
+        <div id="experiment-data" class="hidden"></div>
+        <div id="feedback" class="hidden"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="electrical-experiments.js"></script>
+    <script src="educational-content.js"></script>
+    <script>
+        class ElectricalGameUI {
+             constructor() {
+                 this.experiments = new ElectricalExperiments();
+                 this.currentExperimentIndex = 0;
+                 this.completedExperiments = parseInt(localStorage.getItem('completedExperiments') || '0');
+                 this.isConnected = false;
+                 this.gameCompleted = false;
+                 this.REQUIRED_EXPERIMENTS = 50; // Must complete 50 experiments before advancing
+                 
+                 // Mobile performance optimization
+                 this.isMobile = this.detectMobileDevice();
+                 this.performanceMode = this.detectPerformanceMode();
+                 this.maxParticles = 5; // Default particle count
+                 this.setupPerformanceOptimizations();
+                 
+                 this.initializeGame();
+                 this.setupEventListeners();
+                 this.loadExperiment(0);
+             }
+
+             initializeGame() {
+                 // Update total experiments display
+                 document.getElementById('total-experiments').textContent = this.REQUIRED_EXPERIMENTS;
+                 document.getElementById('current-experiment').textContent = this.completedExperiments + 1;
+                 
+                 // Initialize audio
+                 this.setupAudio();
+                 
+                 // Check if already completed required experiments
+                 if (this.completedExperiments >= this.REQUIRED_EXPERIMENTS) {
+                     this.enableLevelProgression();
+                 }
+             }
+
+            setupEventListeners() {
+                // Drag and drop for electrical objects
+                this.setupDragAndDrop();
+
+                // Audio button
+                 document.getElementById('audio-btn').addEventListener('click', () => {
+                     this.toggleAudio();
+                 });
+
+                 // Reset progress button
+                 document.getElementById('reset-progress').addEventListener('click', () => {
+                     this.resetProgress();
+                 });
+
+                 // Next button
+                 document.getElementById('next-btn').addEventListener('click', () => {
+                     this.handleNextButton();
+                 });
+             }
+
+             setupDragAndDrop() {
+                 const draggableElements = document.querySelectorAll('.electrical-object[draggable="true"]');
+                 const dropZones = document.querySelectorAll('.drop-zone');
+                 
+                 // Initialize connection state
+                 this.connections = {
+                     sourceConnected: false,
+                     bulbConnected: false,
+                     cablePosition: null
+                 };
+                 
+                 // Initialize touch support variables
+                 this.touchData = {
+                     isDragging: false,
+                     dragElement: null,
+                     startX: 0,
+                     startY: 0,
+                     offsetX: 0,
+                     offsetY: 0,
+                     originalPosition: null
+                 };
+                 
+                 draggableElements.forEach(element => {
+                     // Desktop drag events
+                     element.addEventListener('dragstart', (e) => {
+                         this.handleDragStart(e);
+                     });
+                     
+                     // Mobile touch events
+                     element.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false });
+                     element.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
+                     element.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: false });
+                     
+                     element.addEventListener('dragend', (e) => {
+                         this.handleDragEnd(e);
+                     });
+                 });
+                 
+                 dropZones.forEach(zone => {
+                     zone.addEventListener('dragover', (e) => {
+                         e.preventDefault();
+                         this.handleDragOver(e);
+                     });
+                     
+                     zone.addEventListener('dragleave', (e) => {
+                         this.handleDragLeave(e);
+                     });
+                     
+                     zone.addEventListener('drop', (e) => {
+                         e.preventDefault();
+                         this.handleDrop(e);
+                     });
+                 });
+             }
+             
+             handleDragStart(e) {
+                 const element = e.target;
+                 element.classList.add('dragging');
+                 e.dataTransfer.setData('text/plain', element.dataset.type);
+                 e.dataTransfer.effectAllowed = 'move';
+                 
+                 // Add realistic physics feedback
+                 this.createSparkEffect(element);
+                 
+                 // Show all compatible drop zones with animation
+                 const dropZones = document.querySelectorAll('.drop-zone');
+                 dropZones.forEach(zone => {
+                     if (zone.dataset.accepts === element.dataset.type) {
+                         zone.classList.add('active');
+                         this.animateDropZone(zone);
+                     }
+                 });
+             }
+             
+             handleDragEnd(e) {
+                 const element = e.target;
+                 element.classList.remove('dragging');
+                 
+                 // Hide all drop zones
+                 const dropZones = document.querySelectorAll('.drop-zone');
+                 dropZones.forEach(zone => {
+                     zone.classList.remove('active');
+                 });
+             }
+             
+             handleDragOver(e) {
+                 e.preventDefault();
+                 e.dataTransfer.dropEffect = 'move';
+                 const dropZone = e.target.closest('.drop-zone');
+                 if (dropZone) {
+                     dropZone.classList.add('drag-over');
+                 }
+             }
+             
+             handleDragLeave(e) {
+                 const dropZone = e.target.closest('.drop-zone');
+                 if (dropZone) {
+                     dropZone.classList.remove('drag-over');
+                 }
+             }
+             
+             handleDrop(e) {
+                 e.preventDefault();
+                 const draggedType = e.dataTransfer.getData('text/plain');
+                 const dropZone = e.target.closest('.drop-zone');
+                 
+                 if (dropZone && dropZone.dataset.accepts === draggedType) {
+                     this.createConnection(draggedType, dropZone);
+                 }
+             }
+             
+             createConnection(cableType, dropZone) {
+                 const cable = document.getElementById('cable');
+                 const powerSource = document.getElementById('power-source');
+                 const lightBulb = document.getElementById('light-bulb');
+                 const connectionsContainer = document.getElementById('connections-container');
+                 
+                 if (cableType === 'cable') {
+                     const parentObject = dropZone.closest('.electrical-object');
+                     
+                     if (parentObject.id === 'power-source') {
+                         this.connections.sourceConnected = true;
+                         this.showFeedback('Kabel terhubung ke sumber listrik! Sekarang hubungkan ke lampu.');
+                     } else if (parentObject.id === 'light-bulb') {
+                         this.connections.bulbConnected = true;
+                         this.showFeedback('Kabel terhubung ke lampu!');
+                     }
+                     
+                     // Create visual connection line
+                     this.drawConnectionLine(cable, parentObject);
+                     
+                     // Check if circuit is complete
+                     if (this.connections.sourceConnected && this.connections.bulbConnected) {
+                         this.completeCircuit();
+                     }
+                 }
+             }
+             
+             drawConnectionLine(cable, targetObject) {
+                 const connectionsContainer = document.getElementById('connections-container');
+                 const cableRect = cable.getBoundingClientRect();
+                 const targetRect = targetObject.getBoundingClientRect();
+                 const containerRect = document.querySelector('.game-container').getBoundingClientRect();
+                 
+                 const line = document.createElement('div');
+                 line.className = 'connection-line active';
+                 
+                 // Calculate line position and dimensions
+                 const startX = cableRect.left + cableRect.width / 2 - containerRect.left;
+                 const startY = cableRect.top + cableRect.height / 2 - containerRect.top;
+                 const endX = targetRect.left + targetRect.width / 2 - containerRect.left;
+                 const endY = targetRect.top + targetRect.height / 2 - containerRect.top;
+                 
+                 const length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+                 const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+                 
+                 line.style.width = length + 'px';
+                 line.style.left = startX + 'px';
+                 line.style.top = startY + 'px';
+                 line.style.transform = `rotate(${angle}deg)`;
+                 line.style.transformOrigin = '0 50%';
+                 
+                 connectionsContainer.appendChild(line);
+             }
+             
+             completeCircuit() {
+                 const lightBulb = document.getElementById('light-bulb');
+                 const powerSource = document.getElementById('power-source');
+                 const cable = document.getElementById('cable');
+                 const voltageLabel = powerSource.querySelector('.voltage-label');
+                 const wireCore = cable.querySelector('.wire-core');
+                 const ledFilament = lightBulb.querySelector('.led-filament');
+                 
+                 // Add realistic electrical effects
+                 lightBulb.classList.add('connected', 'powered');
+                 powerSource.classList.add('connected');
+                 cable.classList.add('connected');
+                 
+                 // Activate electrical components
+                 if (voltageLabel) voltageLabel.classList.add('active');
+                 if (wireCore) wireCore.classList.add('active');
+                 if (ledFilament) ledFilament.classList.add('active');
+                 
+                 // Activate connection lines
+                 const connectionLines = document.querySelectorAll('.connection-line');
+                 connectionLines.forEach(line => line.classList.add('active'));
+                 
+                 // Create electrical spark effects
+                 this.createElectricalEffects();
+                 
+                 this.isConnected = true;
+                 this.completedExperiments++;
+                 
+                 // Save progress to localStorage
+                 localStorage.setItem('completedExperiments', this.completedExperiments.toString());
+                 
+                 // Update progress display
+                 document.getElementById('current-experiment').textContent = this.completedExperiments + 1;
+                 
+                 // Show success message based on experiment type
+                 const experimentType = this.getExperimentType(this.currentExperimentIndex);
+                 let successMessage = '';
+                 
+                 switch(experimentType) {
+                     case 'chemistry':
+                         successMessage = 'Hebat! Reaksi kimia berhasil! Larutan dari tabung reaksi telah bercampur sempurna di beaker!';
+                         break;
+                     case 'biology':
+                         successMessage = 'Keren! Pengamatan mikroskopis berhasil! Sampel telah diamati dan dipindahkan ke petri dish!';
+                         break;
+                     case 'physics':
+                         successMessage = 'Luar biasa! Eksperimen fisika berhasil! Magnet dan pendulum telah mempengaruhi prisma!';
+                         break;
+                     case 'botany':
+                         successMessage = 'Fantastis! Penanaman berhasil! Benih telah disiram dan ditanam dengan sempurna!';
+                         break;
+                     default:
+                         successMessage = 'Selamat! Eksperimen berhasil diselesaikan dengan sempurna!';
+                 }
+                 
+                 this.showFeedback(successMessage);
+                 
+                 // Show NEXT button
+                 this.showNextButton();
+                 
+                 // Check if required experiments completed
+                 if (this.completedExperiments >= this.REQUIRED_EXPERIMENTS) {
+                     this.completeGame();
+                 }
+             }
+             
+             resetCircuit() {
+                 // Reset connections
+                 this.connections = {
+                     sourceConnected: false,
+                     bulbConnected: false,
+                     cablePosition: null
+                 };
+                 
+                 // Remove connection lines
+                 const connectionsContainer = document.getElementById('connections-container');
+                 connectionsContainer.innerHTML = '';
+                 
+                 // Reset light bulb state
+                 const lightBulb = document.getElementById('light-bulb');
+                 lightBulb.classList.remove('connected');
+                 
+                 // Reset visual state
+                 this.resetVisualState();
+                 
+                 // Hide NEXT button
+                 this.hideNextButton();
+             }
+
+            setupAudio() {
+                // Audio setup logic here
+                this.audioEnabled = true;
+            }
+
+            toggleAudio() {
+                this.audioEnabled = !this.audioEnabled;
+                const btn = document.getElementById('audio-btn');
+                btn.textContent = this.audioEnabled ? '🔊' : '🔇';
+            }
+
+            loadExperiment(index) {
+                if (index < 0 || index >= this.experiments.experiments.length) return;
+                
+                this.currentExperimentIndex = index;
+                const experiment = this.experiments.experiments[index];
+                
+                // Update progress
+                document.getElementById('current-experiment').textContent = index + 1;
+                
+                // Update speech bubble with experiment-specific text
+                this.updateSpeechBubble(experiment);
+                
+                // Reset connection state
+                this.isConnected = false;
+                this.resetVisualState();
+            }
+
+            updateSpeechBubble(experiment) {
+                const speechBubble = document.querySelector('.speech-bubble');
+                const experimentType = this.getExperimentType(this.currentExperimentIndex);
+                
+                let message = '';
+                switch(experimentType) {
+                    case 'chemistry':
+                        message = '"Mari belajar kimia! Gunakan pipet untuk memindahkan larutan dari tabung reaksi ke beaker. Hati-hati dengan reaksi kimia!"';
+                        break;
+                    case 'biology':
+                        message = '"Waktunya biologi! Letakkan slide sampel di bawah mikroskop, lalu amati di petri dish. Mari pelajari kehidupan mikroskopis!"';
+                        break;
+                    case 'physics':
+                        message = '"Eksperimen fisika! Gunakan pendulum untuk menggerakkan magnet, lalu lihat efeknya pada prisma. Fisika itu menarik!"';
+                        break;
+                    case 'botany':
+                        message = '"Mari berkebun! Siram benih dengan air, lalu tanam di pot tanaman. Saksikan keajaiban pertumbuhan!"';
+                        break;
+                    default:
+                        message = `"Sekarang kita akan belajar tentang ${experiment.title}. Hubungkan objek-objek untuk menyelesaikan eksperimen!"`;
+                }
+                
+                speechBubble.textContent = message;
+                
+                // Update objects based on experiment
+                this.updateObjectsForExperiment(experiment);
+            }
+
+            updateObjectsForExperiment(experiment) {
+                const powerSource = document.getElementById('power-source');
+                const cable = document.getElementById('cable');
+                const lightBulb = document.getElementById('light-bulb');
+                const objectLabel = powerSource.querySelector('.object-label');
+                const cableLabel = cable.querySelector('.object-label');
+                const bulbLabel = lightBulb.querySelector('.object-label');
+                
+                // Determine experiment type based on index
+                const experimentIndex = this.currentExperimentIndex;
+                const experimentType = this.getExperimentType(experimentIndex);
+                
+                switch(experimentType) {
+                    case 'chemistry':
+                        objectLabel.textContent = 'Tabung Reaksi';
+                        cableLabel.textContent = 'Pipet';
+                        bulbLabel.textContent = 'Beaker';
+                        this.updateObjectStyles('chemistry', 'pipette', 'beaker');
+                        break;
+                    case 'biology':
+                        objectLabel.textContent = 'Mikroskop';
+                        cableLabel.textContent = 'Slide Sampel';
+                        bulbLabel.textContent = 'Petri Dish';
+                        this.updateObjectStyles('biology', 'slide', 'petri');
+                        break;
+                    case 'physics':
+                        objectLabel.textContent = 'Magnet';
+                        cableLabel.textContent = 'Pendulum';
+                        bulbLabel.textContent = 'Prisma';
+                        this.updateObjectStyles('physics', 'pendulum', 'prism');
+                        break;
+                    case 'botany':
+                        objectLabel.textContent = 'Benih';
+                        cableLabel.textContent = 'Air';
+                        bulbLabel.textContent = 'Pot Tanaman';
+                        this.updateObjectStyles('botany', 'water', 'pot');
+                        break;
+                    default:
+                        objectLabel.textContent = 'Objek 1';
+                        cableLabel.textContent = 'Objek 2';
+                        bulbLabel.textContent = 'Objek 3';
+                        this.updateObjectStyles('chemistry', 'pipette', 'beaker');
+                }
+            }
+
+            getExperimentType(index) {
+                const types = ['chemistry', 'biology', 'physics', 'botany'];
+                // Setiap 12-13 eksperimen berganti tipe (50 eksperimen / 4 tipe = ~12.5)
+                const typeIndex = Math.floor(index / 12.5);
+                return types[typeIndex] || types[types.length - 1];
+            }
+
+            updateObjectStyles(sourceType, cableType, bulbType) {
+                const powerSource = document.getElementById('power-source');
+                const cable = document.getElementById('cable');
+                const lightBulb = document.getElementById('light-bulb');
+                
+                // Remove existing type classes
+                powerSource.className = powerSource.className.replace(/\btype-\w+/g, '');
+                cable.className = cable.className.replace(/\btype-\w+/g, '');
+                lightBulb.className = lightBulb.className.replace(/\btype-\w+/g, '');
+                
+                // Add new type classes
+                powerSource.classList.add(`type-${sourceType}`);
+                cable.classList.add(`type-${cableType}`);
+                lightBulb.classList.add(`type-${bulbType}`);
+            }
+
+            nextExperiment() {
+                if (this.currentExperimentIndex < this.experiments.experiments.length - 1) {
+                    this.loadExperiment(this.currentExperimentIndex + 1);
+                }
+            }
+
+            completeGame() {
+                 this.gameCompleted = true;
+                 const speechBubble = document.querySelector('.speech-bubble');
+                 speechBubble.textContent = '"Selamat! Kamu telah menyelesaikan 50 eksperimen listrik! Sekarang kamu bisa melanjutkan ke level berikutnya."';
+                 
+                 // Enable level progression
+                 this.enableLevelProgression();
+             }
+
+             resetProgress() {
+                 // Reset all progress
+                 this.completedExperiments = 0;
+                 this.currentExperimentIndex = 0;
+                 this.gameCompleted = false;
+                 
+                 // Clear localStorage
+                 localStorage.removeItem('completedExperiments');
+                 
+                 // Update display
+                 document.getElementById('current-experiment').textContent = '1';
+                 
+                 // Remove next level button if exists
+                 const existingBtn = document.querySelector('.next-level-btn');
+                 if (existingBtn) {
+                     existingBtn.remove();
+                 }
+                 
+                 // Reset speech bubble
+                 const speechBubble = document.querySelector('.speech-bubble');
+                 speechBubble.textContent = '"Halo! Aku butuh bantuanmu untuk menghubungkan kabel listrik ke stop kontak agar lampu bisa menyala. Seret kabel dari sumber listrik ke stop kontak yang tepat!"';
+                 
+                 // Load first experiment
+                 this.loadExperiment(0);
+             }
+
+            showNextButton() {
+                const nextBtn = document.getElementById('next-btn');
+                nextBtn.style.display = 'flex';
+            }
+
+            hideNextButton() {
+                const nextBtn = document.getElementById('next-btn');
+                nextBtn.style.display = 'none';
+            }
+
+            handleNextButton() {
+                // Hide the NEXT button
+                this.hideNextButton();
+                
+                // Check if game is completed
+                if (this.completedExperiments >= this.REQUIRED_EXPERIMENTS) {
+                    this.completeGame();
+                } else {
+                    // Move to next experiment
+                    this.resetCircuit();
+                    this.nextExperiment();
+                }
+            }
+
+            enableLevelProgression() {
+                 // Add next level button or redirect logic
+                 const gameElements = document.querySelector('.game-elements');
+                 const nextLevelBtn = document.createElement('button');
+                 nextLevelBtn.className = 'next-level-btn';
+                 nextLevelBtn.textContent = 'Lanjut ke Level Berikutnya';
+                 nextLevelBtn.style.cssText = `
+                     position: absolute;
+                     top: -80px;
+                     left: 50%;
+                     transform: translateX(-50%);
+                     padding: 15px 30px;
+                     background: #4CAF50;
+                     color: white;
+                     border: none;
+                     border-radius: 10px;
+                     font-size: 18px;
+                     cursor: pointer;
+                 `;
+                 nextLevelBtn.addEventListener('click', () => {
+                     // Navigate to next level
+                     window.location.href = 'scene3-level2.html';
+                 });
+                 gameElements.appendChild(nextLevelBtn);
+             }
+
+            highlightElement(elementId) {
+                // Remove previous highlights
+                document.querySelectorAll('.game-element').forEach(el => {
+                    el.style.boxShadow = '';
+                });
+                
+                // Add highlight to selected element
+                const element = document.getElementById(elementId);
+                element.style.boxShadow = '0 0 15px rgba(255, 255, 255, 0.8)';
+            }
+
+            // Realistic Physics and Animation Methods
+            createSparkEffect(element) {
+                const rect = element.getBoundingClientRect();
+                const container = document.querySelector('.game-container');
+                
+                const particleCount = this.maxParticles || 5;
+                for (let i = 0; i < particleCount; i++) {
+                    const spark = document.createElement('div');
+                    spark.className = 'spark-particle';
+                    spark.style.left = (rect.left + rect.width/2 + Math.random() * 20 - 10) + 'px';
+                    spark.style.top = (rect.top + rect.height/2 + Math.random() * 20 - 10) + 'px';
+                    container.appendChild(spark);
+                    
+                    setTimeout(() => {
+                        if (spark.parentNode) {
+                            spark.parentNode.removeChild(spark);
+                        }
+                    }, 500);
+                }
+            }
+
+            animateDropZone(zone) {
+                zone.style.transition = 'all 0.3s ease';
+                zone.style.transform = 'scale(1.1)';
+                
+                setTimeout(() => {
+                    zone.style.transform = 'scale(1)';
+                }, 300);
+            }
+
+            createElectricalEffects() {
+                const powerSource = document.getElementById('power-source');
+                const lightBulb = document.getElementById('light-bulb');
+                const cable = document.getElementById('cable');
+                
+                // Create electrical flow animation
+                this.createElectricalFlow(powerSource, cable);
+                this.createElectricalFlow(cable, lightBulb);
+                
+                // Add voltage surge effect
+                this.createVoltageSurge();
+                
+                // Create light burst effect
+                this.createLightBurst(lightBulb);
+            }
+
+            createElectricalFlow(fromElement, toElement) {
+                const fromRect = fromElement.getBoundingClientRect();
+                const toRect = toElement.getBoundingClientRect();
+                const container = document.querySelector('.game-container');
+                
+                const flowParticle = document.createElement('div');
+                flowParticle.style.cssText = `
+                    position: absolute;
+                    width: 6px;
+                    height: 6px;
+                    background: #FFD700;
+                    border-radius: 50%;
+                    box-shadow: 0 0 10px #FFD700;
+                    z-index: 10;
+                    pointer-events: none;
+                `;
+                
+                const startX = fromRect.left + fromRect.width/2;
+                const startY = fromRect.top + fromRect.height/2;
+                const endX = toRect.left + toRect.width/2;
+                const endY = toRect.top + toRect.height/2;
+                
+                flowParticle.style.left = startX + 'px';
+                flowParticle.style.top = startY + 'px';
+                
+                container.appendChild(flowParticle);
+                
+                // Animate particle movement
+                flowParticle.animate([
+                    { left: startX + 'px', top: startY + 'px', opacity: 1 },
+                    { left: endX + 'px', top: endY + 'px', opacity: 0 }
+                ], {
+                    duration: 800,
+                    easing: 'ease-out'
+                }).onfinish = () => {
+                    if (flowParticle.parentNode) {
+                        flowParticle.parentNode.removeChild(flowParticle);
+                    }
+                };
+            }
+
+            createVoltageSurge() {
+                const voltageLabel = document.querySelector('.voltage-label.active');
+                if (voltageLabel) {
+                    voltageLabel.style.animation = 'none';
+                    setTimeout(() => {
+                        voltageLabel.style.animation = 'voltageFlicker 0.5s ease-in-out 3';
+                    }, 10);
+                }
+            }
+
+            createLightBurst(lightBulb) {
+                const burst = document.createElement('div');
+                burst.style.cssText = `
+                    position: absolute;
+                    width: 100px;
+                    height: 100px;
+                    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 8;
+                `;
+                
+                const rect = lightBulb.getBoundingClientRect();
+                burst.style.left = (rect.left + rect.width/2 - 50) + 'px';
+                burst.style.top = (rect.top + rect.height/2 - 50) + 'px';
+                
+                document.querySelector('.game-container').appendChild(burst);
+                
+                burst.animate([
+                    { transform: 'scale(0)', opacity: 1 },
+                    { transform: 'scale(1.5)', opacity: 0 }
+                ], {
+                    duration: 600,
+                    easing: 'ease-out'
+                }).onfinish = () => {
+                    if (burst.parentNode) {
+                        burst.parentNode.removeChild(burst);
+                    }
+                };
+            }
+
+            // Touch Event Handlers for Mobile Support
+            handleTouchStart(e) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const element = e.target.closest('.electrical-object');
+                
+                if (!element) return;
+                
+                this.touchData.isDragging = true;
+                this.touchData.dragElement = element;
+                this.touchData.startX = touch.clientX;
+                this.touchData.startY = touch.clientY;
+                
+                // Store original position
+                const rect = element.getBoundingClientRect();
+                this.touchData.originalPosition = {
+                    left: rect.left,
+                    top: rect.top
+                };
+                
+                // Calculate offset from touch point to element center
+                this.touchData.offsetX = touch.clientX - rect.left - rect.width/2;
+                this.touchData.offsetY = touch.clientY - rect.top - rect.height/2;
+                
+                // Add dragging class and effects
+                element.classList.add('dragging');
+                this.createSparkEffect(element);
+                
+                // Show compatible drop zones
+                const dropZones = document.querySelectorAll('.drop-zone');
+                dropZones.forEach(zone => {
+                    if (zone.dataset.accepts === element.dataset.type) {
+                        zone.classList.add('active');
+                        this.animateDropZone(zone);
+                    }
+                });
+            }
+
+            handleTouchMove(e) {
+                e.preventDefault();
+                
+                if (!this.touchData.isDragging || !this.touchData.dragElement) return;
+                
+                const touch = e.touches[0];
+                const element = this.touchData.dragElement;
+                
+                // Calculate new position
+                const newX = touch.clientX - this.touchData.offsetX - element.offsetWidth/2;
+                const newY = touch.clientY - this.touchData.offsetY - element.offsetHeight/2;
+                
+                // Update element position
+                element.style.position = 'fixed';
+                element.style.left = newX + 'px';
+                element.style.top = newY + 'px';
+                element.style.zIndex = '1000';
+                element.style.pointerEvents = 'none';
+                
+                // Check for drop zone hover
+                const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                const dropZone = elementBelow?.closest('.drop-zone');
+                
+                // Update drop zone states
+                document.querySelectorAll('.drop-zone').forEach(zone => {
+                    zone.classList.remove('drag-over');
+                });
+                
+                if (dropZone && dropZone.dataset.accepts === element.dataset.type) {
+                    dropZone.classList.add('drag-over');
+                }
+            }
+
+            handleTouchEnd(e) {
+                e.preventDefault();
+                
+                if (!this.touchData.isDragging || !this.touchData.dragElement) return;
+                
+                const element = this.touchData.dragElement;
+                const touch = e.changedTouches[0];
+                
+                // Find drop zone at touch position
+                const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                const dropZone = elementBelow?.closest('.drop-zone');
+                
+                // Reset element styles
+                element.style.position = '';
+                element.style.left = '';
+                element.style.top = '';
+                element.style.zIndex = '';
+                element.style.pointerEvents = '';
+                element.classList.remove('dragging');
+                
+                // Handle drop
+                if (dropZone && dropZone.dataset.accepts === element.dataset.type) {
+                    // Successful drop
+                    this.handleSuccessfulDrop(element, dropZone);
+                } else {
+                    // Return to original position with animation
+                    this.returnToOriginalPosition(element);
+                }
+                
+                // Clean up drop zones
+                document.querySelectorAll('.drop-zone').forEach(zone => {
+                    zone.classList.remove('active', 'drag-over');
+                });
+                
+                // Reset touch data
+                this.touchData = {
+                    isDragging: false,
+                    dragElement: null,
+                    startX: 0,
+                    startY: 0,
+                    offsetX: 0,
+                    offsetY: 0,
+                    originalPosition: null
+                };
+            }
+
+            handleSuccessfulDrop(element, dropZone) {
+                // Create connection based on element type
+                if (element.dataset.type === 'cable') {
+                    this.createConnection(element, dropZone.parentElement);
+                    this.completeCircuit();
+                }
+            }
+
+            returnToOriginalPosition(element) {
+                if (this.touchData.originalPosition) {
+                    element.animate([
+                        { 
+                            transform: `translate(${this.touchData.originalPosition.left - element.getBoundingClientRect().left}px, ${this.touchData.originalPosition.top - element.getBoundingClientRect().top}px)` 
+                        },
+                        { transform: 'translate(0, 0)' }
+                    ], {
+                        duration: 300,
+                        easing: 'ease-out'
+                    });
+                }
+            }
+
+            detectMobileDevice() {
+                return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                       window.innerWidth <= 768 ||
+                       ('ontouchstart' in window);
+            }
+
+            detectPerformanceMode() {
+                // Check for low-end device indicators
+                const isLowEnd = navigator.hardwareConcurrency <= 2 ||
+                                 navigator.deviceMemory <= 2 ||
+                                 window.innerWidth <= 480;
+                
+                return isLowEnd ? 'low' : 'high';
+            }
+
+            setupPerformanceOptimizations() {
+                if (this.isMobile) {
+                    // Disable complex animations on mobile
+                    document.documentElement.style.setProperty('--animation-duration', 
+                        this.performanceMode === 'low' ? '0.2s' : '0.3s');
+                    
+                    // Reduce particle effects
+                    this.maxParticles = this.performanceMode === 'low' ? 5 : 10;
+                    
+                    // Optimize touch delay
+                    document.addEventListener('touchstart', function() {}, {passive: true});
+                    
+                    // Reduce animation complexity for low-end devices
+                    if (this.performanceMode === 'low') {
+                        document.documentElement.style.setProperty('--spark-animation', 'none');
+                        document.documentElement.style.setProperty('--glow-animation', 'none');
+                    }
+                }
+            }
+
+            resetVisualState() {
+                // Reset all visual states
+                document.querySelectorAll('.game-element').forEach(el => {
+                    el.style.boxShadow = '';
+                });
+            }
+
+            showFeedback(message) {
+                // Update speech bubble with feedback
+                const speechBubble = document.querySelector('.speech-bubble');
+                speechBubble.textContent = `"${message}"`;
+            }
+        }
+
+        // Initialize game when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            window.gameUI = new ElectricalGameUI();
+        });
+    </script>
+</body>
+</html>

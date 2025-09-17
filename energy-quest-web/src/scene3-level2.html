@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene 3 - Level 2: Manajemen Efisiensi Dapur</title>
+    <link rel="stylesheet" href="public/main.css">
+    <link rel="stylesheet" href="public/scene3-level2.css">
+    <script src="public/audio-manager.js"></script>
+</head>
+<body>
+    <!-- Scene 3 Level 2 Container -->
+    <div id="scene3-level2-container" class="scene-container hidden">
+        <!-- Background -->
+        <div class="scene-background">
+            <img src="public/images/kitchen-background.jpg" alt="Latar Belakang Dapur" class="background-image">
+            <div class="background-overlay"></div>
+        </div>
+
+        <!-- HUD Interface -->
+        <div class="hud-interface">
+            <!-- Left Panel -->
+            <div class="hud-left-panel">
+                <div class="level-info">
+                    <h2>Level 2: Dapur</h2>
+                    <p>Tantangan Manajemen Efisiensi</p>
+                </div>
+                
+                <div class="objectives-panel">
+                    <h3>Tujuan</h3>
+                    <ul class="objectives-list">
+                        <li id="obj-power-meter" class="objective">
+                            <span class="obj-status">⏳</span>
+                            Jaga meteran daya di zona hijau
+                        </li>
+                        <li id="obj-natural-light" class="objective">
+                            <span class="obj-status">⏳</span>
+                            Manfaatkan cahaya alami
+                        </li>
+                        <li id="obj-efficiency" class="objective">
+                            <span class="obj-status">⏳</span>
+                            Capai target efisiensi energi
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="inventory-panel">
+                    <h3>Kunci Energi</h3>
+                    <div id="energy-keys-container" class="energy-keys">
+                        <!-- Kunci energi akan ditambahkan secara dinamis -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Power Meter -->
+            <div class="hud-right-panel">
+                <div class="power-meter-container">
+                    <h3>Meteran Daya</h3>
+                    <div class="power-meter">
+                        <div class="meter-scale">
+                            <div class="scale-mark" data-value="0">0</div>
+                            <div class="scale-mark" data-value="20">20</div>
+                            <div class="scale-mark" data-value="40">40</div>
+                            <div class="scale-mark" data-value="60">60</div>
+                            <div class="scale-mark" data-value="80">80</div>
+                            <div class="scale-mark" data-value="100">100</div>
+                        </div>
+                        <div class="meter-bar">
+                            <div id="power-level" class="power-level" data-level="0"></div>
+                        </div>
+                        <div class="meter-zones">
+                            <div class="zone green-zone" data-range="0-60">Zona Hijau (0-60)</div>
+                            <div class="zone yellow-zone" data-range="61-80">Zona Kuning (61-80)</div>
+                            <div class="zone red-zone" data-range="81-100">Zona Merah (81-100)</div>
+                        </div>
+                    </div>
+                    <div class="power-value">
+                        <span id="current-power">0</span> / 100 W
+                    </div>
+                </div>
+
+                <div class="efficiency-score">
+                    <h4>Skor Efisiensi</h4>
+                    <div id="efficiency-points" class="score-display">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <div class="game-area">
+            <!-- Kitchen Layout -->
+            <div class="kitchen-layout">
+                <!-- Window -->
+                <div id="window-obj" class="interactive-object window-object" data-device="window">
+                    <div class="window-frame">
+                        <div id="window-panels" class="window-panels closed">
+                            <div class="window-panel left-panel"></div>
+                            <div class="window-panel right-panel"></div>
+                        </div>
+                        <div class="window-light-effect"></div>
+                    </div>
+                    <div class="object-label">Jendela</div>
+                </div>
+
+                <!-- Main Light -->
+                <div id="main-light-obj" class="interactive-object light-object" data-device="main-light">
+                    <div class="light-fixture">
+                        <div class="light-bulb"></div>
+                        <div class="light-glow"></div>
+                    </div>
+                    <div class="object-label">Lampu Utama</div>
+                </div>
+
+                <!-- Refrigerator -->
+                <div id="fridge-obj" class="interactive-object fridge-object" data-device="fridge">
+                    <div class="fridge-body">
+                        <div id="fridge-door" class="fridge-door closed">
+                            <div class="door-handle"></div>
+                            <div class="door-seal"></div>
+                        </div>
+                        <div class="fridge-interior">
+                            <div class="fridge-light"></div>
+                            <div class="fridge-shelves"></div>
+                        </div>
+                    </div>
+                    <div class="object-label">Kulkas</div>
+                </div>
+
+                <!-- Rice Cooker -->
+                <div id="rice-cooker-obj" class="interactive-object rice-cooker-object" data-device="rice-cooker">
+                    <div class="rice-cooker-body">
+                        <div class="cooker-lid"></div>
+                        <div class="cooker-display">
+                            <span id="cooker-mode">Normal</span>
+                        </div>
+                        <div class="cooker-buttons">
+                            <button class="mode-btn" data-mode="normal">Normal</button>
+                            <button class="mode-btn" data-mode="eco">Hemat</button>
+                        </div>
+                    </div>
+                    <div class="object-label">Penanak Nasi</div>
+                </div>
+
+                <!-- Fan -->
+                <div id="fan-obj" class="interactive-object fan-object" data-device="fan">
+                    <div class="fan-base">
+                        <div id="fan-blades" class="fan-blades">
+                            <div class="blade"></div>
+                            <div class="blade"></div>
+                            <div class="blade"></div>
+                        </div>
+                        <div class="fan-motor"></div>
+                    </div>
+                    <div class="object-label">Kipas</div>
+                </div>
+
+                <!-- Iron -->
+                <div id="iron-obj" class="interactive-object iron-object" data-device="iron">
+                    <div class="iron-body">
+                        <div class="iron-plate"></div>
+                        <div class="iron-handle"></div>
+                        <div class="iron-indicator"></div>
+                    </div>
+                    <div class="object-label">Setrika</div>
+                </div>
+
+                <!-- Kitchen Energy Guide Character -->
+                <div id="kitchen-guide" class="kitchen-energy-guide">
+                    <svg width="140" height="180" viewBox="0 0 140 180" class="guide-svg">
+                        <!-- Chef Hat -->
+                        <ellipse cx="70" cy="25" rx="30" ry="15" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="2" class="chef-hat-base"/>
+                        <ellipse cx="70" cy="20" rx="25" ry="20" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="2" class="chef-hat-top"/>
+                        
+                        <!-- Head -->
+                        <circle cx="70" cy="55" r="22" fill="#FFE4B5" stroke="#D4A574" stroke-width="2" class="guide-head"/>
+                        
+                        <!-- Eyes -->
+                        <circle cx="64" cy="50" r="3" fill="#333" class="guide-eye-left"/>
+                        <circle cx="76" cy="50" r="3" fill="#333" class="guide-eye-right"/>
+                        
+                        <!-- Smile -->
+                        <path d="M 60 60 Q 70 68 80 60" stroke="#333" stroke-width="2" fill="none" class="guide-mouth"/>
+                        
+                        <!-- Body (Chef Apron) -->
+                        <rect x="45" y="75" width="50" height="70" rx="10" fill="#4CAF50" stroke="#388E3C" stroke-width="2" class="guide-body"/>
+                        
+                        <!-- Apron -->
+                        <rect x="50" y="80" width="40" height="60" rx="5" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" class="guide-apron"/>
+                        
+                        <!-- Energy Symbol on Apron -->
+                        <circle cx="70" cy="110" r="8" fill="#FFD700" stroke="#FFA000" stroke-width="1" class="energy-badge"/>
+                        <text x="70" y="115" text-anchor="middle" font-size="12" fill="#333">⚡</text>
+                        
+                        <!-- Arms -->
+                        <line x1="45" y1="90" x2="30" y2="120" stroke="#FFE4B5" stroke-width="10" stroke-linecap="round" class="guide-arm-left"/>
+                        <line x1="95" y1="90" x2="110" y2="120" stroke="#FFE4B5" stroke-width="10" stroke-linecap="round" class="guide-arm-right"/>
+                        
+                        <!-- Hands with Kitchen Tools -->
+                        <circle cx="25" cy="125" r="6" fill="#FFE4B5" class="guide-hand-left"/>
+                        <circle cx="115" cy="125" r="6" fill="#FFE4B5" class="guide-hand-right"/>
+                        
+                        <!-- Kitchen Utensil (Spatula) -->
+                        <line x1="20" y1="130" x2="15" y2="140" stroke="#8B4513" stroke-width="3" class="spatula-handle"/>
+                        <ellipse cx="13" cy="142" rx="4" ry="2" fill="#C0C0C0" class="spatula-head"/>
+                        
+                        <!-- Energy Meter (in other hand) -->
+                        <rect x="110" y="130" width="8" height="12" rx="2" fill="#333" class="meter-body"/>
+                        <rect x="111" y="132" width="6" height="8" fill="#00FF00" class="meter-display"/>
+                        
+                        <!-- Legs -->
+                        <line x1="60" y1="145" x2="55" y2="170" stroke="#4CAF50" stroke-width="12" stroke-linecap="round" class="guide-leg-left"/>
+                        <line x1="80" y1="145" x2="85" y2="170" stroke="#4CAF50" stroke-width="12" stroke-linecap="round" class="guide-leg-right"/>
+                        
+                        <!-- Shoes -->
+                        <ellipse cx="52" cy="172" rx="8" ry="4" fill="#333" class="guide-shoe-left"/>
+                        <ellipse cx="88" cy="172" rx="8" ry="4" fill="#333" class="guide-shoe-right"/>
+                    </svg>
+                    
+                    <div class="guide-speech-bubble hidden" id="guide-speech">
+                        <div class="speech-content">
+                            <p id="guide-speech-text">Halo! Saya Chef Eco, ahli hemat energi dapur!</p>
+                        </div>
+                        <div class="speech-arrow"></div>
+                    </div>
+                </div>
+                
+                <!-- Characters -->
+                <div class="character character-1">
+                    <img src="public/images/character1.png" alt="Karakter 1">
+                </div>
+                <div class="character character-2">
+                    <img src="public/images/character2.png" alt="Karakter 2">
+                </div>
+            </div>
+        </div>
+
+        <!-- Device Status Panel -->
+        <div id="device-status-panel" class="device-status-panel">
+            <h3>Status Perangkat</h3>
+            <div class="device-list">
+                <div class="device-item" data-device="window">
+                    <span class="device-name">Jendela</span>
+                    <span class="device-status">Tertutup</span>
+                    <span class="device-power">0W</span>
+                </div>
+                <div class="device-item" data-device="main-light">
+                    <span class="device-name">Lampu Utama</span>
+                    <span class="device-status">Mati</span>
+                    <span class="device-power">0W</span>
+                </div>
+                <div class="device-item" data-device="fridge">
+                    <span class="device-name">Kulkas</span>
+                    <span class="device-status">Berjalan</span>
+                    <span class="device-power">150W</span>
+                </div>
+                <div class="device-item" data-device="rice-cooker">
+                    <span class="device-name">Penanak Nasi</span>
+                    <span class="device-status">Mati</span>
+                    <span class="device-power">0W</span>
+                </div>
+                <div class="device-item" data-device="fan">
+                    <span class="device-name">Kipas</span>
+                    <span class="device-status">Mati</span>
+                    <span class="device-power">0W</span>
+                </div>
+                <div class="device-item" data-device="iron">
+                    <span class="device-name">Setrika</span>
+                    <span class="device-status">Mati</span>
+                    <span class="device-power">0W</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hint Bubble -->
+        <div id="hint-bubble" class="hint-bubble hidden">
+            <div class="hint-content">
+                <p id="hint-text">Klik jendela untuk memanfaatkan cahaya alami</p>
+                <button id="hint-close" class="hint-close">×</button>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div id="success-message" class="success-message hidden">
+            <div class="success-content">
+                <h2 id="success-title">Target Efisiensi Tercapai!</h2>
+                <p id="success-text">Anda berhasil mengelola penggunaan energi dapur dengan efisien.</p>
+                <button id="success-continue" class="success-btn">Lanjutkan</button>
+            </div>
+        </div>
+
+        <!-- Educational Popup -->
+        <div id="educational-popup" class="educational-popup hidden">
+            <div class="edu-content">
+                <h3 id="edu-title">Pengetahuan Efisiensi</h3>
+                <p id="edu-content">Memanfaatkan cahaya alami dapat mengurangi konsumsi energi pencahayaan secara signifikan</p>
+                <div id="edu-detail" class="edu-detail">
+                    Cahaya alami tidak hanya gratis, tetapi juga memberikan kualitas pencahayaan yang lebih baik. Dengan memanfaatkan jendela dan skylight secara bijak, kita dapat mengurangi penggunaan lampu buatan di siang hari, sehingga menghemat energi listrik. Selain itu, cahaya alami juga memiliki dampak positif bagi kesehatan manusia.
+                </div>
+                <div class="edu-actions">
+                    <button id="edu-expand-btn" class="edu-expand">Pelajari Lebih Lanjut</button>
+                    <button id="edu-close" class="edu-close">Tutup</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fridge Timer Warning -->
+        <div id="fridge-warning" class="fridge-warning hidden">
+            <div class="warning-content">
+                <h4>⚠️ Pintu kulkas terbuka terlalu lama</h4>
+                <p>Pintu kulkas terbuka lebih dari 5 detik akan meningkatkan konsumsi energi</p>
+                <div class="timer-display">
+                    <span id="fridge-timer">5</span> detik
+                </div>
+            </div>
+        </div>
+
+        <!-- Helper Character Tooltip -->
+        <div id="helper-tooltip" class="helper-tooltip hidden">
+            <div class="tooltip-content">
+                <div class="helper-avatar">🤖</div>
+                <p id="helper-text">Coba buka jendela untuk mengganti pencahayaan lampu</p>
+                <button id="helper-close" class="tooltip-close">×</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="sfx-ding" preload="auto">
+        <source src="public/audio/sfx_ding.wav" type="audio/wav">
+    </audio>
+    <audio id="sfx-buzz" preload="auto">
+        <source src="public/audio/sfx_buzz.wav" type="audio/wav">
+    </audio>
+    <audio id="sfx-click" preload="auto">
+        <source src="public/audio/sfx_click.wav" type="audio/wav">
+    </audio>
+    <audio id="ambient-kitchen" preload="auto" loop>
+        <source src="public/audio/ambient_kitchen.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Scripts -->
+    <script src="scripts/scene3-level2.js"></script>
+</body>
+</html>

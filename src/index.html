@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Quest - Game Edukasi Hemat Listrik</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* Splash Screen */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .splash-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .splash-logo-img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+            animation: logoGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoGlow {
+             0% { 
+                 filter: drop-shadow(0 0 20px #00ff88) drop-shadow(0 0 40px #00ff88);
+                 transform: scale(1);
+             }
+             100% { 
+                 filter: drop-shadow(0 0 30px #00ff88) drop-shadow(0 0 50px #00ff88) drop-shadow(0 0 70px #4a9eff);
+                 transform: scale(1.05);
+             }
+         }
+
+        .splash-title {
+            font-size: 3em;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 0 0 20px #00ff88;
+            margin-bottom: 20px;
+            animation: titleSlideUp 1.5s ease-out 0.5s both;
+        }
+
+        @keyframes titleSlideUp {
+            0% { 
+                opacity: 0; 
+                transform: translateY(50px); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        .splash-subtitle {
+            font-size: 1.5em;
+            color: #4a9eff;
+            text-shadow: 0 0 10px #4a9eff;
+            margin-bottom: 50px;
+            animation: subtitleSlideUp 1.5s ease-out 1s both;
+        }
+
+        @keyframes subtitleSlideUp {
+            0% { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: loadingFadeIn 1s ease-out 2s both;
+        }
+
+        @keyframes loadingFadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .loading-text {
+            color: #ffffff;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            animation: loadingPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes loadingPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .loading-bar {
+            width: 300px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88, #4a9eff);
+            border-radius: 3px;
+            width: 0%;
+            animation: loadingProgress 3s ease-out 2.5s both;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        @keyframes loadingProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .energy-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: particleFloat 8s linear infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 1s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 2s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 3s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 4s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 5s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 1.5s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 2.5s; }
+        .particle:nth-child(9) { left: 90%; animation-delay: 3.5s; }
+
+        @keyframes particleFloat {
+            0% { 
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(90vh) scale(1);
+            }
+            90% {
+                opacity: 1;
+                transform: translateY(10vh) scale(1);
+            }
+            100% { 
+                transform: translateY(0vh) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Video Container */
+        #video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            display: none;
+            z-index: 999;
+        }
+
+        #cutscene-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #skip-button {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        #skip-button:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.05);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+        
+    </style>
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <div class="splash-content">
+            <img src="public/logo.png" alt="Energy Quest Logo" class="splash-logo-img">
+        </div>
+    </div>
+
+    <!-- Video Cutscene -->
+    <div id="video-container">
+        <video id="cutscene-video" autoplay muted>
+            <source src="/public/Video/opening.mp4" type="video/mp4">
+            Video tidak dapat dimuat.
+        </video>
+        <button id="skip-button">Skip ⏭</button>
+    </div>
+
+    <script>
+        class GameLoader {
+            constructor() {
+                this.splashScreen = document.getElementById('splash-screen');
+                this.videoContainer = document.getElementById('video-container');
+                this.video = document.getElementById('cutscene-video');
+                this.skipButton = document.getElementById('skip-button');
+                
+                // Array of 5 cutscene videos
+                this.cutsceneVideos = [
+                    '/public/Video/opening.mp4',
+                    '/public/Video/ilmuwan.mp4',
+                    '/public/Video/video.mp4',
+                    '/public/Video/video action.mp4',
+                    '/public/Video/final.mp4'
+                ];
+                this.currentVideoIndex = 0;
+                
+                this.init();
+            }
+
+            init() {
+                // Start splash screen sequence
+                setTimeout(() => {
+                    this.showCutscene();
+                }, 5500); // Wait for splash animations to complete
+
+                // Skip button functionality
+                this.skipButton.addEventListener('click', () => {
+                    this.skipToMainMenu();
+                });
+
+                // Auto proceed when video ends
+                this.video.addEventListener('ended', () => {
+                    this.playNextVideo();
+                });
+
+                // Handle video load error
+                this.video.addEventListener('error', () => {
+                    console.log('Video failed to load, trying next video or proceeding to main menu');
+                    this.playNextVideo();
+                });
+            }
+
+            showCutscene() {
+                this.splashScreen.style.display = 'none';
+                this.videoContainer.style.display = 'block';
+                this.playCurrentVideo();
+            }
+
+            playCurrentVideo() {
+                if (this.currentVideoIndex < this.cutsceneVideos.length) {
+                    const videoSrc = this.cutsceneVideos[this.currentVideoIndex];
+                    this.video.src = videoSrc;
+                    
+                    // Try to play video
+                    this.video.play().catch(error => {
+                        console.log('Video autoplay failed:', error);
+                        // If autoplay fails, try next video after short delay
+                        setTimeout(() => {
+                            this.playNextVideo();
+                        }, 2000);
+                    });
+                } else {
+                    this.skipToMainMenu();
+                }
+            }
+
+            playNextVideo() {
+                this.currentVideoIndex++;
+                if (this.currentVideoIndex < this.cutsceneVideos.length) {
+                    this.playCurrentVideo();
+                } else {
+                    this.skipToMainMenu();
+                }
+            }
+
+            skipToMainMenu() {
+                // Fade out effect
+                this.videoContainer.style.transition = 'opacity 0.5s ease-out';
+                this.videoContainer.style.opacity = '0';
+                
+                setTimeout(() => {
+                    window.location.href = 'main-menu.html';
+                }, 500);
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new GameLoader();
+        });
+
+        // Prevent right-click context menu for immersive experience
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>
