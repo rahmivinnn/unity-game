@@ -77,22 +77,30 @@
         
         #skip-button {
             position: fixed;
-            top: 10px;
-            right: 10px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             background: linear-gradient(45deg, #1a237e, #0d47a1);
             border: none;
-            padding: clamp(8px, 2vw, 15px) clamp(15px, 4vw, 30px);
-            border-radius: 8px;
+            padding: clamp(15px, 4vw, 25px) clamp(30px, 8vw, 50px);
+            border-radius: 15px;
             color: white;
-            font-size: clamp(0.8rem, 2.5vw, 1.2rem);
+            font-size: clamp(1.2rem, 4vw, 2rem);
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             font-family: "Orbitron", sans-serif;
             text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(26, 35, 126, 0.4);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 25px rgba(26, 35, 126, 0.6);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
             z-index: 3000;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+            100% { transform: translate(-50%, -50%) scale(1); }
         }
         
         #skip-button:hover {
@@ -295,6 +303,9 @@
     <!-- Splash Screen - Pure Logo Only -->
     <div id="splash-screen">
         <img src="public/logo.png" alt="Energy Quest Logo" class="splash-logo">
+        <button onclick="skipToMainMenu()" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); border: none; color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px; z-index: 1001;">
+            <i class="fas fa-play"></i> SKIP TO GAME
+        </button>
     </div>
     
     <!-- Video Cutscene -->
@@ -304,7 +315,10 @@
         </video>
         <button id="skip-button" onclick="skipVideo()">
             <i class="fas fa-forward"></i>
-            SKIP
+            SKIP VIDEO
+        </button>
+        <button id="skip-button-small" onclick="skipVideo()" style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.7); border: none; color: white; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 14px; z-index: 3001;">
+            <i class="fas fa-times"></i> SKIP
         </button>
     </div>
     
@@ -392,10 +406,19 @@
                 setTimeout(() => {
                     this.goToCutscene();
                 }, 3000);
+                
+                // Fallback: if videos don't work, go to main menu after 10 seconds
+                setTimeout(() => {
+                    if (this.currentStep === 'splash' || this.currentStep === 'cutscene') {
+                        console.log('Fallback: Going directly to main menu');
+                        this.goToMainMenu();
+                    }
+                }, 10000);
             }
             
             goToCutscene() {
                 console.log('Going to cutscene sequence');
+                this.currentStep = 'cutscene';
                 const splashScreen = document.getElementById('splash-screen');
                 const videoContainer = document.getElementById('video-container');
                 
@@ -420,11 +443,47 @@
                 // Update video source
                 video.src = currentVideoSrc;
                 video.load();
-                video.play();
+                
+                // Try to play video with error handling
+                const playPromise = video.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        console.log('Video started playing');
+                    }).catch(error => {
+                        console.log('Video autoplay failed, trying to play manually:', error);
+                        // If autoplay fails, show a play button or skip to next
+                        this.showPlayButton();
+                    });
+                }
                 
                 // When video ends, play next or go to main menu
                 video.onended = () => {
                     this.nextVideo();
+                };
+                
+                // Add error handling for video loading
+                video.onerror = (e) => {
+                    console.error('Video loading error:', e);
+                    console.log('Skipping to next video due to error');
+                    this.nextVideo();
+                };
+            }
+            
+            showPlayButton() {
+                const video = document.getElementById('cutscene-video');
+                const skipButton = document.getElementById('skip-button');
+                
+                // Change skip button to play button
+                skipButton.innerHTML = '<i class="fas fa-play"></i> PLAY VIDEO';
+                skipButton.onclick = () => {
+                    video.play().then(() => {
+                        skipButton.innerHTML = '<i class="fas fa-forward"></i> SKIP';
+                        skipButton.onclick = () => skipVideo();
+                    }).catch(error => {
+                        console.log('Manual play failed, skipping video:', error);
+                        this.nextVideo();
+                    });
                 };
             }
             
@@ -439,6 +498,7 @@
             
             goToMainMenu() {
                 console.log('Going to main menu');
+                this.currentStep = 'mainmenu';
                 const videoContainer = document.getElementById('video-container');
                 const mainMenu = document.getElementById('main-menu');
                 
@@ -452,6 +512,13 @@
             if (window.gameFlow) {
                 console.log('Skipping all cutscene videos');
                 window.gameFlow.currentVideoIndex = window.gameFlow.videos.length; // Skip all videos
+                window.gameFlow.goToMainMenu();
+            }
+        }
+        
+        function skipToMainMenu() {
+            if (window.gameFlow) {
+                console.log('Skipping directly to main menu');
                 window.gameFlow.goToMainMenu();
             }
         }
